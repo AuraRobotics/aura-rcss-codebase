@@ -221,13 +221,13 @@ SamplePlayer::initImpl( CmdLineParser & cmd_parser )
   virtual method in super class
 */
 
-#include "utils/geoUtils.h"
+//#include "utils/geoUtils.h"
 
 void
 SamplePlayer::actionImpl()
 {
-    geoUtils::test();
 
+//    geoUtils::test();
     //
     // update strategy and analyzer
     //
@@ -258,6 +258,10 @@ SamplePlayer::actionImpl()
     //
     ActionChainHolder::instance().update( world() );
 
+
+    if(test()){
+        return;
+    }
 
     //
     // create current role
@@ -830,4 +834,17 @@ SamplePlayer::createActionGenerator() const
     //                    2, ActGen_RangeActionChainLengthFilter::MAX ) );
 
     return ActionGenerator::ConstPtr( g );
+}
+
+
+
+bool SamplePlayer::test(){
+
+    for(int unum = 1; unum<=11 ; unum++){
+
+        dlog.addText( Logger::TEAM,
+                      __FILE__": RoleType:: %d , %d",
+                      Strategy::i().getPositionType(unum) , Strategy::i().getRole(unum));
+    }
+    return false;
 }

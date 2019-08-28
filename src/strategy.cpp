@@ -96,6 +96,7 @@ Strategy::Strategy()
     : M_goalie_unum( Unum_Unknown ),
       M_current_situation( Normal_Situation ),
       M_role_number( 11, 0 ),
+      M_role_type( 11, Sample ),
       M_position_types( 11, Position_Center ),
       M_positions( 11 )
 {
@@ -122,7 +123,6 @@ Strategy::Strategy()
     //
     // formations
     //
-
     M_formation_factory[FormationStatic::name()] = &FormationStatic::create;
     M_formation_factory[FormationDT::name()] = &FormationDT::create;
 #endif
@@ -131,7 +131,28 @@ Strategy::Strategy()
     {
         M_role_number[i] = i + 1;
     }
+
+
+
+
+    ///role mapper
+    M_role_type_mapper[RoleSample::name()] = Sample;
+
+    M_role_type_mapper[RoleGoalie::name()] = Goalie;
+    M_role_type_mapper[RoleCenterBack::name()] = CenterBack;
+    M_role_type_mapper[RoleSideBack::name()] = SideBack;
+    M_role_type_mapper[RoleDefensiveHalf::name()] = DefensiveHalf;
+    M_role_type_mapper[RoleOffensiveHalf::name()] = RoleOffensiveHalf;
+    M_role_type_mapper[RoleSideHalf::name()] = SideHalf;
+    M_role_type_mapper[RoleSideForward::name()] = SideForward;
+    M_role_type_mapper[RoleCenterForward::name()] = CenterForward;
+    // keepaway
+    M_role_type_mapper[RoleKeepawayKeeper::name()] = RoleKeepawayKeeper;
+    M_role_type_mapper[RoleKeepawayTaker::name()] = RoleKeepawayTaker;
+
 }
+
+
 
 /*-------------------------------------------------------------------*/
 /*!
@@ -444,6 +465,7 @@ Strategy::update( const WorldModel & wm )
 
     updateSituation( wm );
     updatePosition( wm );
+    updateRole(wm);
 }
 
 /*-------------------------------------------------------------------*/
@@ -720,7 +742,42 @@ Strategy::updatePosition( const WorldModel & wm )
     }
 }
 
+/*-------------------------------------------------------------------*/
+/*!
 
+ */
+
+void
+Strategy::updateRole( const WorldModel & wm )
+{
+
+
+    static GameTime s_update_time( 0, 0 );
+    if ( s_update_time == wm.time() )
+    {
+        return;
+    }
+    s_update_time = wm.time();
+
+    Formation::Ptr f = getFormation( wm );
+    if ( ! f )
+    {
+        std::cerr << wm.teamName() << ':' << wm.self().unum() << ": "
+                  << wm.time()
+                  << " ***ERROR*** could not get the current formation" << std::endl;
+        return;
+    }
+
+    //
+    // check role names
+    //
+    for ( int unum = 1; unum <= 11; ++unum )
+    {
+        const std::string role_name = f->getRoleName( unum );
+        M_role_type[unum - 1] = M_role_type_mapper.find( role_name )->second;
+    }
+
+}
 /*-------------------------------------------------------------------*/
 /*!
 

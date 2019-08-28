@@ -92,6 +92,8 @@ private:
     bool doForceKick();
     bool doHeardPassReceive();
 
+    bool test();
+
 public:
     virtual
     FieldEvaluator::ConstPtr getFieldEvaluator() const;

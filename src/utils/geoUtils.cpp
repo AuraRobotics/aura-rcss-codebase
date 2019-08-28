@@ -3,14 +3,14 @@
 //
 
 
+#include "geoUtils.h"
+
+
 #include <iostream>
 #include <rcsc/common/logger.h>
 #include <rcsc/geom/vector_2d.h>
 #include <rcsc/geom/segment_2d.h>
 #include <rcsc/geom/polygon_2d.h>
-
-
-#include "geoUtils.h"
 
 using namespace rcsc;
 
