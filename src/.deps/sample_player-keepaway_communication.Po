@@ -243,7 +243,7 @@ sample_player-keepaway_communication.o: keepaway_communication.cpp \
  /usr/include/c++/5/bits/basic_ios.tcc \
  /usr/include/c++/5/bits/ostream.tcc /usr/include/c++/5/istream \
  /usr/include/c++/5/bits/istream.tcc /usr/local/include/rcsc/types.h \
- strategy.h soccer_role.h /usr/local/include/rcsc/factory.h \
+ strategy.h roles/soccer_role.h /usr/local/include/rcsc/factory.h \
  /usr/include/c++/5/map /usr/include/c++/5/bits/stl_tree.h \
  /usr/include/c++/5/bits/stl_map.h /usr/include/c++/5/bits/stl_multimap.h \
  /usr/include/c++/5/list /usr/include/c++/5/bits/stl_list.h \
@@ -1075,7 +1075,7 @@ communication.h:
 
 strategy.h:
 
-soccer_role.h:
+roles/soccer_role.h:
 
 /usr/local/include/rcsc/factory.h:
 

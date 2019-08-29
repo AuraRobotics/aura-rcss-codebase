@@ -35,23 +35,23 @@
 
 #include "strategy.h"
 
-#include "soccer_role.h"
+#include "roles/soccer_role.h"
 
 
 #ifndef USE_GENERIC_FACTORY
-#include "role_sample.h"
+#include "roles/role_sample.h"
 
-#include "role_center_back.h"
-#include "role_center_forward.h"
-#include "role_defensive_half.h"
-#include "role_goalie.h"
-#include "role_offensive_half.h"
-#include "role_side_back.h"
-#include "role_side_forward.h"
-#include "role_side_half.h"
+#include "roles/role_center_back.h"
+#include "roles/role_center_forward.h"
+#include "roles/role_defensive_half.h"
+#include "roles/role_goalie.h"
+#include "roles/role_offensive_half.h"
+#include "roles/role_side_back.h"
+#include "roles/role_side_forward.h"
+#include "roles/role_side_half.h"
 
-#include "role_keepaway_keeper.h"
-#include "role_keepaway_taker.h"
+#include "roles/role_keepaway_keeper.h"
+#include "roles/role_keepaway_taker.h"
 
 #include <rcsc/formation/formation_static.h>
 #include <rcsc/formation/formation_dt.h>

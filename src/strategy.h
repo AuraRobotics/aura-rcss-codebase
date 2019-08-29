@@ -32,7 +32,7 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 
-#include "soccer_role.h"
+#include "roles/soccer_role.h"
 
 #include <rcsc/formation/formation.h>
 #include <rcsc/geom/vector_2d.h>

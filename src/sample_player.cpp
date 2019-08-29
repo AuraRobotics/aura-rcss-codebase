@@ -36,22 +36,22 @@
 #include "action_chain_holder.h"
 #include "sample_field_evaluator.h"
 
-#include "soccer_role.h"
+#include "roles/soccer_role.h"
 
-#include "sample_communication.h"
-#include "keepaway_communication.h"
+#include "communication/sample_communication.h"
+#include "communication/keepaway_communication.h"
 
-#include "bhv_penalty_kick.h"
-#include "bhv_set_play.h"
-#include "bhv_set_play_kick_in.h"
-#include "bhv_set_play_indirect_free_kick.h"
+#include "behaviours/bhv_penalty_kick.h"
+#include "behaviours/bhv_set_play.h"
+#include "behaviours/bhv_set_play_kick_in.h"
+#include "behaviours/bhv_set_play_indirect_free_kick.h"
 
-#include "bhv_custom_before_kick_off.h"
+#include "behaviours/bhv_custom_before_kick_off.h"
 #include "bhv_strict_check_shoot.h"
 
-#include "view_tactical.h"
+#include "actions/view_tactical.h"
 
-#include "intention_receive.h"
+#include "communication/intention_receive.h"
 
 #include <rcsc/action/basic_actions.h>
 #include <rcsc/action/bhv_emergency.h>

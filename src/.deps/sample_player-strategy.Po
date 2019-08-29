@@ -1,6 +1,7 @@
 sample_player-strategy.o: strategy.cpp /usr/include/stdc-predef.h \
- ../config.h strategy.h soccer_role.h /usr/local/include/rcsc/factory.h \
- /usr/include/c++/5/map /usr/include/c++/5/bits/stl_tree.h \
+ ../config.h strategy.h roles/soccer_role.h \
+ /usr/local/include/rcsc/factory.h /usr/include/c++/5/map \
+ /usr/include/c++/5/bits/stl_tree.h \
  /usr/include/c++/5/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
@@ -265,10 +266,12 @@ sample_player-strategy.o: strategy.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
- role_sample.h role_center_back.h role_center_forward.h \
- role_defensive_half.h role_goalie.h /usr/local/include/rcsc/game_time.h \
- role_offensive_half.h role_side_back.h role_side_forward.h \
- role_side_half.h role_keepaway_keeper.h role_keepaway_taker.h \
+ roles/role_sample.h roles/soccer_role.h roles/role_center_back.h \
+ roles/role_center_forward.h roles/role_defensive_half.h \
+ roles/role_goalie.h /usr/local/include/rcsc/game_time.h \
+ roles/role_offensive_half.h roles/role_side_back.h \
+ roles/role_side_forward.h roles/role_side_half.h \
+ roles/role_keepaway_keeper.h roles/role_keepaway_taker.h \
  /usr/local/include/rcsc/formation/formation_static.h \
  /usr/local/include/rcsc/formation/formation_dt.h \
  /usr/local/include/rcsc/geom/delaunay_triangulation.h \
@@ -819,7 +822,7 @@ sample_player-strategy.o: strategy.cpp /usr/include/stdc-predef.h \
 
 strategy.h:
 
-soccer_role.h:
+roles/soccer_role.h:
 
 /usr/local/include/rcsc/factory.h:
 
@@ -1461,29 +1464,31 @@ soccer_role.h:
 
 /usr/include/c++/5/bits/vector.tcc:
 
-role_sample.h:
+roles/role_sample.h:
 
-role_center_back.h:
+roles/soccer_role.h:
 
-role_center_forward.h:
+roles/role_center_back.h:
 
-role_defensive_half.h:
+roles/role_center_forward.h:
 
-role_goalie.h:
+roles/role_defensive_half.h:
+
+roles/role_goalie.h:
 
 /usr/local/include/rcsc/game_time.h:
 
-role_offensive_half.h:
+roles/role_offensive_half.h:
 
-role_side_back.h:
+roles/role_side_back.h:
 
-role_side_forward.h:
+roles/role_side_forward.h:
 
-role_side_half.h:
+roles/role_side_half.h:
 
-role_keepaway_keeper.h:
+roles/role_keepaway_keeper.h:
 
-role_keepaway_taker.h:
+roles/role_keepaway_taker.h:
 
 /usr/local/include/rcsc/formation/formation_static.h:
 
