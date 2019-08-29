@@ -1,9 +1,8 @@
 ## Process this file with automake to produce Makefile.in
-UTILSSOURCES = \
-    utils/geoUtils.cpp
 
-UTILSHEADERS = \
-    utils/geoUtils.h
+UTILSSOURCES = \
+    utils/geoUtils.h \
+    utils/geoUtils.cpp
 
 
 BHV_SOURCE = \
@@ -246,6 +245,7 @@ sample_player_SOURCES = \
 	$(ROLE_SOURCE) \
 	$(ACTIONS_SOURCE)  \
 	$(COMM_SOURCE) \
+	$(UTILSSOURCES) \
 	$(PLAYERSOURCES)
 
 

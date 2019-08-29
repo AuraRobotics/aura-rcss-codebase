@@ -221,13 +221,11 @@ SamplePlayer::initImpl( CmdLineParser & cmd_parser )
   virtual method in super class
 */
 
-//#include "utils/geoUtils.h"
 
 void
 SamplePlayer::actionImpl()
 {
-
-//    geoUtils::test();
+    
     //
     // update strategy and analyzer
     //
