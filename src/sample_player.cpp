@@ -52,6 +52,7 @@
 #include "actions/view_tactical.h"
 
 #include "communication/intention_receive.h"
+#include "cafe_model.h"
 
 #include <rcsc/action/basic_actions.h>
 #include <rcsc/action/bhv_emergency.h>
@@ -149,6 +150,9 @@ SamplePlayer::SamplePlayer()
     // set communication planner
     //
     M_communication = Communication::Ptr( new SampleCommunication() );
+
+    //create CafeModel
+    CafeModel::instance().create(world());
 }
 
 /*-------------------------------------------------------------------*/
@@ -225,7 +229,7 @@ SamplePlayer::initImpl( CmdLineParser & cmd_parser )
 void
 SamplePlayer::actionImpl()
 {
-    
+
     //
     // update strategy and analyzer
     //

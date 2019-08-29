@@ -39,7 +39,9 @@ BHV_SOURCE = \
    	behaviours/bhv_set_play_kick_in.h \
    	behaviours/bhv_set_play_kick_off.h \
     behaviours/bhv_their_goal_kick_move.h \
-    behaviours/bhv_penalty_kick.h
+    behaviours/bhv_penalty_kick.h \
+    behaviours/bhv_defensive_positioning.h \
+    behaviours/bhv_defensive_positioning.cpp
 
 
 
@@ -91,12 +93,14 @@ ACTIONS_SOURCE = \
 	actions/view_tactical.cpp
 
 PLAYERSOURCES = \
+    cafe_model.cpp \
 	sample_field_evaluator.cpp \
 	sample_player.cpp \
 	strategy.cpp \
 	main_player.cpp
 
 PLAYERHEADERS = \
+    cafe_model.h\
 	sample_field_evaluator.h \
 	sample_player.h \
 	strategy.h

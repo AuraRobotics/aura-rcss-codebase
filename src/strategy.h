@@ -222,7 +222,7 @@ public:
 
     rcsc::Vector2D getPosition(const int unum) const;
 
-    double getDeffanceLine() const;
+
 
 private:
     void updateSituation(const rcsc::WorldModel &wm);
@@ -247,6 +247,8 @@ public:
 
     static
     double get_normal_dash_power(const rcsc::WorldModel &wm);
+
+    double getDeffanceLine() const;
 
 
 };

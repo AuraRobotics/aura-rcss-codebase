@@ -158,7 +158,8 @@ am__objects_3 = behaviours/sample_player-bhv_basic_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_set_play_kick_in.$(OBJEXT) \
 	behaviours/sample_player-bhv_set_play_kick_off.$(OBJEXT) \
 	behaviours/sample_player-bhv_their_goal_kick_move.$(OBJEXT) \
-	behaviours/sample_player-bhv_penalty_kick.$(OBJEXT)
+	behaviours/sample_player-bhv_penalty_kick.$(OBJEXT) \
+	behaviours/sample_player-bhv_defensive_positioning.$(OBJEXT)
 am__objects_4 = roles/sample_player-soccer_role.$(OBJEXT) \
 	roles/sample_player-role_center_back.$(OBJEXT) \
 	roles/sample_player-role_center_forward.$(OBJEXT) \
@@ -182,7 +183,8 @@ am__objects_6 =  \
 	communication/sample_player-intention_receive.$(OBJEXT) \
 	communication/sample_player-intention_wait_after_set_play_kick.$(OBJEXT)
 am__objects_7 = utils/sample_player-geoUtils.$(OBJEXT)
-am__objects_8 = sample_player-sample_field_evaluator.$(OBJEXT) \
+am__objects_8 = sample_player-cafe_model.$(OBJEXT) \
+	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
 	sample_player-strategy.$(OBJEXT) \
 	sample_player-main_player.$(OBJEXT)
@@ -414,7 +416,9 @@ BHV_SOURCE = \
    	behaviours/bhv_set_play_kick_in.h \
    	behaviours/bhv_set_play_kick_off.h \
     behaviours/bhv_their_goal_kick_move.h \
-    behaviours/bhv_penalty_kick.h
+    behaviours/bhv_penalty_kick.h \
+    behaviours/bhv_defensive_positioning.h \
+    behaviours/bhv_defensive_positioning.cpp
 
 ROLE_SOURCE = \
     roles/soccer_role.h \
@@ -464,12 +468,14 @@ ACTIONS_SOURCE = \
 	actions/view_tactical.cpp
 
 PLAYERSOURCES = \
+    cafe_model.cpp \
 	sample_field_evaluator.cpp \
 	sample_player.cpp \
 	strategy.cpp \
 	main_player.cpp
 
 PLAYERHEADERS = \
+    cafe_model.h\
 	sample_field_evaluator.h \
 	sample_player.h \
 	strategy.h
@@ -850,6 +856,9 @@ behaviours/sample_player-bhv_their_goal_kick_move.$(OBJEXT):  \
 behaviours/sample_player-bhv_penalty_kick.$(OBJEXT):  \
 	behaviours/$(am__dirstamp) \
 	behaviours/$(DEPDIR)/$(am__dirstamp)
+behaviours/sample_player-bhv_defensive_positioning.$(OBJEXT):  \
+	behaviours/$(am__dirstamp) \
+	behaviours/$(DEPDIR)/$(am__dirstamp)
 roles/$(am__dirstamp):
 	@$(MKDIR_P) roles
 	@: > roles/$(am__dirstamp)
@@ -943,6 +952,7 @@ distclean-compile:
 
 include ./$(DEPDIR)/sample_coach-main_coach.Po
 include ./$(DEPDIR)/sample_coach-sample_coach.Po
+include ./$(DEPDIR)/sample_player-cafe_model.Po
 include ./$(DEPDIR)/sample_player-main_player.Po
 include ./$(DEPDIR)/sample_player-sample_field_evaluator.Po
 include ./$(DEPDIR)/sample_player-sample_player.Po
@@ -957,6 +967,7 @@ include behaviours/$(DEPDIR)/sample_player-bhv_basic_move.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_basic_offensive_kick.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_basic_tackle.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_custom_before_kick_off.Po
+include behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_go_to_static_ball.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_goalie_basic_move.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_goalie_chase_ball.Po
@@ -1735,6 +1746,20 @@ behaviours/sample_player-bhv_penalty_kick.obj: behaviours/bhv_penalty_kick.cpp
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_penalty_kick.obj `if test -f 'behaviours/bhv_penalty_kick.cpp'; then $(CYGPATH_W) 'behaviours/bhv_penalty_kick.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_penalty_kick.cpp'; fi`
 
+behaviours/sample_player-bhv_defensive_positioning.o: behaviours/bhv_defensive_positioning.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_defensive_positioning.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Tpo -c -o behaviours/sample_player-bhv_defensive_positioning.o `test -f 'behaviours/bhv_defensive_positioning.cpp' || echo '$(srcdir)/'`behaviours/bhv_defensive_positioning.cpp
+	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Tpo behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Po
+#	$(AM_V_CXX)source='behaviours/bhv_defensive_positioning.cpp' object='behaviours/sample_player-bhv_defensive_positioning.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_defensive_positioning.o `test -f 'behaviours/bhv_defensive_positioning.cpp' || echo '$(srcdir)/'`behaviours/bhv_defensive_positioning.cpp
+
+behaviours/sample_player-bhv_defensive_positioning.obj: behaviours/bhv_defensive_positioning.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_defensive_positioning.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Tpo -c -o behaviours/sample_player-bhv_defensive_positioning.obj `if test -f 'behaviours/bhv_defensive_positioning.cpp'; then $(CYGPATH_W) 'behaviours/bhv_defensive_positioning.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_defensive_positioning.cpp'; fi`
+	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Tpo behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Po
+#	$(AM_V_CXX)source='behaviours/bhv_defensive_positioning.cpp' object='behaviours/sample_player-bhv_defensive_positioning.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_defensive_positioning.obj `if test -f 'behaviours/bhv_defensive_positioning.cpp'; then $(CYGPATH_W) 'behaviours/bhv_defensive_positioning.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_defensive_positioning.cpp'; fi`
+
 roles/sample_player-soccer_role.o: roles/soccer_role.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT roles/sample_player-soccer_role.o -MD -MP -MF roles/$(DEPDIR)/sample_player-soccer_role.Tpo -c -o roles/sample_player-soccer_role.o `test -f 'roles/soccer_role.cpp' || echo '$(srcdir)/'`roles/soccer_role.cpp
 	$(AM_V_at)$(am__mv) roles/$(DEPDIR)/sample_player-soccer_role.Tpo roles/$(DEPDIR)/sample_player-soccer_role.Po
@@ -2028,6 +2053,20 @@ utils/sample_player-geoUtils.obj: utils/geoUtils.cpp
 #	$(AM_V_CXX)source='utils/geoUtils.cpp' object='utils/sample_player-geoUtils.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-geoUtils.obj `if test -f 'utils/geoUtils.cpp'; then $(CYGPATH_W) 'utils/geoUtils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/geoUtils.cpp'; fi`
+
+sample_player-cafe_model.o: cafe_model.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/sample_player-cafe_model.Tpo $(DEPDIR)/sample_player-cafe_model.Po
+#	$(AM_V_CXX)source='cafe_model.cpp' object='sample_player-cafe_model.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp
+
+sample_player-cafe_model.obj: cafe_model.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.obj -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.obj `if test -f 'cafe_model.cpp'; then $(CYGPATH_W) 'cafe_model.cpp'; else $(CYGPATH_W) '$(srcdir)/cafe_model.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/sample_player-cafe_model.Tpo $(DEPDIR)/sample_player-cafe_model.Po
+#	$(AM_V_CXX)source='cafe_model.cpp' object='sample_player-cafe_model.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o sample_player-cafe_model.obj `if test -f 'cafe_model.cpp'; then $(CYGPATH_W) 'cafe_model.cpp'; else $(CYGPATH_W) '$(srcdir)/cafe_model.cpp'; fi`
 
 sample_player-sample_field_evaluator.o: sample_field_evaluator.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-sample_field_evaluator.o -MD -MP -MF $(DEPDIR)/sample_player-sample_field_evaluator.Tpo -c -o sample_player-sample_field_evaluator.o `test -f 'sample_field_evaluator.cpp' || echo '$(srcdir)/'`sample_field_evaluator.cpp
