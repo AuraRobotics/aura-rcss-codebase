@@ -65,10 +65,15 @@ enum SituationType {
     PenaltyKick_Situation,
 };
 
-enum RoleType {
-    Goalie, SideBack, CenterBack, DefensiveHalf, SideHalf, RoleOffensiveHalf, SideForward, CenterForward,
 
-    Sample,RoleKeepawayKeeper,RoleKeepawayTaker
+enum RoleGroup {
+    None, KeepGoal, Defense, Halfback, Offensive
+};
+
+enum RoleType {
+    Goalie, SideBack, CenterBack, DefensiveHalf, SideHalf, OffensiveHalf, SideForward, CenterForward,
+
+    Sample, RoleKeepawayKeeper, RoleKeepawayTaker
 };
 
 
@@ -103,11 +108,13 @@ private:
 #ifndef USE_GENERIC_FACTORY
     typedef std::map <std::string, SoccerRole::Creator> RoleFactory;
     typedef std::map <std::string, rcsc::Formation::Creator> FormationFactory;
-    typedef std::map< std::string, RoleType > RoleTypeMaper;
+    typedef std::map <std::string, RoleType> RoleTypeMaper;
+    typedef std::map <RoleType, RoleGroup> RoleTypeGroupMaper;
 
     RoleFactory M_role_factory;
     RoleTypeMaper M_role_type_mapper;
     FormationFactory M_formation_factory;
+    RoleTypeGroupMaper M_role_group_mapper;
 #endif
 
 
@@ -140,7 +147,7 @@ private:
 
     // role assignment
     std::vector<int> M_role_number;
-    std::vector<RoleType> M_role_type;
+    std::vector <RoleType> M_role_type;
 
     // current home positions
     std::vector <PositionType> M_position_types;
@@ -194,8 +201,13 @@ public:
         if (unum < 1 || 11 < unum) return unum;
         return M_role_number[unum - 1];
     }
-//
-    RoleType getRole(const int unum) const {
+
+    RoleGroup getRoleGroup(const int unum) const {
+        if (unum < 1 || 11 < unum) return None;
+        return M_role_group_mapper.find(M_role_type[unum - 1])->second;
+    }
+
+    RoleType getRoleType(const int unum) const {
         if (unum < 1 || 11 < unum) return Sample;
         return M_role_type[unum - 1];
     }
@@ -210,6 +222,7 @@ public:
 
     rcsc::Vector2D getPosition(const int unum) const;
 
+    double getDeffanceLine() const;
 
 private:
     void updateSituation(const rcsc::WorldModel &wm);
@@ -234,6 +247,8 @@ public:
 
     static
     double get_normal_dash_power(const rcsc::WorldModel &wm);
+
+
 };
 
 #endif

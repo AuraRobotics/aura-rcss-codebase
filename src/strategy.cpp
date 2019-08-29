@@ -125,6 +125,9 @@ Strategy::Strategy()
     //
     M_formation_factory[FormationStatic::name()] = &FormationStatic::create;
     M_formation_factory[FormationDT::name()] = &FormationDT::create;
+
+
+
 #endif
 
     for ( size_t i = 0; i < M_role_number.size(); ++i )
@@ -142,13 +145,30 @@ Strategy::Strategy()
     M_role_type_mapper[RoleCenterBack::name()] = CenterBack;
     M_role_type_mapper[RoleSideBack::name()] = SideBack;
     M_role_type_mapper[RoleDefensiveHalf::name()] = DefensiveHalf;
-    M_role_type_mapper[RoleOffensiveHalf::name()] = RoleOffensiveHalf;
+    M_role_type_mapper[RoleOffensiveHalf::name()] = OffensiveHalf;
     M_role_type_mapper[RoleSideHalf::name()] = SideHalf;
     M_role_type_mapper[RoleSideForward::name()] = SideForward;
     M_role_type_mapper[RoleCenterForward::name()] = CenterForward;
     // keepaway
     M_role_type_mapper[RoleKeepawayKeeper::name()] = RoleKeepawayKeeper;
     M_role_type_mapper[RoleKeepawayTaker::name()] = RoleKeepawayTaker;
+
+    //////// Group
+    M_role_group_mapper[Sample] = None;
+
+    M_role_group_mapper[Goalie] = KeepGoal;
+    M_role_group_mapper[CenterBack] = Defense;
+    M_role_group_mapper[SideBack] = Defense;
+    M_role_group_mapper[DefensiveHalf] = Halfback;
+    M_role_group_mapper[OffensiveHalf] = Halfback;
+    M_role_group_mapper[SideHalf] = Halfback;
+    M_role_group_mapper[SideForward] = Offensive;
+    M_role_group_mapper[CenterForward] = Offensive;
+
+    // keepaway
+    M_role_group_mapper[RoleKeepawayKeeper] = None;
+    M_role_group_mapper[RoleKeepawayTaker] = None;
+
 
 }
 
@@ -1275,4 +1295,20 @@ Strategy::get_normal_dash_power( const WorldModel & wm )
     }
 
     return dash_power;
+}
+
+double Strategy::getDeffanceLine() const {
+
+    double sum_x = 0;
+    int defence_pnum = 0;
+    for(int unum=1; unum<=11; unum++){
+
+        const RoleGroup role_group = getRoleGroup(unum);
+        if(role_group == Defense){
+            defence_pnum++;
+            sum_x += getPosition(unum).x;
+        }
+    }
+
+    return defence_pnum != 0 ? sum_x/defence_pnum : -1;
 }

@@ -840,11 +840,13 @@ SamplePlayer::createActionGenerator() const
 
 bool SamplePlayer::test(){
 
-    for(int unum = 1; unum<=11 ; unum++){
+//    for(int unum = 1; unum<=11 ; unum++){
+//
+//        dlog.addText( Logger::TEAM,
+//                      __FILE__": RoleType:: %d , %d",
+//                      Strategy::i().getPositionType(unum) , Strategy::i().getRoleType(unum));
+//    }
 
-        dlog.addText( Logger::TEAM,
-                      __FILE__": RoleType:: %d , %d",
-                      Strategy::i().getPositionType(unum) , Strategy::i().getRole(unum));
-    }
+
     return false;
 }
