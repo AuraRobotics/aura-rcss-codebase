@@ -11,7 +11,7 @@
 
 class CafeModel {
 
-    typedef const boost::shared_ptr< rcsc::WorldModel > WorldModelPtr;
+    typedef const boost::shared_ptr <rcsc::WorldModel> WorldModelPtr;
 private:
 
     const rcsc::WorldModel *wm;
@@ -33,13 +33,11 @@ public:
     void create(const rcsc::WorldModel &wm);
 
 
+    rcsc::PlayerPtrCont getPlayerInRangeX(int x1, int x2, bool ourTeam) const;
 
-    rcsc::PlayerPtrCont &getPlayerInRangeX(int x1, int x2, bool ourTeam);
-
+    rcsc::PlayerPtrCont getPlayerInRangeX(rcsc::PlayerPtrCont player, int x1, int x2) const;
 
 private:
-    rcsc::PlayerPtrCont &getPlayerInRangeX(rcsc::PlayerPtrCont player, int x1, int x2);
-
 
 };
 
