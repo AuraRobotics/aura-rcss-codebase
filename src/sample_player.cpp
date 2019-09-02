@@ -790,8 +790,11 @@ SamplePlayer::createActionGenerator() const {
     return ActionGenerator::ConstPtr(g);
 }
 
+#include "utils/geo_utils.h"
+
 
 bool SamplePlayer::test() {
+
 
 //    for(int unum = 1; unum<=11 ; unum++){
 //
@@ -800,19 +803,34 @@ bool SamplePlayer::test() {
 //                      Strategy::i().getPositionType(unum) , Strategy::i().getRoleType(unum));
 //    }
 
+    const WorldModel &wm = this->world();
+
 //
-//    PlayerPtrCont in_ragne_player = CafeModel::i().getPlayerInRangeX(-40, 0, true);
+//    PlayerPtrCont in_ragne_player = CafeModel::i().getPlayerInRangeGoal(50, true);
 //
-//    const PlayerPtrCont::const_iterator end = in_ragne_player.end();
-//    for (PlayerPtrCont::const_iterator it = in_ragne_player.begin();
-//         it != end; it++) {
-//        dlog.addText( Logger::TEAM,
-//                      __FILE__": player in Range %d",
-//                      (*it)->unum() );
+//    std::cout << wm.self().unum() << "---------------> " <<  wm.teammates().size() << std::endl;
+//    const PlayerCont::const_iterator t_end = wm.teammates().end();
+//    for (PlayerCont::const_iterator it = wm.teammates().begin();
+//         it != t_end; it++) {
+//        std::cout << (it)->unum() << std::endl;
+//    }
+//
+//    std::vector<int> defance_player_unum = Strategy::i().getGroupPlayer(Defense);
+//    ConstPlayerPtrCont defencive_player = CafeModel::i().getOurPlayersByUnum(defance_player_unum);
+//
+//    std::cout << wm.self().unum() << "---------------> " << std::endl;
+//
+//    const ConstPlayerPtrCont::const_iterator t_end = defencive_player.end();
+//    for (ConstPlayerPtrCont::const_iterator it = defencive_player.begin();
+//         it != t_end; it++) {
+//
+//        if ((*it)->unum() == Unum_Unknown) continue;
+//        std::cout << (*it)->unum() << std::endl;
 //    }
 
-
-
+    dlog.addRect(Logger::TEAM,
+                 wm.self().pos().x - 2, wm.self().pos().y - 2, 4, 4,
+                 "#0000ff");
 
     return false;
 }

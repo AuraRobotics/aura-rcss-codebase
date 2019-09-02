@@ -1,8 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
 UTILSSOURCES = \
-    utils/geoUtils.h \
-    utils/geoUtils.cpp
+    utils/geo_utils.h \
+    utils/geo_utils.cpp \
+    utils/algo_utils.h \
+    utils/algo_utils.cpp \
+    utils/algorithms/hungarian.h \
+    utils/algorithms/hungarian.cpp
 
 
 BHV_SOURCE = \

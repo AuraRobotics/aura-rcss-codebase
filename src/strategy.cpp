@@ -1310,5 +1310,22 @@ double Strategy::getDeffanceLine() const {
         }
     }
 
+    dlog.addText( Logger::TEAM,
+                  __FILE__": getDeffanceLine >>> defence num : %d, sum_x : %.2f",
+                  defence_pnum,
+                  sum_x);
+
     return defence_pnum != 0 ? sum_x/defence_pnum : -1;
+}
+
+
+std::vector<int> Strategy::getGroupPlayer(RoleGroup group) const {
+    std::vector<int> group_player;
+    for(int unum = 1; unum <= 11; unum++){
+        if(getRoleGroup(unum) == group){
+            group_player.push_back(unum);
+        }
+    }
+
+    return group_player;
 }

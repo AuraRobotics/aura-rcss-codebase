@@ -182,7 +182,9 @@ am__objects_6 =  \
 	communication/sample_player-keepaway_communication.$(OBJEXT) \
 	communication/sample_player-intention_receive.$(OBJEXT) \
 	communication/sample_player-intention_wait_after_set_play_kick.$(OBJEXT)
-am__objects_7 = utils/sample_player-geoUtils.$(OBJEXT)
+am__objects_7 = utils/sample_player-geo_utils.$(OBJEXT) \
+	utils/sample_player-algo_utils.$(OBJEXT) \
+	utils/algorithms/sample_player-hungarian.$(OBJEXT)
 am__objects_8 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -379,8 +381,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 UTILSSOURCES = \
-    utils/geoUtils.h \
-    utils/geoUtils.cpp
+    utils/geo_utils.h \
+    utils/geo_utils.cpp \
+    utils/algo_utils.h \
+    utils/algo_utils.cpp \
+    utils/algorithms/hungarian.h \
+    utils/algorithms/hungarian.cpp
 
 BHV_SOURCE = \
     behaviours/bhv_basic_move.cpp \
@@ -927,8 +933,19 @@ utils/$(am__dirstamp):
 utils/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) utils/$(DEPDIR)
 	@: > utils/$(DEPDIR)/$(am__dirstamp)
-utils/sample_player-geoUtils.$(OBJEXT): utils/$(am__dirstamp) \
+utils/sample_player-geo_utils.$(OBJEXT): utils/$(am__dirstamp) \
 	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sample_player-algo_utils.$(OBJEXT): utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/algorithms/$(am__dirstamp):
+	@$(MKDIR_P) utils/algorithms
+	@: > utils/algorithms/$(am__dirstamp)
+utils/algorithms/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) utils/algorithms/$(DEPDIR)
+	@: > utils/algorithms/$(DEPDIR)/$(am__dirstamp)
+utils/algorithms/sample_player-hungarian.$(OBJEXT):  \
+	utils/algorithms/$(am__dirstamp) \
+	utils/algorithms/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -946,6 +963,7 @@ mostlyclean-compile:
 	-rm -f communication/*.$(OBJEXT)
 	-rm -f roles/*.$(OBJEXT)
 	-rm -f utils/*.$(OBJEXT)
+	-rm -f utils/algorithms/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -1028,7 +1046,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-role_side_forward.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-role_side_half.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-soccer_role.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-geoUtils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-algo_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-geo_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -2040,19 +2060,47 @@ communication/sample_player-intention_wait_after_set_play_kick.obj: communicatio
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o communication/sample_player-intention_wait_after_set_play_kick.obj `if test -f 'communication/intention_wait_after_set_play_kick.cpp'; then $(CYGPATH_W) 'communication/intention_wait_after_set_play_kick.cpp'; else $(CYGPATH_W) '$(srcdir)/communication/intention_wait_after_set_play_kick.cpp'; fi`
 
-utils/sample_player-geoUtils.o: utils/geoUtils.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-geoUtils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-geoUtils.Tpo -c -o utils/sample_player-geoUtils.o `test -f 'utils/geoUtils.cpp' || echo '$(srcdir)/'`utils/geoUtils.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-geoUtils.Tpo utils/$(DEPDIR)/sample_player-geoUtils.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/geoUtils.cpp' object='utils/sample_player-geoUtils.o' libtool=no @AMDEPBACKSLASH@
+utils/sample_player-geo_utils.o: utils/geo_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-geo_utils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-geo_utils.Tpo -c -o utils/sample_player-geo_utils.o `test -f 'utils/geo_utils.cpp' || echo '$(srcdir)/'`utils/geo_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-geo_utils.Tpo utils/$(DEPDIR)/sample_player-geo_utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/geo_utils.cpp' object='utils/sample_player-geo_utils.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-geoUtils.o `test -f 'utils/geoUtils.cpp' || echo '$(srcdir)/'`utils/geoUtils.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-geo_utils.o `test -f 'utils/geo_utils.cpp' || echo '$(srcdir)/'`utils/geo_utils.cpp
 
-utils/sample_player-geoUtils.obj: utils/geoUtils.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-geoUtils.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-geoUtils.Tpo -c -o utils/sample_player-geoUtils.obj `if test -f 'utils/geoUtils.cpp'; then $(CYGPATH_W) 'utils/geoUtils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/geoUtils.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-geoUtils.Tpo utils/$(DEPDIR)/sample_player-geoUtils.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/geoUtils.cpp' object='utils/sample_player-geoUtils.obj' libtool=no @AMDEPBACKSLASH@
+utils/sample_player-geo_utils.obj: utils/geo_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-geo_utils.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-geo_utils.Tpo -c -o utils/sample_player-geo_utils.obj `if test -f 'utils/geo_utils.cpp'; then $(CYGPATH_W) 'utils/geo_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/geo_utils.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-geo_utils.Tpo utils/$(DEPDIR)/sample_player-geo_utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/geo_utils.cpp' object='utils/sample_player-geo_utils.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-geoUtils.obj `if test -f 'utils/geoUtils.cpp'; then $(CYGPATH_W) 'utils/geoUtils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/geoUtils.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-geo_utils.obj `if test -f 'utils/geo_utils.cpp'; then $(CYGPATH_W) 'utils/geo_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/geo_utils.cpp'; fi`
+
+utils/sample_player-algo_utils.o: utils/algo_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-algo_utils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-algo_utils.Tpo -c -o utils/sample_player-algo_utils.o `test -f 'utils/algo_utils.cpp' || echo '$(srcdir)/'`utils/algo_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-algo_utils.Tpo utils/$(DEPDIR)/sample_player-algo_utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/algo_utils.cpp' object='utils/sample_player-algo_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-algo_utils.o `test -f 'utils/algo_utils.cpp' || echo '$(srcdir)/'`utils/algo_utils.cpp
+
+utils/sample_player-algo_utils.obj: utils/algo_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-algo_utils.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-algo_utils.Tpo -c -o utils/sample_player-algo_utils.obj `if test -f 'utils/algo_utils.cpp'; then $(CYGPATH_W) 'utils/algo_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/algo_utils.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-algo_utils.Tpo utils/$(DEPDIR)/sample_player-algo_utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/algo_utils.cpp' object='utils/sample_player-algo_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-algo_utils.obj `if test -f 'utils/algo_utils.cpp'; then $(CYGPATH_W) 'utils/algo_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/algo_utils.cpp'; fi`
+
+utils/algorithms/sample_player-hungarian.o: utils/algorithms/hungarian.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/algorithms/sample_player-hungarian.o -MD -MP -MF utils/algorithms/$(DEPDIR)/sample_player-hungarian.Tpo -c -o utils/algorithms/sample_player-hungarian.o `test -f 'utils/algorithms/hungarian.cpp' || echo '$(srcdir)/'`utils/algorithms/hungarian.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/algorithms/$(DEPDIR)/sample_player-hungarian.Tpo utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/algorithms/hungarian.cpp' object='utils/algorithms/sample_player-hungarian.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/algorithms/sample_player-hungarian.o `test -f 'utils/algorithms/hungarian.cpp' || echo '$(srcdir)/'`utils/algorithms/hungarian.cpp
+
+utils/algorithms/sample_player-hungarian.obj: utils/algorithms/hungarian.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/algorithms/sample_player-hungarian.obj -MD -MP -MF utils/algorithms/$(DEPDIR)/sample_player-hungarian.Tpo -c -o utils/algorithms/sample_player-hungarian.obj `if test -f 'utils/algorithms/hungarian.cpp'; then $(CYGPATH_W) 'utils/algorithms/hungarian.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/algorithms/hungarian.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/algorithms/$(DEPDIR)/sample_player-hungarian.Tpo utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/algorithms/hungarian.cpp' object='utils/algorithms/sample_player-hungarian.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/algorithms/sample_player-hungarian.obj `if test -f 'utils/algorithms/hungarian.cpp'; then $(CYGPATH_W) 'utils/algorithms/hungarian.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/algorithms/hungarian.cpp'; fi`
 
 sample_player-cafe_model.o: cafe_model.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp
@@ -2277,6 +2325,8 @@ distclean-generic:
 	-rm -f roles/$(am__dirstamp)
 	-rm -f utils/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utils/$(am__dirstamp)
+	-rm -f utils/algorithms/$(DEPDIR)/$(am__dirstamp)
+	-rm -f utils/algorithms/$(am__dirstamp)
 	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
@@ -2287,7 +2337,7 @@ clean: clean-am
 clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -2333,7 +2383,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

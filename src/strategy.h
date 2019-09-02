@@ -250,6 +250,8 @@ public:
 
     double getDeffanceLine() const;
 
+    std::vector<int> getGroupPlayer(RoleGroup group) const;
+
 
 };
 

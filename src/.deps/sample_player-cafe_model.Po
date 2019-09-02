@@ -286,7 +286,12 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/local/include/rcsc/player/view_grid_map.h \
  /usr/include/boost/scoped_ptr.hpp \
  /usr/include/boost/smart_ptr/scoped_ptr.hpp \
- /usr/local/include/rcsc/game_mode.h
+ /usr/local/include/rcsc/game_mode.h \
+ /usr/local/include/rcsc/common/server_param.h \
+ /usr/local/include/rcsc/geom/rect_2d.h \
+ /usr/local/include/rcsc/geom/region_2d.h \
+ /usr/local/include/rcsc/geom/size_2d.h \
+ /usr/local/include/rcsc/geom/line_2d.h
 
 /usr/include/stdc-predef.h:
 
@@ -983,3 +988,13 @@ roles/soccer_role.h:
 /usr/include/boost/smart_ptr/scoped_ptr.hpp:
 
 /usr/local/include/rcsc/game_mode.h:
+
+/usr/local/include/rcsc/common/server_param.h:
+
+/usr/local/include/rcsc/geom/rect_2d.h:
+
+/usr/local/include/rcsc/geom/region_2d.h:
+
+/usr/local/include/rcsc/geom/size_2d.h:
+
+/usr/local/include/rcsc/geom/line_2d.h:

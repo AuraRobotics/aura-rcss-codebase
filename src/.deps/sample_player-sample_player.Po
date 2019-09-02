@@ -918,7 +918,8 @@ sample_player-sample_player.o: sample_player.cpp \
  ../src/chain_action/actgen_short_dribble.h \
  ../src/chain_action/actgen_simple_dribble.h \
  ../src/chain_action/actgen_shoot.h \
- ../src/chain_action/actgen_action_chain_length_filter.h
+ ../src/chain_action/actgen_action_chain_length_filter.h \
+ utils/geo_utils.h /usr/local/include/rcsc/geom/polygon_2d.h
 
 /usr/include/stdc-predef.h:
 
@@ -2995,3 +2996,7 @@ cafe_model.h:
 ../src/chain_action/actgen_shoot.h:
 
 ../src/chain_action/actgen_action_chain_length_filter.h:
+
+utils/geo_utils.h:
+
+/usr/local/include/rcsc/geom/polygon_2d.h:
