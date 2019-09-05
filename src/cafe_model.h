@@ -53,7 +53,7 @@ public:
 
     rcsc::PlayerPtrCont getPlayerInRangeGoal(rcsc::PlayerPtrCont player, double dist) const;
 
-
+    double getOurOffsideLine() const;
 private:
 
 };

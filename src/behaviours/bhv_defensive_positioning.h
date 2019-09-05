@@ -27,13 +27,13 @@ private:
     const rcsc::PlayerObject *
     assignOpponent(rcsc::ConstPlayerPtrCont def_ps, rcsc::PlayerPtrCont opp_ps, int self_unum);
 
-    rcsc::Vector2D getDefensivePos(rcsc::PlayerAgent *agent, const rcsc::PlayerObject *opponent, double defense_line_x);
+    rcsc::Vector2D getDefensivePos(rcsc::PlayerAgent *agent, const rcsc::PlayerObject *opponent);
 
     rcsc::Polygon2D getDengerArea(rcsc::Vector2D ball_pos,
                                   rcsc::Vector2D opp_pos);
 
     bool checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
-                         rcsc::Vector2D ball_pos);
+                         rcsc::Vector2D ball_pos, double our_offside_x);
 
     double nearToGoalLine(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
                           rcsc::Vector2D ball_pos, double max_radius2);
@@ -47,7 +47,7 @@ private:
                                rcsc::Vector2D ball_pos, rcsc::Polygon2D denger_area,
                                double dist_path);
 
-
+    rcsc::PlayerPtrCont getDengerOpponent(rcsc::PlayerAgent *agent);
 
     void log_table(std::vector<std::vector<double> > table, std::string name);
 

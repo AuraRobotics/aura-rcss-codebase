@@ -299,7 +299,7 @@ roles/sample_player-role_side_back.o: roles/role_side_back.cpp \
  /usr/local/include/rcsc/common/server_param.h \
  /usr/local/include/rcsc/geom/rect_2d.h \
  /usr/local/include/rcsc/geom/size_2d.h \
- /usr/local/include/rcsc/geom/line_2d.h \
+ /usr/local/include/rcsc/geom/line_2d.h roles/../behaviours/bhv_block.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -1216,6 +1216,8 @@ roles/../behaviours/../roles/soccer_role.h:
 /usr/local/include/rcsc/geom/size_2d.h:
 
 /usr/local/include/rcsc/geom/line_2d.h:
+
+roles/../behaviours/bhv_block.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 

@@ -34,23 +34,22 @@
 #include "bhv_chain_action.h"
 #include "../behaviours/bhv_basic_offensive_kick.h"
 #include "../behaviours/bhv_basic_move.h"
-
+#include "../behaviours/bhv_block.h"
 #include <rcsc/player/player_agent.h>
 #include <rcsc/player/debug_client.h>
-
 #include <rcsc/common/logger.h>
 
 using namespace rcsc;
 
-const std::string RoleCenterForward::NAME( "CenterForward" );
+const std::string RoleCenterForward::NAME("CenterForward");
 
 /*-------------------------------------------------------------------*/
 /*!
 
  */
 namespace {
-rcss::RegHolder role = SoccerRole::creators().autoReg( &RoleCenterForward::create,
-                                                       RoleCenterForward::NAME );
+    rcss::RegHolder role = SoccerRole::creators().autoReg(&RoleCenterForward::create,
+                                                          RoleCenterForward::NAME);
 }
 
 /*-------------------------------------------------------------------*/
@@ -58,23 +57,18 @@ rcss::RegHolder role = SoccerRole::creators().autoReg( &RoleCenterForward::creat
 
  */
 bool
-RoleCenterForward::execute( PlayerAgent * agent )
-{
+RoleCenterForward::execute(PlayerAgent *agent) {
     bool kickable = agent->world().self().isKickable();
-    if ( agent->world().existKickableTeammate()
-         && agent->world().teammatesFromBall().front()->distFromBall()
-         < agent->world().ball().distFromSelf() )
-    {
+    if (agent->world().existKickableTeammate()
+        && agent->world().teammatesFromBall().front()->distFromBall()
+           < agent->world().ball().distFromSelf()) {
         kickable = false;
     }
 
-    if ( kickable )
-    {
-        doKick( agent );
-    }
-    else
-    {
-        doMove( agent );
+    if (kickable) {
+        doKick(agent);
+    } else {
+        doMove(agent);
     }
 
     return true;
@@ -85,17 +79,15 @@ RoleCenterForward::execute( PlayerAgent * agent )
 
  */
 void
-RoleCenterForward::doKick( PlayerAgent * agent )
-{
-    if ( Bhv_ChainAction().execute( agent ) )
-    {
-        dlog.addText( Logger::TEAM,
-                      __FILE__": (execute) do chain action" );
-        agent->debugClient().addMessage( "ChainAction" );
+RoleCenterForward::doKick(PlayerAgent *agent) {
+    if (Bhv_ChainAction().execute(agent)) {
+        dlog.addText(Logger::TEAM,
+                     __FILE__": (execute) do chain action");
+        agent->debugClient().addMessage("ChainAction");
         return;
     }
 
-    Bhv_BasicOffensiveKick().execute( agent );
+    Bhv_BasicOffensiveKick().execute(agent);
 }
 
 /*-------------------------------------------------------------------*/
@@ -103,7 +95,9 @@ RoleCenterForward::doKick( PlayerAgent * agent )
 
  */
 void
-RoleCenterForward::doMove( PlayerAgent * agent )
-{
-    Bhv_BasicMove().execute( agent );
+RoleCenterForward::doMove(PlayerAgent *agent) {
+    if (Bhv_Block().execute(agent)) {
+        return;
+    }
+    Bhv_BasicMove().execute(agent);
 }

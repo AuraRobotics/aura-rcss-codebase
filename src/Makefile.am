@@ -1,6 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 UTILSSOURCES = \
+    utils/rcsc_utils.h \
+    utils/rcsc_utils.cpp \
     utils/geo_utils.h \
     utils/geo_utils.cpp \
     utils/algo_utils.h \
@@ -45,7 +47,11 @@ BHV_SOURCE = \
     behaviours/bhv_their_goal_kick_move.h \
     behaviours/bhv_penalty_kick.h \
     behaviours/bhv_defensive_positioning.h \
-    behaviours/bhv_defensive_positioning.cpp
+    behaviours/bhv_defensive_positioning.cpp \
+    behaviours/bhv_defhalf_positioning.h \
+    behaviours/bhv_defhalf_positioning.cpp \
+    behaviours/bhv_block.h \
+    behaviours/bhv_block.cpp
 
 
 

@@ -2,6 +2,15 @@
 // Created by armanaxh on ۲۰۱۹/۸/۲۹.
 //
 
+
+#include <algorithm>
+#include <iostream>
+#include <rcsc/action/basic_actions.h>
+#include <rcsc/action/body_go_to_point.h>
+#include <rcsc/action/neck_turn_to_ball_or_scan.h>
+#include <rcsc/action/neck_turn_to_low_conf_teammate.h>
+
+
 #include "bhv_defensive_positioning.h"
 #include <rcsc/player/player_agent.h>
 #include <rcsc/common/logger.h>
@@ -10,8 +19,7 @@
 #include "../strategy.h"
 #include "../utils/algo_utils.h"
 #include "../utils/geo_utils.h"
-#include <algorithm>
-#include <iostream>
+#include "../utils/rcsc_utils.h"
 
 using namespace rcsc;
 
@@ -44,33 +52,20 @@ bool Bhv_DefensivePositioning::defendTheDefendLine(rcsc::PlayerAgent *agent) {
         return false;
     }
 
-    double defence_line = stra.getDeffanceLine();
-    double defence_denger_line = defence_line + 10;//TODO 5 cycle
-    double denger_range_as_goal = 44; //TODO range for test
-
-
-
+    /////danger opponents
     ConstPlayerPtrCont defensive_players = cm.getOurPlayersByUnum(defensive_players_unum);
-    PlayerPtrCont denger_opp_on_line = cm.getPlayerInRangeX(defence_line, defence_denger_line, false);
+    PlayerPtrCont denger_opp_on_line = getDengerOpponent(agent);
 
-
-///////////////////////////////////////////////// DEBUG
-    dlog.addLine(Logger::TEAM,
-                 Vector2D(defence_line, -30), Vector2D(defence_line, 30),
-                 "#00ffff");
-    dlog.addLine(Logger::TEAM,
-                 Vector2D(defence_denger_line, -30), Vector2D(defence_denger_line, 30),
-                 "#00ffff");
-    std::cout << wm.time() << " -- " << wm.self().unum() << "-=================================== " << std::endl;
-
-
-////////////////////////////////////////////////////////////////////
+    if (denger_opp_on_line.empty()) {
+        return false;
+    }
 
     const PlayerObject *target_opp = assignOpponent(defensive_players, denger_opp_on_line,
                                                     wm.self().unum());//TODO NULL check
     if (target_opp == NULL) {
         return false;
     }
+
     dlog.addLine(Logger::TEAM,
                  wm.self().pos(), target_opp->pos(),
                  "#ff0010");
@@ -79,16 +74,101 @@ bool Bhv_DefensivePositioning::defendTheDefendLine(rcsc::PlayerAgent *agent) {
                  target_opp->pos().x - 2, target_opp->pos().y - 2, 4, 4,
                  "#ff2200");
 
-    dlog.addText(Logger::TEAM, __FILE__"target to defence : %d %.2f %.2f", target_opp->unum(), target_opp->pos().x,
-                 target_opp->pos().y);
+
+    Vector2D target_point = getDefensivePos(agent, target_opp);
+    if (target_point == Vector2D::INVALIDATED) {
+        return false;
+    }
+
+    const double dash_power = Strategy::get_normal_dash_power(wm, stra);
+
+    double dist_thr = wm.ball().distFromSelf() * 0.04;
+    if (dist_thr < 1.0) dist_thr = 1.0;
+
+    dlog.addText(Logger::TEAM,
+                 __FILE__": Bhv_Defencive_Positioning target=(%.1f %.1f) dist_thr=%.2f",
+                 target_point.x, target_point.y,
+                 dist_thr);
 
 
-    Vector2D defensive_player = getDefensivePos(agent, target_opp, defence_line);
+    if (!Body_GoToPoint(target_point, dist_thr, dash_power
+    ).execute(agent)) {
+        Body_TurnToBall().execute(agent);
+    }
 
+    if (wm.existKickableOpponent()
+        && wm.ball().distFromSelf() < 18.0) {
+        agent->setNeckAction(new Neck_TurnToBall());
+    } else {
+        agent->setNeckAction(new Neck_TurnToBallOrScan());
+    }
 
-    return false;
+    return true;
+
 }
 
+
+rcsc::PlayerPtrCont Bhv_DefensivePositioning::getDengerOpponent(rcsc::PlayerAgent *agent) {
+
+    const CafeModel &cm = CafeModel::i();
+    const WorldModel &wm = agent->world();
+    const Strategy &stra = Strategy::i();
+
+    const Vector2D ball_pos = wm.ball().pos();
+
+    double defence_line = stra.getDeffanceLine() - 3;//TODO goto getPlayerInRange
+    double offside_line = cm.getOurOffsideLine();
+    double defence_radus = 13;//TODO 5 cycle
+
+    double x_start = std::min(defence_line, offside_line);
+    double x_end = std::max(x_start + defence_radus, offside_line + defence_radus);
+
+    Strategy::BallArea ball_area = stra.get_ball_area(wm);
+
+    if (ball_area == Strategy::BA_Danger || ball_area == Strategy::BA_CrossBlock) {
+        x_start = -60;
+        x_end = -33;
+        return PlayerPtrCont();//TODO fix return NULL
+    } else {
+        x_end = std::min(x_end, ball_pos.x + 3);
+    }
+
+
+    PlayerPtrCont opponents = cm.getPlayerInRangeX(x_start, x_end, false);
+
+
+    ///////////////////////////////////////////////// DEBUG
+    dlog.addLine(Logger::TEAM,
+                 Vector2D(x_start, -30), Vector2D(x_start, 30),
+                 "#00ffff");
+    dlog.addLine(Logger::TEAM,
+                 Vector2D(x_end, -30), Vector2D(x_end, 30),
+                 "#00ffff");
+
+    dlog.addText(Logger::TEAM,
+                 __FILE__": Max dist ball : %.2f",
+                 rcscUtils::maxDistBall());
+
+
+////////////////////////////////////////////////////////////////////
+    //TODO for now
+    PlayerPtrCont denger_opp;
+
+    const PlayerPtrCont::iterator end_t = opponents.end();
+    for (PlayerPtrCont::iterator it = opponents.begin(); it != end_t; it++) {
+        if ((*it)->distFromBall() < 4 || (*it)->isKickable()) {
+            continue;
+        }
+        if ((*it)->distFromBall() > rcscUtils::maxDistBall()) {
+            continue;
+        }
+
+        denger_opp.push_back(&(**it));
+    }
+
+
+    return denger_opp;
+}
 
 const PlayerObject *
 Bhv_DefensivePositioning::assignOpponent(ConstPlayerPtrCont def_ps, PlayerPtrCont opp_ps, int self_unum) {
@@ -152,44 +232,27 @@ Bhv_DefensivePositioning::assignOpponent(ConstPlayerPtrCont def_ps, PlayerPtrCon
 static Polygon2D max_covered_denger_poly;
 static double max_area_cover = INT_MIN;
 
-static std::vector<std::vector<double > > table_cover;
-static std::vector<std::vector<double > > table_goal_line;
-static std::vector<std::vector<double > > table_near_penalty;
-static std::vector<std::vector<double > > table_near_goal;
-static std::vector<std::vector<double > > table_final_score;
+static std::vector <std::vector<double> > table_cover;
+static std::vector <std::vector<double> > table_goal_line;
+static std::vector <std::vector<double> > table_near_penalty;
+static std::vector <std::vector<double> > table_near_goal;
+static std::vector <std::vector<double> > table_final_score;
 ///////////////////////////////
 
-Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, const PlayerObject *opponent,
-                                                   double defense_line_x) {
+Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, const PlayerObject *opponent) {
 
 
     const ServerParam &SP = ServerParam::i();
     const WorldModel &wm = agent->world();
+    const CafeModel &cm = CafeModel::i();
 
     Vector2D self_pos = Strategy::i().getPosition(wm.self().unum());
     Vector2D ball_pos = wm.ball().pos();
     Vector2D opp_pos = opponent->pos();
 
-    int x_offside = defense_line_x; //TODO change name
+    int x_offside = cm.getOurOffsideLine(); //TODO change name
 
-
-
-
-    //TODO to UTILS
-    double max_speed = SP.ballSpeedMax();
-    double dencay = SP.ballDecay();
-    int path_cycle = 20;
-
-    if (dencay == 1) {
-        std::cerr << "dancay is 1 ..." << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    double path_dist = max_speed * (1 - std::pow(dencay, path_cycle)) / (1 - dencay);
-    dlog.addText(Logger::TEAM,
-                 __FILE__":  =================  max_dist: %.3f, max_speed: %.4f, dencay: %.3f",
-                 path_dist, max_speed, dencay);
-    ////////////////////////////////////////////
-
+    double path_dist = rcscUtils::ballPathDistWithMaxSpeed(20);//TODO why 20?
     rcsc::Polygon2D dengerArea = getDengerArea(ball_pos, opp_pos);
 
 
@@ -199,13 +262,10 @@ Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, con
 
 
     double max_score = INT_MIN;
-    Vector2D best_pos;
+    Vector2D best_pos = Vector2D::INVALIDATED;
 
     double max_score_just_cover = INT_MIN;
     Vector2D best_pos_just_cover;
-
-
-
 
 
 
@@ -229,13 +289,14 @@ Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, con
             Vector2D check_point(i, j);
 
 
-//            if (!checkPosIsValid(check_point, self_pos, opp_pos, ball_pos)) {
-//                continue;
-//            }
+            if (!checkPosIsValid(check_point, self_pos, opp_pos, ball_pos, x_offside)) {
+                continue;
+            }
 
 
             double temp_score = 0;
-            double cover_danger = coverDengerPassArea(check_point, self_pos, opp_pos, ball_pos, dengerArea, path_dist) * 0.6;
+            double cover_danger =
+                    coverDengerPassArea(check_point, self_pos, opp_pos, ball_pos, dengerArea, path_dist) * 0.6;
             ///////////
             table_cover.back().push_back(cover_danger);
             ///////////DEBUG
@@ -245,14 +306,14 @@ Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, con
             }
             /////////////////
 
-            double near_to_goal_line =  nearToGoalLine(check_point, self_pos, opp_pos, ball_pos, 2* search_radius) * 0.35;
+            double near_to_goal_line =
+                    nearToGoalLine(check_point, self_pos, opp_pos, ball_pos, 2 * search_radius) * 0.35;
             table_goal_line.back().push_back(near_to_goal_line);
-            double near_to_penalt =  nearToPenaltyArea(check_point, self_pos, opp_pos, ball_pos, 2* search_radius) * 0.35;
+            double near_to_penalt =
+                    nearToPenaltyArea(check_point, self_pos, opp_pos, ball_pos, 2 * search_radius) * 0.35;
             table_near_penalty.back().push_back(near_to_penalt);
             double near_to_goal = nearToGoal(check_point, check_line_x.first, 2 * search_radius) * 0.2;
             table_near_goal.back().push_back(near_to_goal);
-
-
 
 
             temp_score += cover_danger;
@@ -268,11 +329,10 @@ Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, con
 
             dlog.addCircle(Logger::TEAM,
                            check_point, 0.5, "#0ff000", false);
-            std::cout << (int) (temp_score * 100) << " ";
 
             table_final_score.back().push_back(temp_score);
         }
-        std::cout << std::endl;
+
     }
 
 
@@ -307,27 +367,17 @@ Vector2D Bhv_DefensivePositioning::getDefensivePos(rcsc::PlayerAgent *agent, con
     log_table(table_near_goal, "near to goal");
     log_table(table_final_score, "final score ");
 
-    return Vector2D(0, 0);
+    return best_pos;
 }
 
 
 bool Bhv_DefensivePositioning::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
-                                               rcsc::Vector2D opp_pos, rcsc::Vector2D ball_pos) {
+                                               rcsc::Vector2D opp_pos, rcsc::Vector2D ball_pos, double our_offside_x) {
     const ServerParam &SP = ServerParam::i();
-    const Vector2D our_goal = SP.ourTeamGoalPos();
+    const CafeModel &cm = CafeModel::i();
 
-    Segment2D opp_to_goal(opp_pos, our_goal);
-    Vector2D nearest_point_to_point = opp_to_goal.nearestPoint(check_point);
-    if (nearest_point_to_point.dist(check_point) > nearest_point_to_point.dist(opp_pos)) {
+    if (check_point.x < our_offside_x) {
         return false;
-    }
-
-    if (opp_pos.x > -35) {//penalty area x TODO
-        Segment2D opp_to_penalty(opp_pos, Vector2D(-35, opp_pos.y));
-        nearest_point_to_point = opp_to_penalty.nearestPoint(check_point);
-        if (nearest_point_to_point.dist(check_point) > nearest_point_to_point.dist(opp_pos)) {
-            return false;
-        }
     }
     return true;
 }
@@ -347,7 +397,8 @@ double Bhv_DefensivePositioning::nearToGoalLine(rcsc::Vector2D check_point, rcsc
 }
 
 double Bhv_DefensivePositioning::nearToPenaltyArea(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
-                                                   rcsc::Vector2D opp_pos, rcsc::Vector2D ball_pos,double max_radius2 ) {
+                                                   rcsc::Vector2D opp_pos, rcsc::Vector2D ball_pos,
+                                                   double max_radius2) {
     const double max_dist = std::sqrt(2 * std::pow(max_radius2, 2));
 
     Line2D opp_to_penalty(opp_pos, Vector2D(0, opp_pos.y)); //TODO -35
@@ -469,8 +520,9 @@ bool Bhv_DefensivePositioning::positioningDengerArea(rcsc::PlayerAgent *agent) {
 #include <sstream>
 
 //TODO to Utils
-namespace patch{
-    template < typename T> std::string to_string(const T& n){
+namespace patch {
+    template<typename T>
+    std::string to_string(const T &n) {
         std::ostringstream stm;
         stm << n;
         return stm.str();
@@ -478,19 +530,17 @@ namespace patch{
 }
 
 
-
-
-void Bhv_DefensivePositioning::log_table(std::vector<std::vector<double> > table , std::string name){
-    dlog.addText( Logger::TEAM,
-                  __FILE__":   %s ----------------- %d",  name.c_str(), table.size());
+void Bhv_DefensivePositioning::log_table(std::vector <std::vector<double> > table, std::string name) {
+    dlog.addText(Logger::TEAM,
+                 __FILE__":   %s ----------------- %d", name.c_str(), table.size());
 
 
     int max_d = table.size();
-    int arr[max_d][max_d] = { 0 };
+    int arr[max_d][max_d] = {0};
 
-    for(int i=0; i<table.size(); i++){
+    for (int i = 0; i < table.size(); i++) {
         std::string temp;
-        for(int j=0; j<table[i].size(); j++){
+        for (int j = 0; j < table[i].size(); j++) {
             arr[i][j] = int(table[i][j] * 100);
         }
     }
@@ -505,12 +555,12 @@ void Bhv_DefensivePositioning::log_table(std::vector<std::vector<double> > table
 
 
     std::string temp;
-    for(int i=0; i<max_d;i++){
-        for(int j=0; j<max_d; j++){
-            temp += patch::to_string(arr2[i][j]) +"\t";
+    for (int i = 0; i < max_d; i++) {
+        for (int j = 0; j < max_d; j++) {
+            temp += patch::to_string(arr2[i][j]) + "\t";
         }
-        rcsc::dlog.addText( rcsc::Logger::TEAM,
-                            __FILE__" %s ", temp.c_str() );
+        rcsc::dlog.addText(rcsc::Logger::TEAM,
+                           __FILE__" %s ", temp.c_str());
         temp = "";
     }
 

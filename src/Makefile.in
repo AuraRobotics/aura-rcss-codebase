@@ -159,7 +159,9 @@ am__objects_3 = behaviours/sample_player-bhv_basic_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_set_play_kick_off.$(OBJEXT) \
 	behaviours/sample_player-bhv_their_goal_kick_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_penalty_kick.$(OBJEXT) \
-	behaviours/sample_player-bhv_defensive_positioning.$(OBJEXT)
+	behaviours/sample_player-bhv_defensive_positioning.$(OBJEXT) \
+	behaviours/sample_player-bhv_defhalf_positioning.$(OBJEXT) \
+	behaviours/sample_player-bhv_block.$(OBJEXT)
 am__objects_4 = roles/sample_player-soccer_role.$(OBJEXT) \
 	roles/sample_player-role_center_back.$(OBJEXT) \
 	roles/sample_player-role_center_forward.$(OBJEXT) \
@@ -182,7 +184,8 @@ am__objects_6 =  \
 	communication/sample_player-keepaway_communication.$(OBJEXT) \
 	communication/sample_player-intention_receive.$(OBJEXT) \
 	communication/sample_player-intention_wait_after_set_play_kick.$(OBJEXT)
-am__objects_7 = utils/sample_player-geo_utils.$(OBJEXT) \
+am__objects_7 = utils/sample_player-rcsc_utils.$(OBJEXT) \
+	utils/sample_player-geo_utils.$(OBJEXT) \
 	utils/sample_player-algo_utils.$(OBJEXT) \
 	utils/algorithms/sample_player-hungarian.$(OBJEXT)
 am__objects_8 = sample_player-cafe_model.$(OBJEXT) \
@@ -381,6 +384,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 UTILSSOURCES = \
+    utils/rcsc_utils.h \
+    utils/rcsc_utils.cpp \
     utils/geo_utils.h \
     utils/geo_utils.cpp \
     utils/algo_utils.h \
@@ -424,7 +429,11 @@ BHV_SOURCE = \
     behaviours/bhv_their_goal_kick_move.h \
     behaviours/bhv_penalty_kick.h \
     behaviours/bhv_defensive_positioning.h \
-    behaviours/bhv_defensive_positioning.cpp
+    behaviours/bhv_defensive_positioning.cpp \
+    behaviours/bhv_defhalf_positioning.h \
+    behaviours/bhv_defhalf_positioning.cpp \
+    behaviours/bhv_block.h \
+    behaviours/bhv_block.cpp
 
 ROLE_SOURCE = \
     roles/soccer_role.h \
@@ -865,6 +874,12 @@ behaviours/sample_player-bhv_penalty_kick.$(OBJEXT):  \
 behaviours/sample_player-bhv_defensive_positioning.$(OBJEXT):  \
 	behaviours/$(am__dirstamp) \
 	behaviours/$(DEPDIR)/$(am__dirstamp)
+behaviours/sample_player-bhv_defhalf_positioning.$(OBJEXT):  \
+	behaviours/$(am__dirstamp) \
+	behaviours/$(DEPDIR)/$(am__dirstamp)
+behaviours/sample_player-bhv_block.$(OBJEXT):  \
+	behaviours/$(am__dirstamp) \
+	behaviours/$(DEPDIR)/$(am__dirstamp)
 roles/$(am__dirstamp):
 	@$(MKDIR_P) roles
 	@: > roles/$(am__dirstamp)
@@ -933,6 +948,8 @@ utils/$(am__dirstamp):
 utils/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) utils/$(DEPDIR)
 	@: > utils/$(DEPDIR)/$(am__dirstamp)
+utils/sample_player-rcsc_utils.$(OBJEXT): utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
 utils/sample_player-geo_utils.$(OBJEXT): utils/$(am__dirstamp) \
 	utils/$(DEPDIR)/$(am__dirstamp)
 utils/sample_player-algo_utils.$(OBJEXT): utils/$(am__dirstamp) \
@@ -984,8 +1001,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_basic_move.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_basic_offensive_kick.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_basic_tackle.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_block.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_custom_before_kick_off.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_defensive_positioning.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_go_to_static_ball.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_goalie_basic_move.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_goalie_chase_ball.Po@am__quote@
@@ -1048,6 +1067,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-soccer_role.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-algo_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-geo_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-rcsc_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po@am__quote@
 
 .cpp.o:
@@ -1780,6 +1800,34 @@ behaviours/sample_player-bhv_defensive_positioning.obj: behaviours/bhv_defensive
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_defensive_positioning.obj `if test -f 'behaviours/bhv_defensive_positioning.cpp'; then $(CYGPATH_W) 'behaviours/bhv_defensive_positioning.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_defensive_positioning.cpp'; fi`
 
+behaviours/sample_player-bhv_defhalf_positioning.o: behaviours/bhv_defhalf_positioning.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_defhalf_positioning.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Tpo -c -o behaviours/sample_player-bhv_defhalf_positioning.o `test -f 'behaviours/bhv_defhalf_positioning.cpp' || echo '$(srcdir)/'`behaviours/bhv_defhalf_positioning.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Tpo behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='behaviours/bhv_defhalf_positioning.cpp' object='behaviours/sample_player-bhv_defhalf_positioning.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_defhalf_positioning.o `test -f 'behaviours/bhv_defhalf_positioning.cpp' || echo '$(srcdir)/'`behaviours/bhv_defhalf_positioning.cpp
+
+behaviours/sample_player-bhv_defhalf_positioning.obj: behaviours/bhv_defhalf_positioning.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_defhalf_positioning.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Tpo -c -o behaviours/sample_player-bhv_defhalf_positioning.obj `if test -f 'behaviours/bhv_defhalf_positioning.cpp'; then $(CYGPATH_W) 'behaviours/bhv_defhalf_positioning.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_defhalf_positioning.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Tpo behaviours/$(DEPDIR)/sample_player-bhv_defhalf_positioning.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='behaviours/bhv_defhalf_positioning.cpp' object='behaviours/sample_player-bhv_defhalf_positioning.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_defhalf_positioning.obj `if test -f 'behaviours/bhv_defhalf_positioning.cpp'; then $(CYGPATH_W) 'behaviours/bhv_defhalf_positioning.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_defhalf_positioning.cpp'; fi`
+
+behaviours/sample_player-bhv_block.o: behaviours/bhv_block.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_block.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_block.Tpo -c -o behaviours/sample_player-bhv_block.o `test -f 'behaviours/bhv_block.cpp' || echo '$(srcdir)/'`behaviours/bhv_block.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_block.Tpo behaviours/$(DEPDIR)/sample_player-bhv_block.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='behaviours/bhv_block.cpp' object='behaviours/sample_player-bhv_block.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_block.o `test -f 'behaviours/bhv_block.cpp' || echo '$(srcdir)/'`behaviours/bhv_block.cpp
+
+behaviours/sample_player-bhv_block.obj: behaviours/bhv_block.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_block.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_block.Tpo -c -o behaviours/sample_player-bhv_block.obj `if test -f 'behaviours/bhv_block.cpp'; then $(CYGPATH_W) 'behaviours/bhv_block.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_block.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_block.Tpo behaviours/$(DEPDIR)/sample_player-bhv_block.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='behaviours/bhv_block.cpp' object='behaviours/sample_player-bhv_block.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_block.obj `if test -f 'behaviours/bhv_block.cpp'; then $(CYGPATH_W) 'behaviours/bhv_block.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_block.cpp'; fi`
+
 roles/sample_player-soccer_role.o: roles/soccer_role.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT roles/sample_player-soccer_role.o -MD -MP -MF roles/$(DEPDIR)/sample_player-soccer_role.Tpo -c -o roles/sample_player-soccer_role.o `test -f 'roles/soccer_role.cpp' || echo '$(srcdir)/'`roles/soccer_role.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) roles/$(DEPDIR)/sample_player-soccer_role.Tpo roles/$(DEPDIR)/sample_player-soccer_role.Po
@@ -2059,6 +2107,20 @@ communication/sample_player-intention_wait_after_set_play_kick.obj: communicatio
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='communication/intention_wait_after_set_play_kick.cpp' object='communication/sample_player-intention_wait_after_set_play_kick.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o communication/sample_player-intention_wait_after_set_play_kick.obj `if test -f 'communication/intention_wait_after_set_play_kick.cpp'; then $(CYGPATH_W) 'communication/intention_wait_after_set_play_kick.cpp'; else $(CYGPATH_W) '$(srcdir)/communication/intention_wait_after_set_play_kick.cpp'; fi`
+
+utils/sample_player-rcsc_utils.o: utils/rcsc_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-rcsc_utils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-rcsc_utils.Tpo -c -o utils/sample_player-rcsc_utils.o `test -f 'utils/rcsc_utils.cpp' || echo '$(srcdir)/'`utils/rcsc_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-rcsc_utils.Tpo utils/$(DEPDIR)/sample_player-rcsc_utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/rcsc_utils.cpp' object='utils/sample_player-rcsc_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-rcsc_utils.o `test -f 'utils/rcsc_utils.cpp' || echo '$(srcdir)/'`utils/rcsc_utils.cpp
+
+utils/sample_player-rcsc_utils.obj: utils/rcsc_utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-rcsc_utils.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-rcsc_utils.Tpo -c -o utils/sample_player-rcsc_utils.obj `if test -f 'utils/rcsc_utils.cpp'; then $(CYGPATH_W) 'utils/rcsc_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/rcsc_utils.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-rcsc_utils.Tpo utils/$(DEPDIR)/sample_player-rcsc_utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/rcsc_utils.cpp' object='utils/sample_player-rcsc_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-rcsc_utils.obj `if test -f 'utils/rcsc_utils.cpp'; then $(CYGPATH_W) 'utils/rcsc_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/rcsc_utils.cpp'; fi`
 
 utils/sample_player-geo_utils.o: utils/geo_utils.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-geo_utils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-geo_utils.Tpo -c -o utils/sample_player-geo_utils.o `test -f 'utils/geo_utils.cpp' || echo '$(srcdir)/'`utils/geo_utils.cpp

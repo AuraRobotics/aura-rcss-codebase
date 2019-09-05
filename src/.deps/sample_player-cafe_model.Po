@@ -1,8 +1,7 @@
 sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
- cafe_model.h strategy.h roles/soccer_role.h \
- /usr/local/include/rcsc/factory.h /usr/include/c++/5/map \
- /usr/include/c++/5/bits/stl_tree.h \
- /usr/include/c++/5/bits/stl_algobase.h \
+ /usr/local/include/rcsc/common/logger.h \
+ /usr/local/include/rcsc/geom/vector_2d.h \
+ /usr/local/include/rcsc/geom/angle_deg.h /usr/include/c++/5/functional \
  /usr/include/x86_64-linux-gnu/c++/5/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -10,6 +9,19 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
+ /usr/include/c++/5/bits/stl_function.h \
+ /usr/include/c++/5/backward/binders.h /usr/include/c++/5/iostream \
+ /usr/include/c++/5/ostream /usr/include/c++/5/ios \
+ /usr/include/c++/5/iosfwd /usr/include/c++/5/bits/stringfwd.h \
+ /usr/include/c++/5/bits/memoryfwd.h /usr/include/c++/5/bits/postypes.h \
+ /usr/include/c++/5/cwchar /usr/include/wchar.h /usr/include/stdio.h \
+ /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/lib/gcc/x86_64-linux-gnu/5/include/stddef.h /usr/include/xlocale.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar2.h /usr/include/c++/5/exception \
+ /usr/include/c++/5/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/5/bits/char_traits.h \
+ /usr/include/c++/5/bits/stl_algobase.h \
  /usr/include/c++/5/bits/functexcept.h \
  /usr/include/c++/5/bits/exception_defines.h \
  /usr/include/c++/5/bits/cpp_type_traits.h \
@@ -22,32 +34,6 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/debug/debug.h /usr/include/c++/5/bits/stl_iterator.h \
  /usr/include/c++/5/bits/ptr_traits.h \
  /usr/include/c++/5/bits/predefined_ops.h \
- /usr/include/c++/5/bits/allocator.h \
- /usr/include/x86_64-linux-gnu/c++/5/bits/c++allocator.h \
- /usr/include/c++/5/ext/new_allocator.h /usr/include/c++/5/new \
- /usr/include/c++/5/exception \
- /usr/include/c++/5/bits/atomic_lockfree_defines.h \
- /usr/include/c++/5/bits/memoryfwd.h \
- /usr/include/c++/5/bits/stl_function.h \
- /usr/include/c++/5/backward/binders.h \
- /usr/include/c++/5/ext/alloc_traits.h /usr/include/c++/5/bits/stl_map.h \
- /usr/include/c++/5/bits/stl_multimap.h \
- /usr/include/c++/5/bits/range_access.h /usr/include/c++/5/list \
- /usr/include/c++/5/bits/stl_list.h /usr/include/c++/5/bits/list.tcc \
- /usr/include/c++/5/stack /usr/include/c++/5/deque \
- /usr/include/c++/5/bits/stl_construct.h \
- /usr/include/c++/5/bits/stl_uninitialized.h \
- /usr/include/c++/5/bits/stl_deque.h /usr/include/c++/5/bits/deque.tcc \
- /usr/include/c++/5/bits/stl_stack.h /usr/include/c++/5/iostream \
- /usr/include/c++/5/ostream /usr/include/c++/5/ios \
- /usr/include/c++/5/iosfwd /usr/include/c++/5/bits/stringfwd.h \
- /usr/include/c++/5/bits/postypes.h /usr/include/c++/5/cwchar \
- /usr/include/wchar.h /usr/include/stdio.h \
- /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
- /usr/include/x86_64-linux-gnu/bits/wchar.h \
- /usr/lib/gcc/x86_64-linux-gnu/5/include/stddef.h /usr/include/xlocale.h \
- /usr/include/x86_64-linux-gnu/bits/wchar2.h \
- /usr/include/c++/5/bits/char_traits.h \
  /usr/include/c++/5/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/c++locale.h \
  /usr/include/c++/5/clocale /usr/include/locale.h \
@@ -68,9 +54,14 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/setjmp.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/atomic_word.h \
  /usr/include/c++/5/bits/locale_classes.h /usr/include/c++/5/string \
+ /usr/include/c++/5/bits/allocator.h \
+ /usr/include/x86_64-linux-gnu/c++/5/bits/c++allocator.h \
+ /usr/include/c++/5/ext/new_allocator.h /usr/include/c++/5/new \
  /usr/include/c++/5/bits/ostream_insert.h \
  /usr/include/c++/5/bits/cxxabi_forced.h \
+ /usr/include/c++/5/bits/range_access.h \
  /usr/include/c++/5/bits/basic_string.h \
+ /usr/include/c++/5/ext/alloc_traits.h \
  /usr/include/c++/5/bits/basic_string.tcc \
  /usr/include/c++/5/bits/locale_classes.tcc /usr/include/c++/5/stdexcept \
  /usr/include/c++/5/streambuf /usr/include/c++/5/bits/streambuf.tcc \
@@ -83,13 +74,25 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/bits/locale_facets.tcc \
  /usr/include/c++/5/bits/basic_ios.tcc \
  /usr/include/c++/5/bits/ostream.tcc /usr/include/c++/5/istream \
- /usr/include/c++/5/bits/istream.tcc /usr/include/c++/5/memory \
- /usr/include/c++/5/bits/stl_tempbuf.h \
- /usr/include/c++/5/bits/stl_raw_storage_iter.h \
- /usr/include/c++/5/backward/auto_ptr.h /usr/include/c++/5/cstring \
- /usr/include/string.h /usr/include/x86_64-linux-gnu/bits/string3.h \
- /usr/include/boost/shared_ptr.hpp \
- /usr/include/boost/smart_ptr/shared_ptr.hpp \
+ /usr/include/c++/5/bits/istream.tcc /usr/include/c++/5/cmath \
+ /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_val.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
+ /usr/include/x86_64-linux-gnu/bits/inf.h \
+ /usr/include/x86_64-linux-gnu/bits/nan.h \
+ /usr/include/x86_64-linux-gnu/bits/mathdef.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+ /usr/include/x86_64-linux-gnu/bits/mathinline.h \
+ /usr/local/include/rcsc/geom/circle_2d.h \
+ /usr/local/include/rcsc/geom/region_2d.h \
+ /usr/local/include/rcsc/geom/rect_2d.h \
+ /usr/local/include/rcsc/geom/size_2d.h \
+ /usr/local/include/rcsc/geom/line_2d.h \
+ /usr/local/include/rcsc/geom/sector_2d.h \
+ /usr/local/include/rcsc/geom/triangle_2d.h \
+ /usr/local/include/rcsc/geom/segment_2d.h /usr/include/boost/cstdint.hpp \
  /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp \
  /usr/include/boost/config/select_compiler_config.hpp \
  /usr/include/boost/config/compiler/gcc.hpp \
@@ -115,6 +118,27 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
  /usr/include/boost/config/posix_features.hpp \
  /usr/include/boost/config/suffix.hpp \
+ /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
+ /usr/include/c++/5/cstdio /usr/include/libio.h /usr/include/_G_config.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h cafe_model.h strategy.h \
+ roles/soccer_role.h /usr/local/include/rcsc/factory.h \
+ /usr/include/c++/5/map /usr/include/c++/5/bits/stl_tree.h \
+ /usr/include/c++/5/bits/stl_map.h /usr/include/c++/5/bits/stl_multimap.h \
+ /usr/include/c++/5/list /usr/include/c++/5/bits/stl_list.h \
+ /usr/include/c++/5/bits/list.tcc /usr/include/c++/5/stack \
+ /usr/include/c++/5/deque /usr/include/c++/5/bits/stl_construct.h \
+ /usr/include/c++/5/bits/stl_uninitialized.h \
+ /usr/include/c++/5/bits/stl_deque.h /usr/include/c++/5/bits/deque.tcc \
+ /usr/include/c++/5/bits/stl_stack.h /usr/include/c++/5/memory \
+ /usr/include/c++/5/bits/stl_tempbuf.h \
+ /usr/include/c++/5/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/5/backward/auto_ptr.h /usr/include/c++/5/cstring \
+ /usr/include/string.h /usr/include/x86_64-linux-gnu/bits/string3.h \
+ /usr/include/boost/shared_ptr.hpp \
+ /usr/include/boost/smart_ptr/shared_ptr.hpp \
  /usr/include/boost/config/no_tr1/memory.hpp \
  /usr/include/boost/assert.hpp /usr/include/assert.h \
  /usr/include/boost/checked_delete.hpp \
@@ -134,7 +158,6 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cxxabi_tweaks.h \
  /usr/include/c++/5/typeinfo \
  /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp \
- /usr/include/c++/5/functional \
  /usr/include/boost/smart_ptr/detail/sp_convertible.hpp \
  /usr/include/boost/smart_ptr/detail/sp_nullptr_t.hpp \
  /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp \
@@ -252,18 +275,6 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/boost/smart_ptr/detail/operator_bool.hpp \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
- /usr/local/include/rcsc/geom/vector_2d.h \
- /usr/local/include/rcsc/geom/angle_deg.h /usr/include/c++/5/cmath \
- /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
- /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
- /usr/include/x86_64-linux-gnu/bits/huge_val.h \
- /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
- /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
- /usr/include/x86_64-linux-gnu/bits/inf.h \
- /usr/include/x86_64-linux-gnu/bits/nan.h \
- /usr/include/x86_64-linux-gnu/bits/mathdef.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
- /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
  /usr/local/include/rcsc/player/world_model.h \
@@ -273,8 +284,7 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/local/include/rcsc/player/visual_sensor.h \
  /usr/local/include/rcsc/game_time.h /usr/local/include/rcsc/types.h \
  /usr/local/include/rcsc/common/player_type.h \
- /usr/local/include/rcsc/rcg/types.h /usr/include/boost/cstdint.hpp \
- /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
+ /usr/local/include/rcsc/rcg/types.h \
  /usr/local/include/rcsc/soccer_math.h \
  /usr/local/include/rcsc/player/view_mode.h \
  /usr/local/include/rcsc/player/fullstate_sensor.h \
@@ -287,27 +297,17 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/boost/scoped_ptr.hpp \
  /usr/include/boost/smart_ptr/scoped_ptr.hpp \
  /usr/local/include/rcsc/game_mode.h \
- /usr/local/include/rcsc/common/server_param.h \
- /usr/local/include/rcsc/geom/rect_2d.h \
- /usr/local/include/rcsc/geom/region_2d.h \
- /usr/local/include/rcsc/geom/size_2d.h \
- /usr/local/include/rcsc/geom/line_2d.h
+ /usr/local/include/rcsc/common/server_param.h
 
 /usr/include/stdc-predef.h:
 
-cafe_model.h:
+/usr/local/include/rcsc/common/logger.h:
 
-strategy.h:
+/usr/local/include/rcsc/geom/vector_2d.h:
 
-roles/soccer_role.h:
+/usr/local/include/rcsc/geom/angle_deg.h:
 
-/usr/local/include/rcsc/factory.h:
-
-/usr/include/c++/5/map:
-
-/usr/include/c++/5/bits/stl_tree.h:
-
-/usr/include/c++/5/bits/stl_algobase.h:
+/usr/include/c++/5/functional:
 
 /usr/include/x86_64-linux-gnu/c++/5/bits/c++config.h:
 
@@ -324,6 +324,48 @@ roles/soccer_role.h:
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
 /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h:
+
+/usr/include/c++/5/bits/stl_function.h:
+
+/usr/include/c++/5/backward/binders.h:
+
+/usr/include/c++/5/iostream:
+
+/usr/include/c++/5/ostream:
+
+/usr/include/c++/5/ios:
+
+/usr/include/c++/5/iosfwd:
+
+/usr/include/c++/5/bits/stringfwd.h:
+
+/usr/include/c++/5/bits/memoryfwd.h:
+
+/usr/include/c++/5/bits/postypes.h:
+
+/usr/include/c++/5/cwchar:
+
+/usr/include/wchar.h:
+
+/usr/include/stdio.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/5/include/stddef.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
+
+/usr/include/c++/5/exception:
+
+/usr/include/c++/5/bits/atomic_lockfree_defines.h:
+
+/usr/include/c++/5/bits/char_traits.h:
+
+/usr/include/c++/5/bits/stl_algobase.h:
 
 /usr/include/c++/5/bits/functexcept.h:
 
@@ -352,82 +394,6 @@ roles/soccer_role.h:
 /usr/include/c++/5/bits/ptr_traits.h:
 
 /usr/include/c++/5/bits/predefined_ops.h:
-
-/usr/include/c++/5/bits/allocator.h:
-
-/usr/include/x86_64-linux-gnu/c++/5/bits/c++allocator.h:
-
-/usr/include/c++/5/ext/new_allocator.h:
-
-/usr/include/c++/5/new:
-
-/usr/include/c++/5/exception:
-
-/usr/include/c++/5/bits/atomic_lockfree_defines.h:
-
-/usr/include/c++/5/bits/memoryfwd.h:
-
-/usr/include/c++/5/bits/stl_function.h:
-
-/usr/include/c++/5/backward/binders.h:
-
-/usr/include/c++/5/ext/alloc_traits.h:
-
-/usr/include/c++/5/bits/stl_map.h:
-
-/usr/include/c++/5/bits/stl_multimap.h:
-
-/usr/include/c++/5/bits/range_access.h:
-
-/usr/include/c++/5/list:
-
-/usr/include/c++/5/bits/stl_list.h:
-
-/usr/include/c++/5/bits/list.tcc:
-
-/usr/include/c++/5/stack:
-
-/usr/include/c++/5/deque:
-
-/usr/include/c++/5/bits/stl_construct.h:
-
-/usr/include/c++/5/bits/stl_uninitialized.h:
-
-/usr/include/c++/5/bits/stl_deque.h:
-
-/usr/include/c++/5/bits/deque.tcc:
-
-/usr/include/c++/5/bits/stl_stack.h:
-
-/usr/include/c++/5/iostream:
-
-/usr/include/c++/5/ostream:
-
-/usr/include/c++/5/ios:
-
-/usr/include/c++/5/iosfwd:
-
-/usr/include/c++/5/bits/stringfwd.h:
-
-/usr/include/c++/5/bits/postypes.h:
-
-/usr/include/c++/5/cwchar:
-
-/usr/include/wchar.h:
-
-/usr/include/stdio.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/5/include/stddef.h:
-
-/usr/include/xlocale.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar2.h:
-
-/usr/include/c++/5/bits/char_traits.h:
 
 /usr/include/c++/5/bits/localefwd.h:
 
@@ -485,11 +451,23 @@ roles/soccer_role.h:
 
 /usr/include/c++/5/string:
 
+/usr/include/c++/5/bits/allocator.h:
+
+/usr/include/x86_64-linux-gnu/c++/5/bits/c++allocator.h:
+
+/usr/include/c++/5/ext/new_allocator.h:
+
+/usr/include/c++/5/new:
+
 /usr/include/c++/5/bits/ostream_insert.h:
 
 /usr/include/c++/5/bits/cxxabi_forced.h:
 
+/usr/include/c++/5/bits/range_access.h:
+
 /usr/include/c++/5/bits/basic_string.h:
+
+/usr/include/c++/5/ext/alloc_traits.h:
 
 /usr/include/c++/5/bits/basic_string.tcc:
 
@@ -525,23 +503,47 @@ roles/soccer_role.h:
 
 /usr/include/c++/5/bits/istream.tcc:
 
-/usr/include/c++/5/memory:
+/usr/include/c++/5/cmath:
 
-/usr/include/c++/5/bits/stl_tempbuf.h:
+/usr/include/math.h:
 
-/usr/include/c++/5/bits/stl_raw_storage_iter.h:
+/usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
-/usr/include/c++/5/backward/auto_ptr.h:
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
 
-/usr/include/c++/5/cstring:
+/usr/include/x86_64-linux-gnu/bits/huge_val.h:
 
-/usr/include/string.h:
+/usr/include/x86_64-linux-gnu/bits/huge_valf.h:
 
-/usr/include/x86_64-linux-gnu/bits/string3.h:
+/usr/include/x86_64-linux-gnu/bits/huge_vall.h:
 
-/usr/include/boost/shared_ptr.hpp:
+/usr/include/x86_64-linux-gnu/bits/inf.h:
 
-/usr/include/boost/smart_ptr/shared_ptr.hpp:
+/usr/include/x86_64-linux-gnu/bits/nan.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathdef.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathinline.h:
+
+/usr/local/include/rcsc/geom/circle_2d.h:
+
+/usr/local/include/rcsc/geom/region_2d.h:
+
+/usr/local/include/rcsc/geom/rect_2d.h:
+
+/usr/local/include/rcsc/geom/size_2d.h:
+
+/usr/local/include/rcsc/geom/line_2d.h:
+
+/usr/local/include/rcsc/geom/sector_2d.h:
+
+/usr/local/include/rcsc/geom/triangle_2d.h:
+
+/usr/local/include/rcsc/geom/segment_2d.h:
+
+/usr/include/boost/cstdint.hpp:
 
 /usr/include/boost/config.hpp:
 
@@ -605,6 +607,78 @@ roles/soccer_role.h:
 
 /usr/include/boost/config/suffix.hpp:
 
+/usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/c++/5/cstdio:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/sys_errlist.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
+cafe_model.h:
+
+strategy.h:
+
+roles/soccer_role.h:
+
+/usr/local/include/rcsc/factory.h:
+
+/usr/include/c++/5/map:
+
+/usr/include/c++/5/bits/stl_tree.h:
+
+/usr/include/c++/5/bits/stl_map.h:
+
+/usr/include/c++/5/bits/stl_multimap.h:
+
+/usr/include/c++/5/list:
+
+/usr/include/c++/5/bits/stl_list.h:
+
+/usr/include/c++/5/bits/list.tcc:
+
+/usr/include/c++/5/stack:
+
+/usr/include/c++/5/deque:
+
+/usr/include/c++/5/bits/stl_construct.h:
+
+/usr/include/c++/5/bits/stl_uninitialized.h:
+
+/usr/include/c++/5/bits/stl_deque.h:
+
+/usr/include/c++/5/bits/deque.tcc:
+
+/usr/include/c++/5/bits/stl_stack.h:
+
+/usr/include/c++/5/memory:
+
+/usr/include/c++/5/bits/stl_tempbuf.h:
+
+/usr/include/c++/5/bits/stl_raw_storage_iter.h:
+
+/usr/include/c++/5/backward/auto_ptr.h:
+
+/usr/include/c++/5/cstring:
+
+/usr/include/string.h:
+
+/usr/include/x86_64-linux-gnu/bits/string3.h:
+
+/usr/include/boost/shared_ptr.hpp:
+
+/usr/include/boost/smart_ptr/shared_ptr.hpp:
+
 /usr/include/boost/config/no_tr1/memory.hpp:
 
 /usr/include/boost/assert.hpp:
@@ -646,8 +720,6 @@ roles/soccer_role.h:
 /usr/include/c++/5/typeinfo:
 
 /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:
-
-/usr/include/c++/5/functional:
 
 /usr/include/boost/smart_ptr/detail/sp_convertible.hpp:
 
@@ -905,34 +977,6 @@ roles/soccer_role.h:
 
 /usr/local/include/rcsc/formation/sample_data.h:
 
-/usr/local/include/rcsc/geom/vector_2d.h:
-
-/usr/local/include/rcsc/geom/angle_deg.h:
-
-/usr/include/c++/5/cmath:
-
-/usr/include/math.h:
-
-/usr/include/x86_64-linux-gnu/bits/math-vector.h:
-
-/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
-
-/usr/include/x86_64-linux-gnu/bits/huge_val.h:
-
-/usr/include/x86_64-linux-gnu/bits/huge_valf.h:
-
-/usr/include/x86_64-linux-gnu/bits/huge_vall.h:
-
-/usr/include/x86_64-linux-gnu/bits/inf.h:
-
-/usr/include/x86_64-linux-gnu/bits/nan.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathdef.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathinline.h:
-
 /usr/include/c++/5/vector:
 
 /usr/include/c++/5/bits/stl_vector.h:
@@ -959,12 +1003,6 @@ roles/soccer_role.h:
 
 /usr/local/include/rcsc/rcg/types.h:
 
-/usr/include/boost/cstdint.hpp:
-
-/usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h:
-
-/usr/include/stdint.h:
-
 /usr/local/include/rcsc/soccer_math.h:
 
 /usr/local/include/rcsc/player/view_mode.h:
@@ -990,11 +1028,3 @@ roles/soccer_role.h:
 /usr/local/include/rcsc/game_mode.h:
 
 /usr/local/include/rcsc/common/server_param.h:
-
-/usr/local/include/rcsc/geom/rect_2d.h:
-
-/usr/local/include/rcsc/geom/region_2d.h:
-
-/usr/local/include/rcsc/geom/size_2d.h:
-
-/usr/local/include/rcsc/geom/line_2d.h:

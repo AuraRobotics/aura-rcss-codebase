@@ -2,6 +2,7 @@
 // Created by armanaxh on ۲۰۱۹/۸/۲۹.
 //
 
+#include <rcsc/common/logger.h>
 #include "cafe_model.h"
 
 using namespace rcsc;
@@ -32,7 +33,7 @@ ConstPlayerPtrCont CafeModel::getOurPlayersByUnum(std::vector<int> players_unum)
 
         if (unum <= 0 || 11 < unum) continue;
         const PlayerObject *p_temp = static_cast<const PlayerObject *>(wm->ourPlayer(unum));
-        if(p_temp == NULL) continue;
+        if (p_temp == NULL) continue;
         temp_player.push_back(p_temp);
 
     }
@@ -49,7 +50,7 @@ rcsc::ConstPlayerPtrCont CafeModel::getTheirPlayersByUnum(std::vector<int> playe
 
         if (unum <= 0 || 11 < unum) continue;
         const PlayerObject *p_temp = static_cast<const PlayerObject *>(wm->theirPlayer(unum));
-        if(p_temp == NULL) continue;
+        if (p_temp == NULL) continue;
         temp_player.push_back(p_temp);
 
     }
@@ -98,4 +99,42 @@ rcsc::PlayerPtrCont CafeModel::getPlayerInRangeGoal(const rcsc::PlayerPtrCont pl
     }
 
     return temp_player;
+}
+
+
+double CafeModel::getOurOffsideLine() const {
+    const PlayerCont teammates = wm->teammates();
+    const int goalie_unum = wm->ourGoalieUnum();
+
+
+    double offside_line_x = 0;
+    const PlayerCont::const_iterator end_t = teammates.end();
+    for (PlayerCont::const_iterator it = teammates.begin(); it != end_t; it++) {
+
+        int unum = it->unum();
+        if (goalie_unum == unum) {
+            continue;
+        }
+        if (unum == Unum_Unknown) { //TODO not true
+            continue;
+        }
+        if (goalie_unum == Unum_Unknown && it->pos().x < -45) {
+            continue;
+        } // TODO brodcast Goalie position
+
+        double pos_x = it->pos().x;
+        if (pos_x < offside_line_x) {
+            offside_line_x = pos_x;
+        }
+
+    }
+
+
+    if (wm->ball().pos().x < offside_line_x) {
+        offside_line_x = wm->ball().pos().x;
+    }
+    if (wm->self().pos().x < offside_line_x) {
+        offside_line_x = wm->self().pos().x;
+    }
+    return offside_line_x;
 }

@@ -192,7 +192,7 @@ Strategy::instance()
 bool
 Strategy::init( CmdLineParser & cmd_parser )
 {
-    ParamMap param_map( "HELIOS_org options" );
+    ParamMap param_map( "Helios_cafe options" );
 
     // std::string fconf;
     //param_map.add()
@@ -694,7 +694,7 @@ Strategy::updatePosition( const WorldModel & wm )
 
     Vector2D ball_pos = wm.ball().inertiaPoint( ball_step );
 
-    dlog.addText( Logger::TEAM,
+    dlog.addText( Logger::ROLE,
                   __FILE__": HOME POSITION: ball pos=(%.1f %.1f) step=%d",
                   ball_pos.x, ball_pos.y,
                   ball_step );
@@ -1204,9 +1204,13 @@ Strategy::get_ball_area( const Vector2D & ball_pos )
 
  */
 double
-Strategy::get_normal_dash_power( const WorldModel & wm )
+Strategy::get_normal_dash_power( const WorldModel & wm, const Strategy &stra )
 {
     static bool s_recover_mode = false;
+
+    const RoleGroup role_group = stra.getRoleGroup(wm.self().unum());
+    const Vector2D ball_pos = wm.ball().pos();
+    const Vector2D self_pos = wm.self().pos();
 
     if ( wm.self().staminaModel().capacityIsEmpty() )
     {
@@ -1281,7 +1285,13 @@ Strategy::get_normal_dash_power( const WorldModel & wm )
                             my_inc * 0.5,
                             ServerParam::i().maxDashPower() );
         dlog.addText( Logger::TEAM,
-                      __FILE__": (get_normal_dash_power) opponent ball dash_power=%.1f",
+                      __FILE__": (get_normal_dash_power) !bound dash_power=%.1f",
+                      dash_power );
+    }else if(role_group == Defense && self_pos.x > ball_pos.x){
+        dash_power = std::min( my_inc * 2,
+                               ServerParam::i().maxDashPower() );
+        dlog.addText( Logger::TEAM,
+                      __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
                       dash_power );
     }
     // normal
@@ -1299,23 +1309,26 @@ Strategy::get_normal_dash_power( const WorldModel & wm )
 
 double Strategy::getDeffanceLine() const {
 
-    double sum_x = 0;
-    int defence_pnum = 0;
+    double min_x = INT_MAX;
     for(int unum=1; unum<=11; unum++){
 
         const RoleGroup role_group = getRoleGroup(unum);
         if(role_group == Defense){
-            defence_pnum++;
-            sum_x += getPosition(unum).x;
+            double x_pos = getPosition(unum).x;
+            if(x_pos < min_x){
+                min_x = x_pos;
+                dlog.addText( Logger::TEAM,
+                              __FILE__": getDeffanceLine >>> defence  min-x  : %.2f",
+                              min_x);
+            }
         }
     }
 
     dlog.addText( Logger::TEAM,
-                  __FILE__": getDeffanceLine >>> defence num : %d, sum_x : %.2f",
-                  defence_pnum,
-                  sum_x);
+                  __FILE__": getDeffanceLine >>> defence  min-x  : %.2f",
+                  min_x);
 
-    return defence_pnum != 0 ? sum_x/defence_pnum : -1;
+    return min_x;
 }
 
 

@@ -246,7 +246,7 @@ public:
     BallArea get_ball_area(const rcsc::Vector2D &ball_pos);
 
     static
-    double get_normal_dash_power(const rcsc::WorldModel &wm);
+    double get_normal_dash_power(const rcsc::WorldModel &wm, const Strategy &stra);
 
     double getDeffanceLine() const;
 

@@ -69,6 +69,7 @@ Bhv_BasicMove::execute( PlayerAgent * agent )
     }
 
     const WorldModel & wm = agent->world();
+    const Strategy & stra = Strategy::i();
     /*--------------------------------------------------------*/
     // chase ball
     const int self_min = wm.interceptTable()->selfReachCycle();
@@ -91,7 +92,7 @@ Bhv_BasicMove::execute( PlayerAgent * agent )
     }
 
     const Vector2D target_point = Strategy::i().getPosition( wm.self().unum() );
-    const double dash_power = Strategy::get_normal_dash_power( wm );
+    const double dash_power = Strategy::get_normal_dash_power( wm, stra );
 
     double dist_thr = wm.ball().distFromSelf() * 0.1;
     if ( dist_thr < 1.0 ) dist_thr = 1.0;

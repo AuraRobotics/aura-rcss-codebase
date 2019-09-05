@@ -33,7 +33,8 @@
 #include "bhv_chain_action.h"
 #include "../behaviours/bhv_basic_offensive_kick.h"
 #include "../behaviours/bhv_basic_move.h"
-
+#include "../behaviours/bhv_block.h"
+#include "../behaviours/bhv_defhalf_positioning.h"
 #include <rcsc/player/player_agent.h>
 #include <rcsc/player/debug_client.h>
 
@@ -41,15 +42,15 @@
 
 using namespace rcsc;
 
-const std::string RoleOffensiveHalf::NAME( "OffensiveHalf" );
+const std::string RoleOffensiveHalf::NAME("OffensiveHalf");
 
 /*-------------------------------------------------------------------*/
 /*!
 
  */
 namespace {
-rcss::RegHolder role = SoccerRole::creators().autoReg( &RoleOffensiveHalf::create,
-                                                       RoleOffensiveHalf::NAME );
+    rcss::RegHolder role = SoccerRole::creators().autoReg(&RoleOffensiveHalf::create,
+                                                          RoleOffensiveHalf::NAME);
 }
 
 /*-------------------------------------------------------------------*/
@@ -57,23 +58,18 @@ rcss::RegHolder role = SoccerRole::creators().autoReg( &RoleOffensiveHalf::creat
 
  */
 bool
-RoleOffensiveHalf::execute( PlayerAgent * agent )
-{
+RoleOffensiveHalf::execute(PlayerAgent *agent) {
     bool kickable = agent->world().self().isKickable();
-    if ( agent->world().existKickableTeammate()
-         && agent->world().teammatesFromBall().front()->distFromBall()
-         < agent->world().ball().distFromSelf() )
-    {
+    if (agent->world().existKickableTeammate()
+        && agent->world().teammatesFromBall().front()->distFromBall()
+           < agent->world().ball().distFromSelf()) {
         kickable = false;
     }
 
-    if ( kickable )
-    {
-        doKick( agent );
-    }
-    else
-    {
-        doMove( agent );
+    if (kickable) {
+        doKick(agent);
+    } else {
+        doMove(agent);
     }
 
     return true;
@@ -84,17 +80,15 @@ RoleOffensiveHalf::execute( PlayerAgent * agent )
 
  */
 void
-RoleOffensiveHalf::doKick( PlayerAgent * agent )
-{
-    if ( Bhv_ChainAction().execute( agent ) )
-    {
-        dlog.addText( Logger::TEAM,
-                      __FILE__": (execute) do chain action" );
-        agent->debugClient().addMessage( "ChainAction" );
+RoleOffensiveHalf::doKick(PlayerAgent *agent) {
+    if (Bhv_ChainAction().execute(agent)) {
+        dlog.addText(Logger::TEAM,
+                     __FILE__": (execute) do chain action");
+        agent->debugClient().addMessage("ChainAction");
         return;
     }
 
-    Bhv_BasicOffensiveKick().execute( agent );
+    Bhv_BasicOffensiveKick().execute(agent);
 }
 
 /*-------------------------------------------------------------------*/
@@ -102,7 +96,11 @@ RoleOffensiveHalf::doKick( PlayerAgent * agent )
 
  */
 void
-RoleOffensiveHalf::doMove( PlayerAgent * agent )
-{
-    Bhv_BasicMove().execute( agent );
+RoleOffensiveHalf::doMove(PlayerAgent *agent) {
+    if (Bhv_Block().execute(agent)) {
+        return;
+    } else if (Bhv_DefhalfPositioning().execute(agent)) {
+        return;
+    }
+    Bhv_BasicMove().execute(agent);
 }

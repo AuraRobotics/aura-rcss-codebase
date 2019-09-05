@@ -804,6 +804,7 @@ bool SamplePlayer::test() {
 //    }
 
     const WorldModel &wm = this->world();
+    const CafeModel &cm = CafeModel::i();
 
 //
 //    PlayerPtrCont in_ragne_player = CafeModel::i().getPlayerInRangeGoal(50, true);
@@ -831,6 +832,12 @@ bool SamplePlayer::test() {
     dlog.addRect(Logger::TEAM,
                  wm.self().pos().x - 2, wm.self().pos().y - 2, 4, 4,
                  "#0000ff");
+
+    double our_offside_line = cm.getOurOffsideLine();
+
+    dlog.addLine(Logger::TEAM,
+                Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
+            );
 
     return false;
 }
