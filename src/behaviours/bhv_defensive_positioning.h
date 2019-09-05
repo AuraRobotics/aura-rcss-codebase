@@ -11,6 +11,8 @@
 #include <rcsc/geom/polygon_2d.h>
 #include "../cafe_model.h"
 
+
+
 class Bhv_DefensivePositioning
         : public rcsc::SoccerBehavior {
 public:

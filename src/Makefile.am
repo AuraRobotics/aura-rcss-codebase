@@ -51,7 +51,11 @@ BHV_SOURCE = \
     behaviours/bhv_defhalf_positioning.h \
     behaviours/bhv_defhalf_positioning.cpp \
     behaviours/bhv_block.h \
-    behaviours/bhv_block.cpp
+    behaviours/bhv_block.cpp\
+    behaviours/bhv_mark.h \
+    behaviours/bhv_mark.cpp \
+    behaviours/bhv_mark_deep.h \
+    behaviours/bhv_mark_deep.cpp
 
 
 
