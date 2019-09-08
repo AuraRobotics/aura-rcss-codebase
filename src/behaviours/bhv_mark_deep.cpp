@@ -44,7 +44,7 @@ bool Bhv_MarkDeep::execute(rcsc::PlayerAgent *agent) {
     if (dist_thr < 1.0) dist_thr = 1.0;
 
     dlog.addText(Logger::TEAM,
-                 __FILE__": Bhv_Defencive_Positioning target=(%.1f %.1f) dist_thr=%.2f",
+                 __FILE__": Bhv_MarkDeep target=(%.1f %.1f) dist_thr=%.2f",
                  target_point.x, target_point.y,
                  dist_thr);
 
@@ -61,6 +61,7 @@ bool Bhv_MarkDeep::execute(rcsc::PlayerAgent *agent) {
         agent->setNeckAction(new Neck_TurnToBallOrScan());
     }
 
+    return true;
 }
 
 
@@ -83,7 +84,7 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
     const WorldModel &wm = agent->world();
     const CafeModel &cm = CafeModel::i();
 
-    Vector2D self_pos = Strategy::i().getPosition(wm.self().unum());
+    Vector2D self_pos = Strategy::i().getPosition(wm.self().unum()); // TODO check self_pos is ok
     Vector2D ball_pos = wm.ball().pos();
     Vector2D opp_pos = target_opp->pos();
 

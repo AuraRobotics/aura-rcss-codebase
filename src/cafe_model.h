@@ -9,8 +9,9 @@
 #include <rcsc/player/world_model.h>
 #include <rcsc/common/server_param.h>
 #include <rcsc/player/player_object.h>
+#include "utils/HERMES_FastIC.h";
 
-namespace rcsc{
+namespace rcsc {
     typedef std::vector<const rcsc::PlayerObject *> ConstPlayerPtrCont;
 }
 
@@ -22,6 +23,7 @@ private:
 
 
     const rcsc::WorldModel *wm;
+    static FastIC *fic;
 
 
     CafeModel();
@@ -32,6 +34,8 @@ private:
 
 public:
     static CafeModel &instance();
+    static void updateFastIC(PlayerAgent *agent);
+    static FastIC *fastIC();
 
     static
     const
@@ -39,7 +43,7 @@ public:
         return instance();
     }
 
-    void create(const rcsc::WorldModel &wm);
+    void create(const rcsc::WorldModel &wm, PlayerAgent *agent);
 
     rcsc::ConstPlayerPtrCont getOurPlayersByUnum(std::vector<int> players_unum) const;
 
@@ -54,6 +58,7 @@ public:
     rcsc::PlayerPtrCont getPlayerInRangeGoal(rcsc::PlayerPtrCont player, double dist) const;
 
     double getOurOffsideLine() const;
+
 private:
 
 };

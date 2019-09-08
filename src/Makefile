@@ -189,7 +189,8 @@ am__objects_6 =  \
 am__objects_7 = utils/sample_player-rcsc_utils.$(OBJEXT) \
 	utils/sample_player-geo_utils.$(OBJEXT) \
 	utils/sample_player-algo_utils.$(OBJEXT) \
-	utils/algorithms/sample_player-hungarian.$(OBJEXT)
+	utils/algorithms/sample_player-hungarian.$(OBJEXT) \
+	utils/sample_player-HERMES_FastIC.$(OBJEXT)
 am__objects_8 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -393,7 +394,9 @@ UTILSSOURCES = \
     utils/algo_utils.h \
     utils/algo_utils.cpp \
     utils/algorithms/hungarian.h \
-    utils/algorithms/hungarian.cpp
+    utils/algorithms/hungarian.cpp \
+    utils/HERMES_FastIC.h \
+    utils/HERMES_FastIC.cpp
 
 BHV_SOURCE = \
     behaviours/bhv_basic_move.cpp \
@@ -975,6 +978,8 @@ utils/algorithms/$(DEPDIR)/$(am__dirstamp):
 utils/algorithms/sample_player-hungarian.$(OBJEXT):  \
 	utils/algorithms/$(am__dirstamp) \
 	utils/algorithms/$(DEPDIR)/$(am__dirstamp)
+utils/sample_player-HERMES_FastIC.$(OBJEXT): utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -1079,6 +1084,7 @@ include roles/$(DEPDIR)/sample_player-role_side_back.Po
 include roles/$(DEPDIR)/sample_player-role_side_forward.Po
 include roles/$(DEPDIR)/sample_player-role_side_half.Po
 include roles/$(DEPDIR)/sample_player-soccer_role.Po
+include utils/$(DEPDIR)/sample_player-HERMES_FastIC.Po
 include utils/$(DEPDIR)/sample_player-algo_utils.Po
 include utils/$(DEPDIR)/sample_player-geo_utils.Po
 include utils/$(DEPDIR)/sample_player-rcsc_utils.Po
@@ -2205,6 +2211,20 @@ utils/algorithms/sample_player-hungarian.obj: utils/algorithms/hungarian.cpp
 #	$(AM_V_CXX)source='utils/algorithms/hungarian.cpp' object='utils/algorithms/sample_player-hungarian.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/algorithms/sample_player-hungarian.obj `if test -f 'utils/algorithms/hungarian.cpp'; then $(CYGPATH_W) 'utils/algorithms/hungarian.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/algorithms/hungarian.cpp'; fi`
+
+utils/sample_player-HERMES_FastIC.o: utils/HERMES_FastIC.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-HERMES_FastIC.o -MD -MP -MF utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo -c -o utils/sample_player-HERMES_FastIC.o `test -f 'utils/HERMES_FastIC.cpp' || echo '$(srcdir)/'`utils/HERMES_FastIC.cpp
+	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo utils/$(DEPDIR)/sample_player-HERMES_FastIC.Po
+#	$(AM_V_CXX)source='utils/HERMES_FastIC.cpp' object='utils/sample_player-HERMES_FastIC.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-HERMES_FastIC.o `test -f 'utils/HERMES_FastIC.cpp' || echo '$(srcdir)/'`utils/HERMES_FastIC.cpp
+
+utils/sample_player-HERMES_FastIC.obj: utils/HERMES_FastIC.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-HERMES_FastIC.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo -c -o utils/sample_player-HERMES_FastIC.obj `if test -f 'utils/HERMES_FastIC.cpp'; then $(CYGPATH_W) 'utils/HERMES_FastIC.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/HERMES_FastIC.cpp'; fi`
+	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo utils/$(DEPDIR)/sample_player-HERMES_FastIC.Po
+#	$(AM_V_CXX)source='utils/HERMES_FastIC.cpp' object='utils/sample_player-HERMES_FastIC.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-HERMES_FastIC.obj `if test -f 'utils/HERMES_FastIC.cpp'; then $(CYGPATH_W) 'utils/HERMES_FastIC.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/HERMES_FastIC.cpp'; fi`
 
 sample_player-cafe_model.o: cafe_model.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp

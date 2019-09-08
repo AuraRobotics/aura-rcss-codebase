@@ -491,7 +491,8 @@ behaviours/sample_player-bhv_block.o: behaviours/bhv_block.cpp \
  /usr/include/c++/5/bits/stl_stack.h \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
- behaviours/../cafe_model.h behaviours/../strategy.h
+ behaviours/../cafe_model.h behaviours/../strategy.h \
+ behaviours/../utils/HERMES_FastIC.h
 
 /usr/include/stdc-predef.h:
 
@@ -1630,3 +1631,5 @@ behaviours/../roles/soccer_role.h:
 behaviours/../cafe_model.h:
 
 behaviours/../strategy.h:
+
+behaviours/../utils/HERMES_FastIC.h:

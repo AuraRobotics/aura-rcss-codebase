@@ -8,9 +8,11 @@
 
 
 #include "bhv_defensive_positioning.h"
+
 #include <rcsc/player/player_agent.h>
 #include <rcsc/common/logger.h>
 #include <rcsc/common/server_param.h>
+#include <rcsc/player/intercept_table.h>
 #include "../cafe_model.h"
 #include "../strategy.h"
 #include "../utils/algo_utils.h"
@@ -22,6 +24,18 @@ using namespace rcsc;
 
 
 bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
+
+//    const WorldModel & wm = agent->world();
+//    const Strategy & stra = Strategy::i();
+//    /*--------------------------------------------------------*/
+//    // chase ball
+//    const int self_min = wm.interceptTable()->selfReachCycle();
+//    const int mate_min = wm.interceptTable()->teammateReachCycle();
+//    const int opp_min = wm.interceptTable()->opponentReachCycle();
+//
+//    if(wm.existKickableOpponent() || (self_min > opp_min + 3 && mate_min > opp_min + 3) ){
+//        return false;
+//    }
 
 
     if (defendTheDefendLine(agent)) {
@@ -136,6 +150,10 @@ rcsc::PlayerPtrCont Bhv_DefensivePositioning::getDengerOpponent(rcsc::PlayerAgen
             continue;
         }
 
+
+        dlog.addRect(Logger::TEAM,
+                     (*it)->pos().x - 2, (*it)->pos().y - 2, 4, 4,
+                     "#ff6000");
         denger_opp.push_back(&(**it));
     }
 
@@ -146,6 +164,8 @@ rcsc::PlayerPtrCont Bhv_DefensivePositioning::getDengerOpponent(rcsc::PlayerAgen
 const PlayerObject *
 Bhv_DefensivePositioning::assignOpponent(ConstPlayerPtrCont def_ps, PlayerPtrCont opp_ps, int self_unum) {
 
+
+    const Strategy &stra = Strategy::i();
     Hungarian::Matrix cost_m;
 
     if (def_ps.empty() || opp_ps.empty()) {
@@ -162,7 +182,10 @@ Bhv_DefensivePositioning::assignOpponent(ConstPlayerPtrCont def_ps, PlayerPtrCon
         const PlayerPtrCont::const_iterator opp_ops = opp_ps.end();
         for (PlayerPtrCont::const_iterator ito = opp_ps.begin();
              ito != opp_ops; ito++) {
-            double dist2 = (*itd)->pos().dist2((*ito)->pos());
+            const Vector2D opp_pos = (*ito)->pos();
+            const Vector2D mate_pos = stra.getPosition((*itd)->unum());//(*itd)->pos();
+
+            double dist2 = opp_pos.dist2(mate_pos);
             cost_m[i].push_back(dist2);
         }
         i++;
@@ -185,7 +208,7 @@ Bhv_DefensivePositioning::assignOpponent(ConstPlayerPtrCont def_ps, PlayerPtrCon
 //    //////////////////////////////////////////
 
     for (int j = 0; j < opp_ps.size(); j++) {
-        for (int i = 0; i < solution.size(); i++) {
+        for (int i = 0; i < def_ps.size(); i++) {
             if (solution[i][j]) {
                 dlog.addLine(Logger::TEAM,
                              def_ps[i]->pos(), opp_ps[j]->pos(),

@@ -8,7 +8,9 @@ UTILSSOURCES = \
     utils/algo_utils.h \
     utils/algo_utils.cpp \
     utils/algorithms/hungarian.h \
-    utils/algorithms/hungarian.cpp
+    utils/algorithms/hungarian.cpp \
+    utils/HERMES_FastIC.h \
+    utils/HERMES_FastIC.cpp
 
 
 BHV_SOURCE = \

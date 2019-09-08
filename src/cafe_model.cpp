@@ -12,16 +12,27 @@ CafeModel::CafeModel() {
 
 }
 
+FastIC * CafeModel::fic;
+
+static FastIC *fic;
 
 CafeModel &CafeModel::instance() {
     static CafeModel s_instance;
     return s_instance;
 }
 
+void CafeModel::updateFastIC(PlayerAgent *agent) {
+    fic = new FastIC(agent);
 
-void CafeModel::create(const rcsc::WorldModel &wm) {
+    fic->setByWorldModel();
+}
+
+FastIC* CafeModel::fastIC() {
+    return CafeModel::fic;
+}
+
+void CafeModel::create(const rcsc::WorldModel &wm, PlayerAgent *agent) {
     this->wm = &wm;
-
 }
 
 

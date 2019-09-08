@@ -150,8 +150,7 @@ SamplePlayer::SamplePlayer()
     //
     M_communication = Communication::Ptr(new SampleCommunication());
 
-    //create CafeModel
-    CafeModel::instance().create(world());
+
 }
 
 /*-------------------------------------------------------------------*/
@@ -208,6 +207,8 @@ SamplePlayer::initImpl(CmdLineParser &cmd_parser) {
                   << std::endl;
     }
 
+    //create CafeModel
+    CafeModel::instance().create(world(), this);
     return true;
 }
 
@@ -226,7 +227,7 @@ SamplePlayer::actionImpl() {
     //
     Strategy::instance().update(world());
     FieldAnalyzer::instance().update(world());
-
+    CafeModel::updateFastIC(this);
     //
     // prepare action chain
     //
@@ -790,6 +791,7 @@ SamplePlayer::createActionGenerator() const {
     return ActionGenerator::ConstPtr(g);
 }
 
+#include "utils/HERMES_FastIC.h"
 #include "utils/geo_utils.h"
 
 
@@ -838,6 +840,45 @@ bool SamplePlayer::test() {
     dlog.addLine(Logger::TEAM,
                 Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
             );
+
+
+
+    const PlayerAgent *agent = this;
+
+    FastIC *fastIC = CafeModel::fastIC();
+//    for (int i = 0; i < wm.theirPlayers().size(); i++)
+//    {
+//        if (FastIC::isPlayerValid(wm.theirPlayers()[i]))
+//        {
+//            int delay = 1, ext = bound(0, wm.theirPlayers()[i]->posCount(), 3);
+//            fastIC.addPlayer(wm.theirPlayers()[i], 1.0, 1.0, max(0, delay - ext),
+//                             max(0, ext - delay));
+//
+//        }
+//    }
+
+
+//    fastIC.setBall(wm.ball().pos(), );
+
+    fastIC->setMaxCycleAfterFirstFastestPlayer(10);
+    fastIC->refresh();
+    fastIC->calculate();
+
+    int opp_cycle = fastIC->getFastestOpponentReachCycle();
+    int mate_cycle = fastIC->getFastestTeammateReachCycle(true);
+    int min_player = fastIC->getFastestPlayerReachCycle();
+
+
+
+    dlog.addText(Logger::TEAM,
+                 __FILE__":========================== opp_cycle =%d , mate_cycle : %d , player_cycle: %d",
+                 opp_cycle, mate_cycle, min_player);
+
+
+
+
+
+
 
     return false;
 }
