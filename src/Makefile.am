@@ -13,7 +13,9 @@ UTILSSOURCES = \
     utils/estimators/HERMES_FastIC.h \
     utils/estimators/HERMES_FastIC.cpp \
     utils/estimators/player_estimator.h \
-    utils/estimators/player_estimator.cpp
+    utils/estimators/player_estimator.cpp \
+    utils/allocators/mark_target_allocator.h \
+    utils/allocators/mark_target_allocator.cpp
 
 
 

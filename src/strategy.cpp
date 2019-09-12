@@ -1201,18 +1201,22 @@ std::vector<int> Strategy::getGroupPlayer(RoleGroup group) const {
 }
 
 
-double Strategy::getNearsetPosDist(unsigned unum) const {
-    return getNearsetPos(unum).dist(getPosition(unum));
+double Strategy::getNearsetPosDist(unsigned unum, RoleGroup role_group) const {
+    return getNearsetPos(unum, role_group).dist(getPosition(unum));
 }
 
-Vector2D Strategy::getNearsetPos(unsigned unum) const {
+
+Vector2D Strategy::getNearsetPos(unsigned unum, RoleGroup role_group) const {
     Vector2D target = getPosition(unum);
 
     double min_dist = INT_MAX;
-    Vector2D near_pos;
+    Vector2D near_pos = Vector2D::INVALIDATED;
 
     for (int i = 0; i < 11; i++) {
         if(i+1 == unum){
+            continue;
+        }
+        if(role_group != None && role_group != getRoleGroup(i+1)){
             continue;
         }
         double dist = M_positions[i].dist(target);

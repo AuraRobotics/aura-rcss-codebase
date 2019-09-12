@@ -193,7 +193,8 @@ am__objects_7 = utils/sample_player-utils.$(OBJEXT) \
 	utils/sample_player-algo_utils.$(OBJEXT) \
 	utils/algorithms/sample_player-hungarian.$(OBJEXT) \
 	utils/estimators/sample_player-HERMES_FastIC.$(OBJEXT) \
-	utils/estimators/sample_player-player_estimator.$(OBJEXT)
+	utils/estimators/sample_player-player_estimator.$(OBJEXT) \
+	utils/allocators/sample_player-mark_target_allocator.$(OBJEXT)
 am__objects_8 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -402,7 +403,9 @@ UTILSSOURCES = \
     utils/estimators/HERMES_FastIC.h \
     utils/estimators/HERMES_FastIC.cpp \
     utils/estimators/player_estimator.h \
-    utils/estimators/player_estimator.cpp
+    utils/estimators/player_estimator.cpp \
+    utils/allocators/mark_target_allocator.h \
+    utils/allocators/mark_target_allocator.cpp
 
 BHV_SOURCE = \
     behaviours/bhv_basic_move.cpp \
@@ -1003,6 +1006,15 @@ utils/estimators/sample_player-HERMES_FastIC.$(OBJEXT):  \
 utils/estimators/sample_player-player_estimator.$(OBJEXT):  \
 	utils/estimators/$(am__dirstamp) \
 	utils/estimators/$(DEPDIR)/$(am__dirstamp)
+utils/allocators/$(am__dirstamp):
+	@$(MKDIR_P) utils/allocators
+	@: > utils/allocators/$(am__dirstamp)
+utils/allocators/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) utils/allocators/$(DEPDIR)
+	@: > utils/allocators/$(DEPDIR)/$(am__dirstamp)
+utils/allocators/sample_player-mark_target_allocator.$(OBJEXT):  \
+	utils/allocators/$(am__dirstamp) \
+	utils/allocators/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -1021,6 +1033,7 @@ mostlyclean-compile:
 	-rm -f roles/*.$(OBJEXT)
 	-rm -f utils/*.$(OBJEXT)
 	-rm -f utils/algorithms/*.$(OBJEXT)
+	-rm -f utils/allocators/*.$(OBJEXT)
 	-rm -f utils/estimators/*.$(OBJEXT)
 
 distclean-compile:
@@ -1114,6 +1127,7 @@ include utils/$(DEPDIR)/sample_player-geo_utils.Po
 include utils/$(DEPDIR)/sample_player-rcsc_utils.Po
 include utils/$(DEPDIR)/sample_player-utils.Po
 include utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po
+include utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Po
 include utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po
 include utils/estimators/$(DEPDIR)/sample_player-player_estimator.Po
 
@@ -2295,6 +2309,20 @@ utils/estimators/sample_player-player_estimator.obj: utils/estimators/player_est
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/estimators/sample_player-player_estimator.obj `if test -f 'utils/estimators/player_estimator.cpp'; then $(CYGPATH_W) 'utils/estimators/player_estimator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/estimators/player_estimator.cpp'; fi`
 
+utils/allocators/sample_player-mark_target_allocator.o: utils/allocators/mark_target_allocator.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-mark_target_allocator.o -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Tpo -c -o utils/allocators/sample_player-mark_target_allocator.o `test -f 'utils/allocators/mark_target_allocator.cpp' || echo '$(srcdir)/'`utils/allocators/mark_target_allocator.cpp
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Tpo utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Po
+#	$(AM_V_CXX)source='utils/allocators/mark_target_allocator.cpp' object='utils/allocators/sample_player-mark_target_allocator.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-mark_target_allocator.o `test -f 'utils/allocators/mark_target_allocator.cpp' || echo '$(srcdir)/'`utils/allocators/mark_target_allocator.cpp
+
+utils/allocators/sample_player-mark_target_allocator.obj: utils/allocators/mark_target_allocator.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-mark_target_allocator.obj -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Tpo -c -o utils/allocators/sample_player-mark_target_allocator.obj `if test -f 'utils/allocators/mark_target_allocator.cpp'; then $(CYGPATH_W) 'utils/allocators/mark_target_allocator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/mark_target_allocator.cpp'; fi`
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Tpo utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Po
+#	$(AM_V_CXX)source='utils/allocators/mark_target_allocator.cpp' object='utils/allocators/sample_player-mark_target_allocator.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-mark_target_allocator.obj `if test -f 'utils/allocators/mark_target_allocator.cpp'; then $(CYGPATH_W) 'utils/allocators/mark_target_allocator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/mark_target_allocator.cpp'; fi`
+
 sample_player-cafe_model.o: cafe_model.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp
 	$(AM_V_at)$(am__mv) $(DEPDIR)/sample_player-cafe_model.Tpo $(DEPDIR)/sample_player-cafe_model.Po
@@ -2520,6 +2548,8 @@ distclean-generic:
 	-rm -f utils/$(am__dirstamp)
 	-rm -f utils/algorithms/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utils/algorithms/$(am__dirstamp)
+	-rm -f utils/allocators/$(DEPDIR)/$(am__dirstamp)
+	-rm -f utils/allocators/$(am__dirstamp)
 	-rm -f utils/estimators/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utils/estimators/$(am__dirstamp)
 	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
@@ -2532,7 +2562,7 @@ clean: clean-am
 clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR) utils/estimators/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR) utils/allocators/$(DEPDIR) utils/estimators/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -2578,7 +2608,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR) utils/estimators/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR) utils/allocators/$(DEPDIR) utils/estimators/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

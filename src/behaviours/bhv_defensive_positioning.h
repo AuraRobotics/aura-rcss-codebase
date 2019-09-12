@@ -12,7 +12,6 @@
 #include "../cafe_model.h"
 
 
-
 class Bhv_DefensivePositioning
         : public rcsc::SoccerBehavior {
 public:
@@ -22,39 +21,6 @@ public:
 
 private:
 
-    bool defendTheDefendLine(rcsc::PlayerAgent *agent);
-
-    bool positioningDengerArea(rcsc::PlayerAgent *agent);
-
-    const rcsc::PlayerObject *
-    assignOpponent(rcsc::ConstPlayerPtrCont def_ps, rcsc::PlayerPtrCont opp_ps, int self_unum);
-
-    const rcsc::PlayerObject *
-    assignOpponentInPenaltyArea(rcsc::ConstPlayerPtrCont def_ps, rcsc::PlayerPtrCont opp_ps, int self_unum);
-
-    rcsc::Vector2D getDefensivePos(rcsc::PlayerAgent *agent, const rcsc::PlayerObject *opponent);
-
-    rcsc::Polygon2D getDengerArea(rcsc::Vector2D ball_pos,
-                                  rcsc::Vector2D opp_pos);
-
-    bool checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
-                         rcsc::Vector2D ball_pos, double our_offside_x);
-
-    double nearToGoalLine(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
-                          rcsc::Vector2D ball_pos, double max_radius2);
-
-    double nearToPenaltyArea(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
-                             rcsc::Vector2D ball_pos, double max_radius2);
-
-    double nearToGoal(rcsc::Vector2D check_point, double start_x, double max_radius2);
-
-    double coverDengerPassArea(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
-                               rcsc::Vector2D ball_pos, rcsc::Polygon2D denger_area,
-                               double dist_path);
-
-    rcsc::PlayerPtrCont getDengerOpponent(rcsc::PlayerAgent *agent);
-
-    void log_table(std::vector<std::vector<double> > table, std::string name);
 
 };
 

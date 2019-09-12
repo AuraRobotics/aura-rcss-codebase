@@ -493,7 +493,10 @@ behaviours/sample_player-bhv_defhalf_positioning.o: \
  behaviours/../utils/algorithms/hungarian.h \
  behaviours/../utils/geo_utils.h \
  /usr/local/include/rcsc/geom/polygon_2d.h \
- behaviours/../utils/rcsc_utils.h behaviours/bhv_mark.h
+ behaviours/../utils/rcsc_utils.h \
+ behaviours/../utils/allocators/mark_target_allocator.h \
+ ../src/chain_action/../cafe_model.h ../src/chain_action/../strategy.h \
+ behaviours/bhv_mark.h
 
 /usr/include/stdc-predef.h:
 
@@ -1634,5 +1637,11 @@ behaviours/../utils/geo_utils.h:
 /usr/local/include/rcsc/geom/polygon_2d.h:
 
 behaviours/../utils/rcsc_utils.h:
+
+behaviours/../utils/allocators/mark_target_allocator.h:
+
+../src/chain_action/../cafe_model.h:
+
+../src/chain_action/../strategy.h:
 
 behaviours/bhv_mark.h:

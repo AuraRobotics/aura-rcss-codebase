@@ -494,27 +494,8 @@ behaviours/sample_player-bhv_defensive_positioning.o: \
  behaviours/../utils/algorithms/hungarian.h \
  behaviours/../utils/geo_utils.h behaviours/../utils/rcsc_utils.h \
  behaviours/bhv_mark_deep.h behaviours/bhv_mark.h \
- /usr/local/include/rcsc/action/basic_actions.h \
- /usr/local/include/rcsc/action/arm_off.h \
- /usr/local/include/rcsc/action/arm_point_to_point.h \
- /usr/local/include/rcsc/action/bhv_body_neck_to_point.h \
- /usr/local/include/rcsc/action/bhv_body_neck_to_ball.h \
- /usr/local/include/rcsc/action/bhv_neck_body_to_point.h \
- /usr/local/include/rcsc/action/bhv_neck_body_to_ball.h \
- /usr/local/include/rcsc/action/body_tackle_to_point.h \
- /usr/local/include/rcsc/action/body_turn_to_angle.h \
- /usr/local/include/rcsc/action/body_turn_to_ball.h \
- /usr/local/include/rcsc/action/body_turn_to_point.h \
- /usr/local/include/rcsc/action/neck_turn_to_ball.h \
- /usr/local/include/rcsc/action/neck_turn_to_point.h \
- /usr/local/include/rcsc/action/neck_turn_to_relative.h \
- /usr/local/include/rcsc/action/view_change_width.h \
- /usr/local/include/rcsc/action/view_wide.h \
- /usr/local/include/rcsc/action/view_normal.h \
- /usr/local/include/rcsc/action/body_go_to_point.h \
- /usr/local/include/rcsc/action/body_go_to_point2010.h \
- /usr/local/include/rcsc/action/neck_turn_to_ball_or_scan.h \
- /usr/local/include/rcsc/action/neck_turn_to_low_conf_teammate.h
+ behaviours/../utils/allocators/mark_target_allocator.h \
+ ../src/chain_action/../cafe_model.h ../src/chain_action/../strategy.h
 
 /usr/include/stdc-predef.h:
 
@@ -1660,44 +1641,8 @@ behaviours/bhv_mark_deep.h:
 
 behaviours/bhv_mark.h:
 
-/usr/local/include/rcsc/action/basic_actions.h:
+behaviours/../utils/allocators/mark_target_allocator.h:
 
-/usr/local/include/rcsc/action/arm_off.h:
+../src/chain_action/../cafe_model.h:
 
-/usr/local/include/rcsc/action/arm_point_to_point.h:
-
-/usr/local/include/rcsc/action/bhv_body_neck_to_point.h:
-
-/usr/local/include/rcsc/action/bhv_body_neck_to_ball.h:
-
-/usr/local/include/rcsc/action/bhv_neck_body_to_point.h:
-
-/usr/local/include/rcsc/action/bhv_neck_body_to_ball.h:
-
-/usr/local/include/rcsc/action/body_tackle_to_point.h:
-
-/usr/local/include/rcsc/action/body_turn_to_angle.h:
-
-/usr/local/include/rcsc/action/body_turn_to_ball.h:
-
-/usr/local/include/rcsc/action/body_turn_to_point.h:
-
-/usr/local/include/rcsc/action/neck_turn_to_ball.h:
-
-/usr/local/include/rcsc/action/neck_turn_to_point.h:
-
-/usr/local/include/rcsc/action/neck_turn_to_relative.h:
-
-/usr/local/include/rcsc/action/view_change_width.h:
-
-/usr/local/include/rcsc/action/view_wide.h:
-
-/usr/local/include/rcsc/action/view_normal.h:
-
-/usr/local/include/rcsc/action/body_go_to_point.h:
-
-/usr/local/include/rcsc/action/body_go_to_point2010.h:
-
-/usr/local/include/rcsc/action/neck_turn_to_ball_or_scan.h:
-
-/usr/local/include/rcsc/action/neck_turn_to_low_conf_teammate.h:
+../src/chain_action/../strategy.h:

@@ -797,7 +797,7 @@ SamplePlayer::createActionGenerator() const {
 
 
 bool SamplePlayer::test() {
-
+    return false;
 
 //    for(int unum = 1; unum<=11 ; unum++){
 //
@@ -833,7 +833,7 @@ bool SamplePlayer::test() {
 //    }
 
     dlog.addRect(Logger::TEAM,
-                 wm.self().pos().x - 2, wm.self().pos().y - 2, 4, 4,
+                 wm.self().pos().x - 2.1, wm.self().pos().y - 2.1, 4.1, 4.1,
                  "#0000ff");
 
     double our_offside_line = cm.getOurOffsideLine();

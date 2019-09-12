@@ -18,30 +18,6 @@ public:
     bool execute(rcsc::PlayerAgent *agent);
 
 private:
-
-    bool defendeTheDengerArea(rcsc::PlayerAgent *agent);
-
-    rcsc::PlayerPtrCont getDengerOpponent(rcsc::PlayerAgent *agent);
-
-    const rcsc::PlayerObject *
-    assignOpponent(rcsc::ConstPlayerPtrCont def_ps, rcsc::PlayerPtrCont opp_ps, int self_unum, const rcsc::WorldModel &wm);
-
-
-
-
-
-
-
-
-
-
-
-
-
-    rcsc::PlayerPtrCont defenceLineAssignment(rcsc::PlayerAgent *agent);
-    rcsc::PlayerPtrCont getDengerOpponentDefendeLine(rcsc::PlayerAgent *agent);
-    const rcsc::PlayerPtrCont assignOpponentToDefenceLine(ConstPlayerPtrCont def_ps, PlayerPtrCont opp_ps, int self_unum);
-
 };
 
 
