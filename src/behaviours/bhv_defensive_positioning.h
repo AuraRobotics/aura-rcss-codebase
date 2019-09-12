@@ -29,6 +29,9 @@ private:
     const rcsc::PlayerObject *
     assignOpponent(rcsc::ConstPlayerPtrCont def_ps, rcsc::PlayerPtrCont opp_ps, int self_unum);
 
+    const rcsc::PlayerObject *
+    assignOpponentInPenaltyArea(rcsc::ConstPlayerPtrCont def_ps, rcsc::PlayerPtrCont opp_ps, int self_unum);
+
     rcsc::Vector2D getDefensivePos(rcsc::PlayerAgent *agent, const rcsc::PlayerObject *opponent);
 
     rcsc::Polygon2D getDengerArea(rcsc::Vector2D ball_pos,

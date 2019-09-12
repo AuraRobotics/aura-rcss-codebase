@@ -297,7 +297,8 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/boost/scoped_ptr.hpp \
  /usr/include/boost/smart_ptr/scoped_ptr.hpp \
  /usr/local/include/rcsc/game_mode.h \
- /usr/local/include/rcsc/common/server_param.h utils/HERMES_FastIC.h \
+ /usr/local/include/rcsc/common/server_param.h \
+ utils/estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -479,7 +480,8 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/boost/function/detail/maybe_include.hpp \
  /usr/include/boost/function/function_template.hpp \
  /usr/include/boost/detail/no_exceptions_support.hpp \
- /usr/include/boost/core/no_exceptions_support.hpp
+ /usr/include/boost/core/no_exceptions_support.hpp \
+ /usr/local/include/rcsc/player/intercept_table.h
 
 /usr/include/stdc-predef.h:
 
@@ -1211,7 +1213,7 @@ roles/soccer_role.h:
 
 /usr/local/include/rcsc/common/server_param.h:
 
-utils/HERMES_FastIC.h:
+utils/estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 
@@ -1602,3 +1604,5 @@ utils/HERMES_FastIC.h:
 /usr/include/boost/detail/no_exceptions_support.hpp:
 
 /usr/include/boost/core/no_exceptions_support.hpp:
+
+/usr/local/include/rcsc/player/intercept_table.h:

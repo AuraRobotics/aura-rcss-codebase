@@ -34,7 +34,7 @@
 
 #include "../behaviours/bhv_basic_offensive_kick.h"
 #include "../behaviours/bhv_basic_move.h"
-
+#include "../behaviours/bhv_intercept.h"
 #include <rcsc/formation/formation.h>
 
 #include <rcsc/player/player_agent.h>

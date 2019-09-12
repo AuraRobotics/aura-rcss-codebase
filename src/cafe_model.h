@@ -9,7 +9,7 @@
 #include <rcsc/player/world_model.h>
 #include <rcsc/common/server_param.h>
 #include <rcsc/player/player_object.h>
-#include "utils/HERMES_FastIC.h";
+#include "utils/estimators/HERMES_FastIC.h";
 
 namespace rcsc {
     typedef std::vector<const rcsc::PlayerObject *> ConstPlayerPtrCont;
@@ -34,7 +34,9 @@ private:
 
 public:
     static CafeModel &instance();
+
     static void updateFastIC(PlayerAgent *agent);
+
     static FastIC *fastIC();
 
     static
@@ -53,11 +55,20 @@ public:
 
     rcsc::PlayerPtrCont getPlayerInRangeX(rcsc::PlayerPtrCont player, double x1, double x2) const;
 
+    rcsc::PlayerPtrCont getPlayerInRect(rcsc::PlayerPtrCont player, double x1, double x2, double y1, double y2) const;
+
+    rcsc::PlayerPtrCont getPlayerInBallArea(Strategy::BallArea ball_area, bool ourTeam) const;
+
+    rcsc::PlayerPtrCont getPlayerInBallArea(rcsc::PlayerPtrCont player, Strategy::BallArea ball_area) const;
+
     rcsc::PlayerPtrCont getPlayerInRangeGoal(double dist, bool ourTeam) const;
 
     rcsc::PlayerPtrCont getPlayerInRangeGoal(rcsc::PlayerPtrCont player, double dist) const;
 
     double getOurOffsideLine() const;
+
+    rcsc::Vector2D getBallLord() const;
+
 
 private:
 

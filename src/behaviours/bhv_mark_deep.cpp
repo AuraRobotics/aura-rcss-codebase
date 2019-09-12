@@ -85,7 +85,7 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
     const CafeModel &cm = CafeModel::i();
 
     Vector2D self_pos = Strategy::i().getPosition(wm.self().unum()); // TODO check self_pos is ok
-    Vector2D ball_pos = wm.ball().pos();
+    Vector2D ball_pos = cm.getBallLord();//wm.ball().pos();
     Vector2D opp_pos = target_opp->pos();
 
     int x_offside = cm.getOurOffsideLine(); //TODO change name
@@ -105,6 +105,7 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
     double max_score_just_cover = INT_MIN;
     Vector2D best_pos_just_cover;
 
+    Vector2D ball_next_pos = cm.getBallLord();
 
 
     ////DEBUG
@@ -127,14 +128,14 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
             Vector2D check_point(i, j);
 
 
-            if (!checkPosIsValid(check_point, self_pos, opp_pos, ball_pos, x_offside)) {
+            if (!checkPosIsValid(check_point, self_pos, opp_pos, ball_next_pos, x_offside)) {
                 continue;
             }
 
 
             double temp_score = 0;
             double cover_danger =
-                    coverDengerPassArea(check_point, self_pos, opp_pos, ball_pos, dengerArea, path_dist) * 0.6;
+                    coverDengerPassArea(check_point, self_pos, opp_pos, ball_next_pos, dengerArea, path_dist) * 0.6;
             ///////////
             table_cover.back().push_back(cover_danger);
             ///////////DEBUG
@@ -145,10 +146,10 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
             /////////////////
 
             double near_to_goal_line =
-                    nearToGoalLine(check_point, self_pos, opp_pos, ball_pos, 2 * search_radius) * 0.35;
+                    nearToGoalLine(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.35;
             table_goal_line.back().push_back(near_to_goal_line);
             double near_to_penalt =
-                    nearToPenaltyArea(check_point, self_pos, opp_pos, ball_pos, 2 * search_radius) * 0.35;
+                    nearToPenaltyArea(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.35;
             table_near_penalty.back().push_back(near_to_penalt);
             double near_to_goal = nearToGoal(check_point, check_line_x.first, 2 * search_radius) * 0.2;
             table_near_goal.back().push_back(near_to_goal);
@@ -181,7 +182,7 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
 
 
     dlog.addCircle(Logger::TEAM,
-                   ball_pos, 0.5, "#ffffff", true);
+                   ball_next_pos, 0.5, "#ffffff", true);
 
     dlog.addCircle(Logger::TEAM,
                    opp_pos, 0.5, "#ff0000", true);
@@ -348,22 +349,7 @@ rcsc::Polygon2D Bhv_MarkDeep::getDengerArea(Vector2D ball_pos,
 }
 
 
-
-
-#include <stdio.h>
-#include <string>
-#include <sstream>
-
-//TODO to Utils
-namespace patch {
-    template<typename T>
-    std::string to_string(const T &n) {
-        std::ostringstream stm;
-        stm << n;
-        return stm.str();
-    }
-}
-
+#include "../utils/utils.cpp"
 
 void Bhv_MarkDeep::log_table(std::vector <std::vector<double> > table, std::string name) {
     dlog.addText(Logger::TEAM,

@@ -492,7 +492,7 @@ behaviours/sample_player-bhv_block.o: behaviours/bhv_block.cpp \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
  behaviours/../cafe_model.h behaviours/../strategy.h \
- behaviours/../utils/HERMES_FastIC.h
+ behaviours/../utils/estimators/HERMES_FastIC.h
 
 /usr/include/stdc-predef.h:
 
@@ -1632,4 +1632,4 @@ behaviours/../cafe_model.h:
 
 behaviours/../strategy.h:
 
-behaviours/../utils/HERMES_FastIC.h:
+behaviours/../utils/estimators/HERMES_FastIC.h:

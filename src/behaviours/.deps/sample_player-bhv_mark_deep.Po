@@ -487,7 +487,7 @@ behaviours/sample_player-bhv_mark_deep.o: behaviours/bhv_mark_deep.cpp \
  /usr/include/c++/5/bits/stl_stack.h \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
- behaviours/../utils/HERMES_FastIC.h behaviours/../strategy.h \
+ behaviours/../utils/estimators/HERMES_FastIC.h behaviours/../strategy.h \
  behaviours/../utils/algo_utils.h \
  behaviours/../utils/algorithms/hungarian.h \
  behaviours/../utils/geo_utils.h behaviours/../utils/rcsc_utils.h \
@@ -512,7 +512,8 @@ behaviours/sample_player-bhv_mark_deep.o: behaviours/bhv_mark_deep.cpp \
  /usr/local/include/rcsc/action/body_go_to_point2010.h \
  /usr/local/include/rcsc/action/neck_turn_to_ball_or_scan.h \
  /usr/local/include/rcsc/action/neck_turn_to_low_conf_teammate.h \
- /usr/include/c++/5/sstream /usr/include/c++/5/bits/sstream.tcc
+ behaviours/../utils/utils.cpp /usr/include/c++/5/sstream \
+ /usr/include/c++/5/bits/sstream.tcc
 
 /usr/include/stdc-predef.h:
 
@@ -1640,7 +1641,7 @@ behaviours/../roles/soccer_role.h:
 
 /usr/local/include/rcsc/formation/sample_data.h:
 
-behaviours/../utils/HERMES_FastIC.h:
+behaviours/../utils/estimators/HERMES_FastIC.h:
 
 behaviours/../strategy.h:
 
@@ -1693,6 +1694,8 @@ behaviours/../utils/rcsc_utils.h:
 /usr/local/include/rcsc/action/neck_turn_to_ball_or_scan.h:
 
 /usr/local/include/rcsc/action/neck_turn_to_low_conf_teammate.h:
+
+behaviours/../utils/utils.cpp:
 
 /usr/include/c++/5/sstream:
 

@@ -74,14 +74,14 @@ rcsc::Vector2D Bhv_Mark::getDefensivePos(rcsc::PlayerAgent *agent) {
 
     Vector2D self_formation_pos = Strategy::i().getPosition(wm.self().unum());
     Vector2D self_pos = wm.self().pos();
-    Vector2D ball_pos = wm.ball().pos();
+    Vector2D ball_next_pos = cm.getBallLord();
     const Strategy::BallArea ball_area = Strategy::get_ball_area(wm);
     Vector2D opp_pos = target_opp->pos();
 
-    Segment2D opp_to_ball(opp_pos, ball_pos);
+    Segment2D opp_to_ball(opp_pos, ball_next_pos);
     Vector2D foot = geoUtils::findFoot(opp_to_ball, self_pos);
 
-    Vector2D ball_to_opp_arow = ball_pos - opp_pos;
+    Vector2D ball_to_opp_arow = ball_next_pos - opp_pos;
     ball_to_opp_arow.setLength(2);
     Vector2D opp_mark_pos = opp_pos + ball_to_opp_arow;
 

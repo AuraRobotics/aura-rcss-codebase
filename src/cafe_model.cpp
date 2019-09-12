@@ -4,6 +4,7 @@
 
 #include <rcsc/common/logger.h>
 #include "cafe_model.h"
+#include <rcsc/player/intercept_table.h>
 
 using namespace rcsc;
 
@@ -12,7 +13,7 @@ CafeModel::CafeModel() {
 
 }
 
-FastIC * CafeModel::fic;
+FastIC *CafeModel::fic;
 
 static FastIC *fic;
 
@@ -27,7 +28,7 @@ void CafeModel::updateFastIC(PlayerAgent *agent) {
     fic->setByWorldModel();
 }
 
-FastIC* CafeModel::fastIC() {
+FastIC *CafeModel::fastIC() {
     return CafeModel::fic;
 }
 
@@ -89,6 +90,21 @@ rcsc::PlayerPtrCont CafeModel::getPlayerInRangeX(const rcsc::PlayerPtrCont playe
     return temp_player;
 }
 
+rcsc::PlayerPtrCont CafeModel::getPlayerInRect(rcsc::PlayerPtrCont player, double x1, double x2, double y1,
+                                               double y2) const {
+    PlayerPtrCont temp_player;
+    const PlayerPtrCont::const_iterator p_end = player.end();
+    for (PlayerPtrCont::const_iterator it = player.begin();
+         it != p_end;
+         ++it) {
+        Vector2D p_pos = (*it)->pos();
+        if (p_pos.x > x1 && p_pos.x < x2 && p_pos.y > y1 && p_pos.y < y2 ) {
+            temp_player.push_back(*it);
+        }
+    }
+    return temp_player;
+}
+
 
 rcsc::PlayerPtrCont CafeModel::getPlayerInRangeGoal(double dist, bool ourTeam) const {
     if (ourTeam == true) {
@@ -109,6 +125,26 @@ rcsc::PlayerPtrCont CafeModel::getPlayerInRangeGoal(const rcsc::PlayerPtrCont pl
         }
     }
 
+    return temp_player;
+}
+
+rcsc::PlayerPtrCont CafeModel::getPlayerInBallArea(Strategy::BallArea ball_area, bool ourTeam) const {
+    if (ourTeam == true) {
+        return getPlayerInBallArea(wm->teammatesFromSelf(), ball_area);
+    }
+    return getPlayerInBallArea(wm->opponentsFromSelf(), ball_area);
+}
+
+rcsc::PlayerPtrCont CafeModel::getPlayerInBallArea(rcsc::PlayerPtrCont player, Strategy::BallArea ball_area) const {
+    PlayerPtrCont temp_player;
+    const PlayerPtrCont::const_iterator p_end = player.end();
+    for (PlayerPtrCont::const_iterator it = player.begin();
+         it != p_end;
+         ++it) {
+        if (Strategy::get_ball_area((*it)->pos()) == ball_area) {
+            temp_player.push_back(*it);
+        }
+    }
     return temp_player;
 }
 
@@ -149,3 +185,19 @@ double CafeModel::getOurOffsideLine() const {
     }
     return offside_line_x;
 }
+
+rcsc::Vector2D CafeModel::getBallLord() const {
+
+    const InterceptTable *interceptTable = wm->interceptTable();
+
+
+    const int mate_min = interceptTable->teammateReachCycle();
+    const int opp_min = interceptTable->opponentReachCycle();
+
+    if (mate_min < opp_min) {
+        return interceptTable->fastestTeammate()->pos();
+    } else {
+        return interceptTable->fastestOpponent()->pos();
+    }
+}
+

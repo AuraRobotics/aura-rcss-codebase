@@ -35,6 +35,7 @@
 #include "../behaviours/bhv_basic_offensive_kick.h"
 #include "../behaviours/bhv_basic_move.h"
 #include "../behaviours/bhv_block.h"
+#include "../behaviours/bhv_intercept.h"
 #include <rcsc/player/player_agent.h>
 #include <rcsc/player/debug_client.h>
 #include <rcsc/common/logger.h>
@@ -96,7 +97,9 @@ RoleCenterForward::doKick(PlayerAgent *agent) {
  */
 void
 RoleCenterForward::doMove(PlayerAgent *agent) {
-    if (Bhv_Block().execute(agent)) {
+    if (Bhv_Intercept().execute(agent)) {
+        return;
+    } else if (Bhv_Block().execute(agent)) {
         return;
     }
     Bhv_BasicMove().execute(agent);

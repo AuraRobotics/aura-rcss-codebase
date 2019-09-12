@@ -487,7 +487,7 @@ behaviours/sample_player-bhv_mark.o: behaviours/bhv_mark.cpp \
  /usr/include/c++/5/bits/stl_stack.h \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
- behaviours/../utils/HERMES_FastIC.h behaviours/../strategy.h \
+ behaviours/../utils/estimators/HERMES_FastIC.h behaviours/../strategy.h \
  behaviours/../utils/algo_utils.h \
  behaviours/../utils/algorithms/hungarian.h \
  behaviours/../utils/geo_utils.h behaviours/../utils/rcsc_utils.h \
@@ -1639,7 +1639,7 @@ behaviours/../roles/soccer_role.h:
 
 /usr/local/include/rcsc/formation/sample_data.h:
 
-behaviours/../utils/HERMES_FastIC.h:
+behaviours/../utils/estimators/HERMES_FastIC.h:
 
 behaviours/../strategy.h:
 

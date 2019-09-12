@@ -515,7 +515,7 @@ sample_player-sample_player.o: sample_player.cpp \
  communication/intention_receive.h \
  /usr/local/include/rcsc/player/soccer_intention.h \
  /usr/include/c++/5/queue /usr/include/c++/5/bits/stl_queue.h \
- cafe_model.h utils/HERMES_FastIC.h \
+ cafe_model.h utils/estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/common/logger.h \
  /usr/local/include/rcsc/geom/sector_2d.h \
  /usr/local/include/rcsc/action/basic_actions.h \
@@ -920,7 +920,8 @@ sample_player-sample_player.o: sample_player.cpp \
  ../src/chain_action/actgen_simple_dribble.h \
  ../src/chain_action/actgen_shoot.h \
  ../src/chain_action/actgen_action_chain_length_filter.h \
- utils/geo_utils.h /usr/local/include/rcsc/geom/polygon_2d.h
+ utils/geo_utils.h /usr/local/include/rcsc/geom/polygon_2d.h \
+ utils/estimators/player_estimator.h
 
 /usr/include/stdc-predef.h:
 
@@ -2136,7 +2137,7 @@ communication/intention_receive.h:
 
 cafe_model.h:
 
-utils/HERMES_FastIC.h:
+utils/estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/common/logger.h:
 
@@ -3003,3 +3004,5 @@ utils/HERMES_FastIC.h:
 utils/geo_utils.h:
 
 /usr/local/include/rcsc/geom/polygon_2d.h:
+
+utils/estimators/player_estimator.h:

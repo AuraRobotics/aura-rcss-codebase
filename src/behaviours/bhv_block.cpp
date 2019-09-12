@@ -35,6 +35,14 @@ bool Bhv_Block::execute(rcsc::PlayerAgent *agent) {
     const Vector2D self_pos = wm.self().pos();
     const Vector2D ball_pos = wm.ball().pos();
 
+    const unsigned self_unum = agent->world().self().unum();
+    const RoleGroup role_group = stra.getRoleGroup(self_unum);
+
+    if(role_group == Defense){
+        if(self_pos.dist(ball_pos) > 2.5){
+            return false;
+        }
+    }
 
     const int self_min = wm.interceptTable()->selfReachCycle();
     const int mate_min = wm.interceptTable()->teammateReachCycle();
@@ -45,11 +53,9 @@ bool Bhv_Block::execute(rcsc::PlayerAgent *agent) {
             dlog.addText(Logger::TEAM,
                          __FILE__": intercept");
 
-            std::cout << " intercept BLOCKKKKKKKKK" << std::endl;
-
             Body_Intercept().execute(agent);
             agent->setNeckAction(new Neck_OffensiveInterceptNeck());
-
+            return true;
         }
     }
 

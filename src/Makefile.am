@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 UTILSSOURCES = \
+    utils/utils.cpp \
     utils/rcsc_utils.h \
     utils/rcsc_utils.cpp \
     utils/geo_utils.h \
@@ -9,8 +10,11 @@ UTILSSOURCES = \
     utils/algo_utils.cpp \
     utils/algorithms/hungarian.h \
     utils/algorithms/hungarian.cpp \
-    utils/HERMES_FastIC.h \
-    utils/HERMES_FastIC.cpp
+    utils/estimators/HERMES_FastIC.h \
+    utils/estimators/HERMES_FastIC.cpp \
+    utils/estimators/player_estimator.h \
+    utils/estimators/player_estimator.cpp
+
 
 
 BHV_SOURCE = \
@@ -57,7 +61,9 @@ BHV_SOURCE = \
     behaviours/bhv_mark.h \
     behaviours/bhv_mark.cpp \
     behaviours/bhv_mark_deep.h \
-    behaviours/bhv_mark_deep.cpp
+    behaviours/bhv_mark_deep.cpp \
+    behaviours/bhv_intercept.h \
+    behaviours/bhv_intercept.cpp
 
 
 

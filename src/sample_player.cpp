@@ -791,8 +791,9 @@ SamplePlayer::createActionGenerator() const {
     return ActionGenerator::ConstPtr(g);
 }
 
-#include "utils/HERMES_FastIC.h"
+#include "utils/estimators/HERMES_FastIC.h"
 #include "utils/geo_utils.h"
+#include "utils/estimators/player_estimator.h"
 
 
 bool SamplePlayer::test() {
@@ -838,9 +839,8 @@ bool SamplePlayer::test() {
     double our_offside_line = cm.getOurOffsideLine();
 
     dlog.addLine(Logger::TEAM,
-                Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
-            );
-
+                 Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
+    );
 
 
     const PlayerAgent *agent = this;
@@ -869,16 +869,38 @@ bool SamplePlayer::test() {
     int min_player = fastIC->getFastestPlayerReachCycle();
 
 
-
     dlog.addText(Logger::TEAM,
                  __FILE__":========================== opp_cycle =%d , mate_cycle : %d , player_cycle: %d",
                  opp_cycle, mate_cycle, min_player);
 
 
+    if (world().gameMode().type() == GameMode::PlayOn && world().self().unum() != 1) {
+
+        dlog.addCircle(Logger::TEAM,
+                       cm.getBallLord(), 0.8, "#f0000f", true);
+
+    }
+
+//    PlayerObject * player = world().teammatesFromBall()[0];
+//
+//    PlayerEstimator estimator(world(), player);
+//    estimator.estimate();
 
 
 
-
+//    const PlayerCont::const_iterator t_end = wm.teammates().end();
+//    for (PlayerCont::const_iterator it = wm.teammates().begin();
+//         it != t_end; it++) {
+//        if(!it->posValid()){
+//            continue;
+//        }
+//
+//
+//        double dist = Strategy::i().getNearsetPosDist(it->unum());
+//
+//        dlog.addCircle(Logger::ROLE,
+//                       it->pos(), dist/2 , "#fc03c2", false);
+//    }
 
     return false;
 }

@@ -268,6 +268,7 @@ roles/sample_player-role_side_forward.o: roles/role_side_forward.cpp \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
  roles/../behaviours/bhv_basic_offensive_kick.h \
  roles/../behaviours/bhv_basic_move.h roles/../behaviours/bhv_block.h \
+ roles/../behaviours/bhv_intercept.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/world_model.h \
  /usr/local/include/rcsc/player/self_object.h \
@@ -1139,6 +1140,8 @@ roles/../behaviours/bhv_basic_offensive_kick.h:
 roles/../behaviours/bhv_basic_move.h:
 
 roles/../behaviours/bhv_block.h:
+
+roles/../behaviours/bhv_intercept.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 

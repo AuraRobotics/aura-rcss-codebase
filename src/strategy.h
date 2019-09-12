@@ -252,6 +252,9 @@ public:
 
     std::vector<int> getGroupPlayer(RoleGroup group) const;
 
+    double getNearsetPosDist(unsigned unum) const;
+
+    rcsc::Vector2D getNearsetPos(unsigned unum) const;
 
 };
 

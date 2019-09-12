@@ -268,6 +268,7 @@ roles/sample_player-role_defensive_half.o: roles/role_defensive_half.cpp \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
  roles/../behaviours/bhv_basic_offensive_kick.h \
  roles/../behaviours/bhv_basic_move.h roles/../behaviours/bhv_block.h \
+ roles/../behaviours/bhv_intercept.h \
  roles/../behaviours/bhv_defhalf_positioning.h \
  /usr/local/include/rcsc/player/player_object.h \
  /usr/local/include/rcsc/player/abstract_player_object.h \
@@ -299,7 +300,7 @@ roles/sample_player-role_defensive_half.o: roles/role_defensive_half.cpp \
  /usr/local/include/rcsc/geom/region_2d.h \
  /usr/local/include/rcsc/geom/size_2d.h \
  /usr/local/include/rcsc/geom/line_2d.h \
- roles/../behaviours/../utils/HERMES_FastIC.h \
+ roles/../behaviours/../utils/estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -1147,6 +1148,8 @@ roles/../behaviours/bhv_basic_move.h:
 
 roles/../behaviours/bhv_block.h:
 
+roles/../behaviours/bhv_intercept.h:
+
 roles/../behaviours/bhv_defhalf_positioning.h:
 
 /usr/local/include/rcsc/player/player_object.h:
@@ -1217,7 +1220,7 @@ roles/../behaviours/../roles/soccer_role.h:
 
 /usr/local/include/rcsc/geom/line_2d.h:
 
-roles/../behaviours/../utils/HERMES_FastIC.h:
+roles/../behaviours/../utils/estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 

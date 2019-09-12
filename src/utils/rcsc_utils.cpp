@@ -33,3 +33,4 @@ double rcscUtils::maxDistBall() {
 
     return max_speed / (1 - dencay);
 }
+

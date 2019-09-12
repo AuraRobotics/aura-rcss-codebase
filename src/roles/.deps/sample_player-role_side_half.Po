@@ -299,7 +299,7 @@ roles/sample_player-role_side_half.o: roles/role_side_half.cpp \
  /usr/local/include/rcsc/geom/region_2d.h \
  /usr/local/include/rcsc/geom/size_2d.h \
  /usr/local/include/rcsc/geom/line_2d.h \
- roles/../behaviours/../utils/HERMES_FastIC.h \
+ roles/../behaviours/../utils/estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -492,6 +492,7 @@ roles/sample_player-role_side_half.o: roles/role_side_half.cpp \
  /usr/include/boost/core/no_exceptions_support.hpp \
  /usr/local/include/rcsc/common/logger.h \
  /usr/local/include/rcsc/geom/sector_2d.h \
+ roles/../behaviours/bhv_intercept.h \
  /usr/local/include/rcsc/player/intercept_table.h
 
 /usr/include/stdc-predef.h:
@@ -1218,7 +1219,7 @@ roles/../behaviours/../roles/soccer_role.h:
 
 /usr/local/include/rcsc/geom/line_2d.h:
 
-roles/../behaviours/../utils/HERMES_FastIC.h:
+roles/../behaviours/../utils/estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 
@@ -1633,5 +1634,7 @@ roles/../behaviours/../utils/HERMES_FastIC.h:
 /usr/local/include/rcsc/common/logger.h:
 
 /usr/local/include/rcsc/geom/sector_2d.h:
+
+roles/../behaviours/bhv_intercept.h:
 
 /usr/local/include/rcsc/player/intercept_table.h:

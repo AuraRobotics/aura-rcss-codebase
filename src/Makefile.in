@@ -163,7 +163,8 @@ am__objects_3 = behaviours/sample_player-bhv_basic_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_defhalf_positioning.$(OBJEXT) \
 	behaviours/sample_player-bhv_block.$(OBJEXT) \
 	behaviours/sample_player-bhv_mark.$(OBJEXT) \
-	behaviours/sample_player-bhv_mark_deep.$(OBJEXT)
+	behaviours/sample_player-bhv_mark_deep.$(OBJEXT) \
+	behaviours/sample_player-bhv_intercept.$(OBJEXT)
 am__objects_4 = roles/sample_player-soccer_role.$(OBJEXT) \
 	roles/sample_player-role_center_back.$(OBJEXT) \
 	roles/sample_player-role_center_forward.$(OBJEXT) \
@@ -186,11 +187,13 @@ am__objects_6 =  \
 	communication/sample_player-keepaway_communication.$(OBJEXT) \
 	communication/sample_player-intention_receive.$(OBJEXT) \
 	communication/sample_player-intention_wait_after_set_play_kick.$(OBJEXT)
-am__objects_7 = utils/sample_player-rcsc_utils.$(OBJEXT) \
+am__objects_7 = utils/sample_player-utils.$(OBJEXT) \
+	utils/sample_player-rcsc_utils.$(OBJEXT) \
 	utils/sample_player-geo_utils.$(OBJEXT) \
 	utils/sample_player-algo_utils.$(OBJEXT) \
 	utils/algorithms/sample_player-hungarian.$(OBJEXT) \
-	utils/sample_player-HERMES_FastIC.$(OBJEXT)
+	utils/estimators/sample_player-HERMES_FastIC.$(OBJEXT) \
+	utils/estimators/sample_player-player_estimator.$(OBJEXT)
 am__objects_8 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -387,6 +390,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 UTILSSOURCES = \
+    utils/utils.cpp \
     utils/rcsc_utils.h \
     utils/rcsc_utils.cpp \
     utils/geo_utils.h \
@@ -395,8 +399,10 @@ UTILSSOURCES = \
     utils/algo_utils.cpp \
     utils/algorithms/hungarian.h \
     utils/algorithms/hungarian.cpp \
-    utils/HERMES_FastIC.h \
-    utils/HERMES_FastIC.cpp
+    utils/estimators/HERMES_FastIC.h \
+    utils/estimators/HERMES_FastIC.cpp \
+    utils/estimators/player_estimator.h \
+    utils/estimators/player_estimator.cpp
 
 BHV_SOURCE = \
     behaviours/bhv_basic_move.cpp \
@@ -442,7 +448,9 @@ BHV_SOURCE = \
     behaviours/bhv_mark.h \
     behaviours/bhv_mark.cpp \
     behaviours/bhv_mark_deep.h \
-    behaviours/bhv_mark_deep.cpp
+    behaviours/bhv_mark_deep.cpp \
+    behaviours/bhv_intercept.h \
+    behaviours/bhv_intercept.cpp
 
 ROLE_SOURCE = \
     roles/soccer_role.h \
@@ -895,6 +903,9 @@ behaviours/sample_player-bhv_mark.$(OBJEXT):  \
 behaviours/sample_player-bhv_mark_deep.$(OBJEXT):  \
 	behaviours/$(am__dirstamp) \
 	behaviours/$(DEPDIR)/$(am__dirstamp)
+behaviours/sample_player-bhv_intercept.$(OBJEXT):  \
+	behaviours/$(am__dirstamp) \
+	behaviours/$(DEPDIR)/$(am__dirstamp)
 roles/$(am__dirstamp):
 	@$(MKDIR_P) roles
 	@: > roles/$(am__dirstamp)
@@ -963,6 +974,8 @@ utils/$(am__dirstamp):
 utils/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) utils/$(DEPDIR)
 	@: > utils/$(DEPDIR)/$(am__dirstamp)
+utils/sample_player-utils.$(OBJEXT): utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
 utils/sample_player-rcsc_utils.$(OBJEXT): utils/$(am__dirstamp) \
 	utils/$(DEPDIR)/$(am__dirstamp)
 utils/sample_player-geo_utils.$(OBJEXT): utils/$(am__dirstamp) \
@@ -978,8 +991,18 @@ utils/algorithms/$(DEPDIR)/$(am__dirstamp):
 utils/algorithms/sample_player-hungarian.$(OBJEXT):  \
 	utils/algorithms/$(am__dirstamp) \
 	utils/algorithms/$(DEPDIR)/$(am__dirstamp)
-utils/sample_player-HERMES_FastIC.$(OBJEXT): utils/$(am__dirstamp) \
-	utils/$(DEPDIR)/$(am__dirstamp)
+utils/estimators/$(am__dirstamp):
+	@$(MKDIR_P) utils/estimators
+	@: > utils/estimators/$(am__dirstamp)
+utils/estimators/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) utils/estimators/$(DEPDIR)
+	@: > utils/estimators/$(DEPDIR)/$(am__dirstamp)
+utils/estimators/sample_player-HERMES_FastIC.$(OBJEXT):  \
+	utils/estimators/$(am__dirstamp) \
+	utils/estimators/$(DEPDIR)/$(am__dirstamp)
+utils/estimators/sample_player-player_estimator.$(OBJEXT):  \
+	utils/estimators/$(am__dirstamp) \
+	utils/estimators/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -998,6 +1021,7 @@ mostlyclean-compile:
 	-rm -f roles/*.$(OBJEXT)
 	-rm -f utils/*.$(OBJEXT)
 	-rm -f utils/algorithms/*.$(OBJEXT)
+	-rm -f utils/estimators/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -1026,6 +1050,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_goalie_basic_move.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_goalie_chase_ball.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_goalie_free_kick.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_intercept.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_mark.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_mark_deep.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@behaviours/$(DEPDIR)/sample_player-bhv_penalty_kick.Po@am__quote@
@@ -1084,11 +1109,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-role_side_forward.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-role_side_half.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@roles/$(DEPDIR)/sample_player-soccer_role.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-HERMES_FastIC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-algo_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-geo_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-rcsc_utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sample_player-utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/estimators/$(DEPDIR)/sample_player-player_estimator.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -1876,6 +1903,20 @@ behaviours/sample_player-bhv_mark_deep.obj: behaviours/bhv_mark_deep.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark_deep.obj `if test -f 'behaviours/bhv_mark_deep.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark_deep.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark_deep.cpp'; fi`
 
+behaviours/sample_player-bhv_intercept.o: behaviours/bhv_intercept.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_intercept.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_intercept.Tpo -c -o behaviours/sample_player-bhv_intercept.o `test -f 'behaviours/bhv_intercept.cpp' || echo '$(srcdir)/'`behaviours/bhv_intercept.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_intercept.Tpo behaviours/$(DEPDIR)/sample_player-bhv_intercept.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='behaviours/bhv_intercept.cpp' object='behaviours/sample_player-bhv_intercept.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_intercept.o `test -f 'behaviours/bhv_intercept.cpp' || echo '$(srcdir)/'`behaviours/bhv_intercept.cpp
+
+behaviours/sample_player-bhv_intercept.obj: behaviours/bhv_intercept.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_intercept.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_intercept.Tpo -c -o behaviours/sample_player-bhv_intercept.obj `if test -f 'behaviours/bhv_intercept.cpp'; then $(CYGPATH_W) 'behaviours/bhv_intercept.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_intercept.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_intercept.Tpo behaviours/$(DEPDIR)/sample_player-bhv_intercept.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='behaviours/bhv_intercept.cpp' object='behaviours/sample_player-bhv_intercept.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_intercept.obj `if test -f 'behaviours/bhv_intercept.cpp'; then $(CYGPATH_W) 'behaviours/bhv_intercept.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_intercept.cpp'; fi`
+
 roles/sample_player-soccer_role.o: roles/soccer_role.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT roles/sample_player-soccer_role.o -MD -MP -MF roles/$(DEPDIR)/sample_player-soccer_role.Tpo -c -o roles/sample_player-soccer_role.o `test -f 'roles/soccer_role.cpp' || echo '$(srcdir)/'`roles/soccer_role.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) roles/$(DEPDIR)/sample_player-soccer_role.Tpo roles/$(DEPDIR)/sample_player-soccer_role.Po
@@ -2156,6 +2197,20 @@ communication/sample_player-intention_wait_after_set_play_kick.obj: communicatio
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o communication/sample_player-intention_wait_after_set_play_kick.obj `if test -f 'communication/intention_wait_after_set_play_kick.cpp'; then $(CYGPATH_W) 'communication/intention_wait_after_set_play_kick.cpp'; else $(CYGPATH_W) '$(srcdir)/communication/intention_wait_after_set_play_kick.cpp'; fi`
 
+utils/sample_player-utils.o: utils/utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-utils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-utils.Tpo -c -o utils/sample_player-utils.o `test -f 'utils/utils.cpp' || echo '$(srcdir)/'`utils/utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-utils.Tpo utils/$(DEPDIR)/sample_player-utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/utils.cpp' object='utils/sample_player-utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-utils.o `test -f 'utils/utils.cpp' || echo '$(srcdir)/'`utils/utils.cpp
+
+utils/sample_player-utils.obj: utils/utils.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-utils.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-utils.Tpo -c -o utils/sample_player-utils.obj `if test -f 'utils/utils.cpp'; then $(CYGPATH_W) 'utils/utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/utils.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-utils.Tpo utils/$(DEPDIR)/sample_player-utils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/utils.cpp' object='utils/sample_player-utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-utils.obj `if test -f 'utils/utils.cpp'; then $(CYGPATH_W) 'utils/utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/utils.cpp'; fi`
+
 utils/sample_player-rcsc_utils.o: utils/rcsc_utils.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-rcsc_utils.o -MD -MP -MF utils/$(DEPDIR)/sample_player-rcsc_utils.Tpo -c -o utils/sample_player-rcsc_utils.o `test -f 'utils/rcsc_utils.cpp' || echo '$(srcdir)/'`utils/rcsc_utils.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-rcsc_utils.Tpo utils/$(DEPDIR)/sample_player-rcsc_utils.Po
@@ -2212,19 +2267,33 @@ utils/algorithms/sample_player-hungarian.obj: utils/algorithms/hungarian.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/algorithms/sample_player-hungarian.obj `if test -f 'utils/algorithms/hungarian.cpp'; then $(CYGPATH_W) 'utils/algorithms/hungarian.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/algorithms/hungarian.cpp'; fi`
 
-utils/sample_player-HERMES_FastIC.o: utils/HERMES_FastIC.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-HERMES_FastIC.o -MD -MP -MF utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo -c -o utils/sample_player-HERMES_FastIC.o `test -f 'utils/HERMES_FastIC.cpp' || echo '$(srcdir)/'`utils/HERMES_FastIC.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo utils/$(DEPDIR)/sample_player-HERMES_FastIC.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/HERMES_FastIC.cpp' object='utils/sample_player-HERMES_FastIC.o' libtool=no @AMDEPBACKSLASH@
+utils/estimators/sample_player-HERMES_FastIC.o: utils/estimators/HERMES_FastIC.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/estimators/sample_player-HERMES_FastIC.o -MD -MP -MF utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo -c -o utils/estimators/sample_player-HERMES_FastIC.o `test -f 'utils/estimators/HERMES_FastIC.cpp' || echo '$(srcdir)/'`utils/estimators/HERMES_FastIC.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/estimators/HERMES_FastIC.cpp' object='utils/estimators/sample_player-HERMES_FastIC.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-HERMES_FastIC.o `test -f 'utils/HERMES_FastIC.cpp' || echo '$(srcdir)/'`utils/HERMES_FastIC.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/estimators/sample_player-HERMES_FastIC.o `test -f 'utils/estimators/HERMES_FastIC.cpp' || echo '$(srcdir)/'`utils/estimators/HERMES_FastIC.cpp
 
-utils/sample_player-HERMES_FastIC.obj: utils/HERMES_FastIC.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/sample_player-HERMES_FastIC.obj -MD -MP -MF utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo -c -o utils/sample_player-HERMES_FastIC.obj `if test -f 'utils/HERMES_FastIC.cpp'; then $(CYGPATH_W) 'utils/HERMES_FastIC.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/HERMES_FastIC.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo utils/$(DEPDIR)/sample_player-HERMES_FastIC.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/HERMES_FastIC.cpp' object='utils/sample_player-HERMES_FastIC.obj' libtool=no @AMDEPBACKSLASH@
+utils/estimators/sample_player-HERMES_FastIC.obj: utils/estimators/HERMES_FastIC.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/estimators/sample_player-HERMES_FastIC.obj -MD -MP -MF utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo -c -o utils/estimators/sample_player-HERMES_FastIC.obj `if test -f 'utils/estimators/HERMES_FastIC.cpp'; then $(CYGPATH_W) 'utils/estimators/HERMES_FastIC.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/estimators/HERMES_FastIC.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Tpo utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/estimators/HERMES_FastIC.cpp' object='utils/estimators/sample_player-HERMES_FastIC.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/sample_player-HERMES_FastIC.obj `if test -f 'utils/HERMES_FastIC.cpp'; then $(CYGPATH_W) 'utils/HERMES_FastIC.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/HERMES_FastIC.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/estimators/sample_player-HERMES_FastIC.obj `if test -f 'utils/estimators/HERMES_FastIC.cpp'; then $(CYGPATH_W) 'utils/estimators/HERMES_FastIC.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/estimators/HERMES_FastIC.cpp'; fi`
+
+utils/estimators/sample_player-player_estimator.o: utils/estimators/player_estimator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/estimators/sample_player-player_estimator.o -MD -MP -MF utils/estimators/$(DEPDIR)/sample_player-player_estimator.Tpo -c -o utils/estimators/sample_player-player_estimator.o `test -f 'utils/estimators/player_estimator.cpp' || echo '$(srcdir)/'`utils/estimators/player_estimator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/estimators/$(DEPDIR)/sample_player-player_estimator.Tpo utils/estimators/$(DEPDIR)/sample_player-player_estimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/estimators/player_estimator.cpp' object='utils/estimators/sample_player-player_estimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/estimators/sample_player-player_estimator.o `test -f 'utils/estimators/player_estimator.cpp' || echo '$(srcdir)/'`utils/estimators/player_estimator.cpp
+
+utils/estimators/sample_player-player_estimator.obj: utils/estimators/player_estimator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/estimators/sample_player-player_estimator.obj -MD -MP -MF utils/estimators/$(DEPDIR)/sample_player-player_estimator.Tpo -c -o utils/estimators/sample_player-player_estimator.obj `if test -f 'utils/estimators/player_estimator.cpp'; then $(CYGPATH_W) 'utils/estimators/player_estimator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/estimators/player_estimator.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) utils/estimators/$(DEPDIR)/sample_player-player_estimator.Tpo utils/estimators/$(DEPDIR)/sample_player-player_estimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='utils/estimators/player_estimator.cpp' object='utils/estimators/sample_player-player_estimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/estimators/sample_player-player_estimator.obj `if test -f 'utils/estimators/player_estimator.cpp'; then $(CYGPATH_W) 'utils/estimators/player_estimator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/estimators/player_estimator.cpp'; fi`
 
 sample_player-cafe_model.o: cafe_model.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp
@@ -2451,6 +2520,8 @@ distclean-generic:
 	-rm -f utils/$(am__dirstamp)
 	-rm -f utils/algorithms/$(DEPDIR)/$(am__dirstamp)
 	-rm -f utils/algorithms/$(am__dirstamp)
+	-rm -f utils/estimators/$(DEPDIR)/$(am__dirstamp)
+	-rm -f utils/estimators/$(am__dirstamp)
 	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
@@ -2461,7 +2532,7 @@ clean: clean-am
 clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR) utils/estimators/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -2507,7 +2578,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) actions/$(DEPDIR) behaviours/$(DEPDIR) chain_action/$(DEPDIR) communication/$(DEPDIR) roles/$(DEPDIR) utils/$(DEPDIR) utils/algorithms/$(DEPDIR) utils/estimators/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

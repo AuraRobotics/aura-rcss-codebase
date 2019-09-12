@@ -295,7 +295,7 @@ behaviours/sample_player-bhv_defhalf_positioning.o: \
  /usr/local/include/rcsc/geom/region_2d.h \
  /usr/local/include/rcsc/geom/size_2d.h \
  /usr/local/include/rcsc/geom/line_2d.h \
- behaviours/../utils/HERMES_FastIC.h \
+ behaviours/../utils/estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -1205,7 +1205,7 @@ behaviours/../roles/soccer_role.h:
 
 /usr/local/include/rcsc/geom/line_2d.h:
 
-behaviours/../utils/HERMES_FastIC.h:
+behaviours/../utils/estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 
