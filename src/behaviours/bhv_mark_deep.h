@@ -34,6 +34,9 @@ private:
     bool checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
                          rcsc::Vector2D ball_pos, double our_offside_x);
 
+    double nearToTarget(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
+                        rcsc::Vector2D ball_pos, double max_radius2);
+
     double nearToGoalLine(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
                           rcsc::Vector2D ball_pos, double max_radius2);
 
@@ -46,7 +49,7 @@ private:
                                rcsc::Vector2D ball_pos, rcsc::Polygon2D denger_area,
                                double dist_path);
 
-    void log_table(std::vector <std::vector<double> >  table, std::string name);
+    void log_table(std::vector <std::vector<double> > table, std::string name);
 };
 
 #endif //CAFE_2D_BHV_MARK_DEEP_H

@@ -6,10 +6,13 @@
 #include "../../strategy.h"
 #include "../algo_utils.h"
 
+
 bool MarkTargetAllocator::calculate() {
 
     target = NULL;
     assignments_table.clear();
+
+    const Vector2D &ball_pos = wm.ball().pos();
 
     const ConstPlayerPtrCont defensive_players = getDefensivePlayers();
     const PlayerPtrCont denger_opp = getDengerOpponents();
@@ -28,7 +31,7 @@ bool MarkTargetAllocator::calculate() {
 
 
     if (result.success != true) {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::MARK,
                      __FILE__": Hungarian NOT Success!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         );
         return false;
@@ -74,7 +77,7 @@ const ConstPlayerPtrCont MarkTargetAllocator::getDefensivePlayers() {
 //***************************************************************************
 
 const PlayerPtrCont MarkTargetAllocator::getDengerOpponents() {
-    Vector2D ball_pos = wm.ball().pos();
+    const Vector2D &ball_pos = wm.ball().pos();
 
     double ball_radius = 6;
 
@@ -98,7 +101,11 @@ Hungarian::Matrix &MarkTargetAllocator::createCostMatrix(Hungarian::Matrix &cost
                                                          const ConstPlayerPtrCont defensive_player,
                                                          const PlayerPtrCont denger_opp) {
 
-    RoleGroup self_role_group = stra.getRoleGroup(wm.self().unum());
+
+    double dist_div = 2;
+    if(Strategy::defense_mode == Dangerous){
+        dist_div = 1.65;
+    }
 
     int i = 0;
     const ConstPlayerPtrCont::const_iterator end_dp = defensive_player.end();
@@ -108,7 +115,7 @@ Hungarian::Matrix &MarkTargetAllocator::createCostMatrix(Hungarian::Matrix &cost
 
         unsigned mate_unum = (*it_dp)->unum();
         Vector2D mate_form_pos = stra.getPosition(mate_unum);
-        double max_cover_dist = stra.getNearsetPosDist(mate_unum, self_role_group) / 2;
+        double max_cover_dist = stra.getNearsetPosDistGroup(mate_unum) / dist_div;
 
         cost_matrix.push_back(std::vector<int>());
         const PlayerPtrCont::const_iterator end_op = denger_opp.end();
@@ -125,17 +132,26 @@ Hungarian::Matrix &MarkTargetAllocator::createCostMatrix(Hungarian::Matrix &cost
 }
 
 #define MAX_COST 1000
+#define MAX_DIST_COVER 17
 
 //***************************************************************************
 int MarkTargetAllocator::calcStateCost(const PlayerObject *our_p, const PlayerObject *opp_p, Vector2D mate_form_pos,
                                        double max_cover_dist) {
 
-    Vector2D opp_pos = opp_p->pos();
-    double mate_to_opp_dist = mate_form_pos.dist(opp_pos);
+    const Vector2D &opp_pos = opp_p->pos();
+    const Vector2D &our_pos = our_p->pos();
 
-    if (mate_to_opp_dist > max_cover_dist) {
+    double mate_to_opp_dist = our_pos.dist(opp_pos);
+    double mate_form_to_opp_dist = mate_form_pos.dist(opp_pos);
+
+    if (mate_form_to_opp_dist > max_cover_dist) {
         return MAX_COST;
     }
+
+    if(mate_to_opp_dist > MAX_DIST_COVER){
+        return MAX_COST;
+    }
+
     return mate_to_opp_dist;
 }
 
@@ -187,11 +203,11 @@ void MarkTargetAllocator::log_table(const Hungarian::Matrix table, std::string n
                                     const PlayerPtrCont denger_opp) {
 
     if (table.size() == 0) {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::MARK,
                      __FILE__" target mark assign table is NULLLLLLLL ");
     }
 
-    dlog.addText(Logger::TEAM,
+    dlog.addText(Logger::MARK,
                  __FILE__":   %s ----------------- %d %d", name.c_str(), table.size(), table[0].size());
 
     std::string temp;
@@ -200,7 +216,7 @@ void MarkTargetAllocator::log_table(const Hungarian::Matrix table, std::string n
     for (int i = 0; i < denger_opp.size(); i++) {
         temp += patch::to_string(denger_opp[i]->unum()) + "\t";
     }
-    dlog.addText(Logger::TEAM,
+    dlog.addText(Logger::MARK,
                  __FILE__" %s ", temp.c_str());
     temp = "";
     for (int i = 0; i < defensive_player.size(); i++) {
@@ -208,7 +224,7 @@ void MarkTargetAllocator::log_table(const Hungarian::Matrix table, std::string n
         for (int j = 0; j < denger_opp.size(); j++) {
             temp += patch::to_string(table[i][j]) + "\t";
         }
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::MARK,
                      __FILE__" %s ", temp.c_str());
         temp = "";
     }
@@ -218,23 +234,32 @@ void MarkTargetAllocator::log_table(const Hungarian::Matrix table, std::string n
 void MarkTargetAllocator::log_draw(const ConstPlayerPtrCont &defensive_player,
                                    const PlayerPtrCont &denger_opp) {
 
-    RoleGroup self_role_group = stra.getRoleGroup(wm.self().unum());
 
+
+    double dist_div = 2;
+    if(Strategy::defense_mode == Dangerous){
+        dist_div = 1.65;
+    }
     const ConstPlayerPtrCont::const_iterator end_dp = defensive_player.end();
     for (ConstPlayerPtrCont::const_iterator it = defensive_player.begin(); it != end_dp; it++) {
-        dlog.addRect(Logger::TEAM,
+        dlog.addRect(Logger::ROLE,
                      (*it)->pos().x - 2, (*it)->pos().y - 2, 4, 4,
                      "#0000ff");
         unsigned mate_unum = (*it)->unum();
-        double max_cover_dist = stra.getNearsetPosDist(mate_unum, self_role_group)/2;
-        dlog.addText(Logger::TEAM,
+        double max_cover_dist = stra.getNearsetPosDistGroup(mate_unum)/dist_div;
+        dlog.addText(Logger::MARK,
                      __FILE__": max_cover_dist---- %d :-:> %.2f",
                      mate_unum, max_cover_dist);
+
+        Vector2D pos = stra.getPosition(mate_unum);
+        dlog.addCircle(Logger::MARK,
+                       pos, max_cover_dist, "#ed93e3", false);
+
     }
 
     const PlayerPtrCont::const_iterator end_op = denger_opp.end();
     for (PlayerPtrCont::const_iterator it = denger_opp.begin(); it != end_op; it++) {
-        dlog.addRect(Logger::TEAM,
+        dlog.addRect(Logger::ROLE,
                      (*it)->pos().x - 2, (*it)->pos().y - 2, 4, 4,
                      "#ff0000");
     }
@@ -245,7 +270,7 @@ void MarkTargetAllocator::log_draw(const ConstPlayerPtrCont &defensive_player,
         const PlayerObject *mate_p = it->first;
         const PlayerObject *opp_p = it->second;
 
-        dlog.addLine(Logger::TEAM,
+        dlog.addLine(Logger::ROLE,
                      mate_p->pos(), opp_p->pos(),
                      "#a009db");
     }

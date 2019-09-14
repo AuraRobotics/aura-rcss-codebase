@@ -48,6 +48,9 @@ bool Bhv_Block::execute(rcsc::PlayerAgent *agent) {
     const int mate_min = wm.interceptTable()->teammateReachCycle();
     const int opp_min = wm.interceptTable()->opponentReachCycle();
 
+    dlog.addText(Logger::TEAM,
+                 __FILE__": ================= self_min : %d , mate_min: %d ,  opp_min: %d", self_min, mate_min, opp_min);
+
     if (wm.existKickableOpponent() || (opp_min < self_min && opp_min < mate_min)) {
         if (self_min < mate_min) {
             dlog.addText(Logger::TEAM,

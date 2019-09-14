@@ -797,8 +797,8 @@ SamplePlayer::createActionGenerator() const {
 
 
 bool SamplePlayer::test() {
-    return false;
 
+    return false;
 //    for(int unum = 1; unum<=11 ; unum++){
 //
 //        dlog.addText( Logger::TEAM,

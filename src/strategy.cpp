@@ -404,6 +404,7 @@ Strategy::readFormation(const std::string &filepath) {
     return f;
 }
 
+
 /*-------------------------------------------------------------------*/
 /*!
 
@@ -436,6 +437,7 @@ Strategy::createFormation(const std::string &type_name) const {
     return f;
 }
 
+DefenseMode Strategy::defense_mode = Normal;
 /*-------------------------------------------------------------------*/
 /*!
 
@@ -448,6 +450,16 @@ Strategy::update(const WorldModel &wm) {
         return;
     }
     s_update_time = wm.time();
+
+    const ServerParam &SP = ServerParam::i();
+    const Vector2D our_goal = SP.ourTeamGoalPos();
+    const double dist_self_goal =  wm.self().pos().dist(our_goal);
+
+
+    defense_mode = Normal;
+    if(wm.ball().pos().x < -32 || dist_self_goal < 28){
+        defense_mode = Dangerous;
+    }
 
     updateSituation(wm);
     updatePosition(wm);
@@ -1139,19 +1151,27 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
         dlog.addText(Logger::TEAM,
                      __FILE__": (get_normal_dash_power) !bound dash_power=%.1f",
                      dash_power);
-    } else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
-        dash_power = std::min(my_inc * 2,
-                              ServerParam::i().maxDashPower());
-        dlog.addText(Logger::TEAM,
-                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
-                     dash_power);
-    } else if (role_group == Halfback && -25 > ball_pos_lord.x) {
-        dash_power = std::min(my_inc * 2,
+    }
+    else if(self_pos.x < -35 && (get_ball_area(wm) == BA_Danger || ball_pos_lord.x)){
+        dash_power = std::min(my_inc * 1.8,
                               ServerParam::i().maxDashPower());
         dlog.addText(Logger::TEAM,
                      __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
                      dash_power);
     }
+//    else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
+//        dash_power = std::min(my_inc * 2,
+//                              ServerParam::i().maxDashPower());
+//        dlog.addText(Logger::TEAM,
+//                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
+//                     dash_power);
+//    } else if (role_group == Halfback && -25 > ball_pos_lord.x) {
+//        dash_power = std::min(my_inc * 2,
+//                              ServerParam::i().maxDashPower());
+//        dlog.addText(Logger::TEAM,
+//                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
+//                     dash_power);
+//    }
         // normal
     else {
         dash_power = std::min(my_inc * 1.7,
@@ -1175,14 +1195,14 @@ double Strategy::getDeffanceLine() const {
             if (x_pos < min_x) {
                 min_x = x_pos;
                 dlog.addText(Logger::TEAM,
-                             __FILE__": getDeffanceLine >>> defence  min-x  : %.2f",
+                             __FILE__": getDeffanceLine >>> defense  min-x  : %.2f",
                              min_x);
             }
         }
     }
 
     dlog.addText(Logger::TEAM,
-                 __FILE__": getDeffanceLine >>> defence  min-x  : %.2f",
+                 __FILE__": getDeffanceLine >>> defense  min-x  : %.2f",
                  min_x);
 
     return min_x;
@@ -1205,6 +1225,10 @@ double Strategy::getNearsetPosDist(unsigned unum, RoleGroup role_group) const {
     return getNearsetPos(unum, role_group).dist(getPosition(unum));
 }
 
+double Strategy::getNearsetPosDistGroup(unsigned unum) const {
+    RoleGroup role_group = getRoleGroup(unum);
+    return getNearsetPos(unum, role_group).dist(getPosition(unum));
+}
 
 Vector2D Strategy::getNearsetPos(unsigned unum, RoleGroup role_group) const {
     Vector2D target = getPosition(unum);

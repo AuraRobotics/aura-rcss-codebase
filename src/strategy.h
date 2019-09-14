@@ -76,6 +76,10 @@ enum RoleType {
     Sample, RoleKeepawayKeeper, RoleKeepawayTaker
 };
 
+enum DefenseMode {
+    Normal, Dangerous
+};
+
 
 class Strategy {
 public:
@@ -101,6 +105,7 @@ public:
         BA_None
     };
 
+    static DefenseMode defense_mode;
 private:
     //
     // factories
@@ -223,7 +228,6 @@ public:
     rcsc::Vector2D getPosition(const int unum) const;
 
 
-
 private:
     void updateSituation(const rcsc::WorldModel &wm);
 
@@ -253,6 +257,8 @@ public:
     std::vector<int> getGroupPlayer(RoleGroup group) const;
 
     double getNearsetPosDist(unsigned unum, RoleGroup role_group = None) const;
+
+    double getNearsetPosDistGroup(unsigned unum) const;
 
     rcsc::Vector2D getNearsetPos(unsigned unum, RoleGroup role_group = None) const;
 
