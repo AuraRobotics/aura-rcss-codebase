@@ -83,12 +83,21 @@ const PlayerPtrCont MarkTargetAllocator::getDengerOpponents() {
 
     double x_start = -60;
     double x_end = ball_pos.x + ball_radius;
+    if(Strategy::defense_mode == Dangerous){
+        x_end = -29;
+    }
     PlayerPtrCont opp_in_range = cm.getPlayerInRangeX(x_start, x_end, false);
     PlayerPtrCont denger_opps;
 
     const PlayerPtrCont::const_iterator end_dp = opp_in_range.end();
     for (PlayerPtrCont::const_iterator it = opp_in_range.begin(); it != end_dp; it++) {
         if ((*it)->unum() != -1 && (*it)->posValid()) {
+            if(Strategy::defense_mode == Dangerous){
+                Vector2D pos = (*it)->pos();
+                if(pos.y < -20 || pos.y > 20){
+                    continue;
+                }
+            }
             denger_opps.push_back((*it));
         }
 
@@ -104,7 +113,7 @@ Hungarian::Matrix &MarkTargetAllocator::createCostMatrix(Hungarian::Matrix &cost
 
     double dist_div = 2;
     if(Strategy::defense_mode == Dangerous){
-        dist_div = 1.65;
+        dist_div = 1;
     }
 
     int i = 0;
@@ -238,7 +247,7 @@ void MarkTargetAllocator::log_draw(const ConstPlayerPtrCont &defensive_player,
 
     double dist_div = 2;
     if(Strategy::defense_mode == Dangerous){
-        dist_div = 1.65;
+        dist_div = 1;
     }
     const ConstPlayerPtrCont::const_iterator end_dp = defensive_player.end();
     for (ConstPlayerPtrCont::const_iterator it = defensive_player.begin(); it != end_dp; it++) {

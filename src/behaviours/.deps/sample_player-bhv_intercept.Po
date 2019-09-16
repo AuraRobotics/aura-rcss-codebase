@@ -486,9 +486,9 @@ behaviours/sample_player-bhv_intercept.o: behaviours/bhv_intercept.cpp \
  /usr/local/include/rcsc/action/neck_turn_to_ball_or_scan.h \
  /usr/local/include/rcsc/action/neck_turn_to_low_conf_teammate.h \
  behaviours/../actions/neck_offensive_intercept_neck.h \
- behaviours/../strategy.h behaviours/../roles/soccer_role.h \
- /usr/local/include/rcsc/factory.h /usr/include/c++/5/stack \
- /usr/include/c++/5/bits/stl_stack.h \
+ behaviours/bhv_basic_tackle.h behaviours/../strategy.h \
+ behaviours/../roles/soccer_role.h /usr/local/include/rcsc/factory.h \
+ /usr/include/c++/5/stack /usr/include/c++/5/bits/stl_stack.h \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
  behaviours/../cafe_model.h behaviours/../strategy.h \
@@ -1613,6 +1613,8 @@ behaviours/bhv_intercept.h:
 /usr/local/include/rcsc/action/neck_turn_to_low_conf_teammate.h:
 
 behaviours/../actions/neck_offensive_intercept_neck.h:
+
+behaviours/bhv_basic_tackle.h:
 
 behaviours/../strategy.h:
 

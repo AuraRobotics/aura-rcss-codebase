@@ -61,35 +61,9 @@ Bhv_BasicMove::execute( PlayerAgent * agent )
     dlog.addText( Logger::TEAM,
                   __FILE__": Bhv_BasicMove" );
 
-    //-----------------------------------------------
-    // tackle
-    if ( Bhv_BasicTackle( 0.8, 80.0 ).execute( agent ) )
-    {
-        return true;
-    }
 
     const WorldModel & wm = agent->world();
     const Strategy & stra = Strategy::i();
-    /*--------------------------------------------------------*/
-    // chase ball
-    const int self_min = wm.interceptTable()->selfReachCycle();
-    const int mate_min = wm.interceptTable()->teammateReachCycle();
-    const int opp_min = wm.interceptTable()->opponentReachCycle();
-
-    if ( ! wm.existKickableTeammate()
-         && ( self_min <= 3
-              || ( self_min <= mate_min
-                   && self_min < opp_min + 3 )
-              )
-         )
-    {
-        dlog.addText( Logger::TEAM,
-                      __FILE__": intercept" );
-        Body_Intercept().execute( agent );
-        agent->setNeckAction( new Neck_OffensiveInterceptNeck() );
-
-        return true;
-    }
 
     const Vector2D target_point = Strategy::i().getPosition( wm.self().unum() );
     const double dash_power = Strategy::get_normal_dash_power( wm, stra );

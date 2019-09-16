@@ -98,9 +98,9 @@ RoleSideBack::doKick(PlayerAgent *agent) {
 */
 void
 RoleSideBack::doMove(PlayerAgent *agent) {
-//    if (Bhv_Intercept().execute(agent)) {
-//        return;
-//    } else
+    if (Bhv_Intercept().execute(agent)) {
+        return;
+    } else
         if (Bhv_Block().execute(agent)) {
         return;
     } else if (Bhv_DefensivePositioning().execute(agent)) {

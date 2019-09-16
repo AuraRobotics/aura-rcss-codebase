@@ -98,7 +98,7 @@ rcsc::PlayerPtrCont CafeModel::getPlayerInRect(rcsc::PlayerPtrCont player, doubl
          it != p_end;
          ++it) {
         Vector2D p_pos = (*it)->pos();
-        if (p_pos.x > x1 && p_pos.x < x2 && p_pos.y > y1 && p_pos.y < y2 ) {
+        if (p_pos.x > x1 && p_pos.x < x2 && p_pos.y > y1 && p_pos.y < y2) {
             temp_player.push_back(*it);
         }
     }
@@ -188,6 +188,9 @@ double CafeModel::getOurOffsideLine() const {
 
 rcsc::Vector2D CafeModel::getBallLord() const {
 
+    if (wm->ball().pos() == Vector2D::INVALIDATED) {
+        return Vector2D::INVALIDATED;
+    }
     const InterceptTable *interceptTable = wm->interceptTable();
 
 
@@ -195,9 +198,13 @@ rcsc::Vector2D CafeModel::getBallLord() const {
     const int opp_min = interceptTable->opponentReachCycle();
 
     if (mate_min < opp_min) {
-        return interceptTable->fastestTeammate()->pos();
+        if (interceptTable->fastestTeammate())
+            return interceptTable->fastestTeammate()->pos();
     } else {
-        return interceptTable->fastestOpponent()->pos();
+        if (interceptTable->fastestOpponent())
+            return interceptTable->fastestOpponent()->pos();
     }
+
+    return Vector2D::INVALIDATED;
 }
 

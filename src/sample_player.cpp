@@ -798,6 +798,18 @@ SamplePlayer::createActionGenerator() const {
 
 bool SamplePlayer::test() {
 
+    const WorldModel &wm = this->world();
+    const CafeModel &cm = CafeModel::i();
+
+
+
+
+
+    double our_offside_line = cm.getOurOffsideLine();
+
+    dlog.addLine(Logger::TEAM,
+                 Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
+    );
     return false;
 //    for(int unum = 1; unum<=11 ; unum++){
 //
@@ -806,10 +818,7 @@ bool SamplePlayer::test() {
 //                      Strategy::i().getPositionType(unum) , Strategy::i().getRoleType(unum));
 //    }
 
-    const WorldModel &wm = this->world();
-    const CafeModel &cm = CafeModel::i();
 
-//
 //    PlayerPtrCont in_ragne_player = CafeModel::i().getPlayerInRangeGoal(50, true);
 //
 //    std::cout << wm.self().unum() << "---------------> " <<  wm.teammates().size() << std::endl;
@@ -836,11 +845,6 @@ bool SamplePlayer::test() {
                  wm.self().pos().x - 2.1, wm.self().pos().y - 2.1, 4.1, 4.1,
                  "#0000ff");
 
-    double our_offside_line = cm.getOurOffsideLine();
-
-    dlog.addLine(Logger::TEAM,
-                 Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
-    );
 
 
     const PlayerAgent *agent = this;

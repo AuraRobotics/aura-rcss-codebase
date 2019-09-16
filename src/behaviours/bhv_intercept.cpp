@@ -13,6 +13,8 @@
 #include <rcsc/action/neck_turn_to_ball_or_scan.h>
 #include <rcsc/action/neck_turn_to_low_conf_teammate.h>
 #include "../actions/neck_offensive_intercept_neck.h"
+#include "bhv_basic_tackle.h"
+
 #include "../strategy.h"
 #include "../cafe_model.h"
 
@@ -32,12 +34,26 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
     const Vector2D ball_pos = wm.ball().pos();
 
 
+    //-----------------------------------------------
+    // tackle
+    if ( Bhv_BasicTackle( 0.8, 80.0 ).execute( agent ) )
+    {
+        return true;
+    }
+
+
+
+
     const int self_min = wm.interceptTable()->selfReachCycle();
     const int mate_min = wm.interceptTable()->teammateReachCycle();
     const int opp_min = wm.interceptTable()->opponentReachCycle();
 
+    dlog.addText(Logger::TEAM,
+                 __FILE__": ================= self_min : %d , mate_min: %d ,  opp_min: %d", self_min, mate_min,
+                 opp_min);
+
     if (self_min <= opp_min && self_min <= mate_min) {
-        if (self_min < mate_min) {
+
             dlog.addText(Logger::TEAM,
                          __FILE__": intercept");
 
@@ -45,8 +61,8 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
 
             Body_Intercept().execute(agent);
             agent->setNeckAction(new Neck_OffensiveInterceptNeck());
+            return true;
 
-        }
     }
 
 

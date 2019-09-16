@@ -98,10 +98,9 @@ RoleCenterBack::doKick(PlayerAgent *agent) {
  */
 void
 RoleCenterBack::doMove(PlayerAgent *agent) {
-//    if (Bhv_Intercept().execute(agent)) {
-//        return;
-//    } else
-        if (Bhv_Block().execute(agent)) {
+    if (Bhv_Intercept().execute(agent)) {
+        return;
+    } else if (Bhv_Block().execute(agent)) {
         return;
     } else if (Bhv_DefensivePositioning().execute(agent)) {
         return;

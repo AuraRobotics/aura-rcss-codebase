@@ -43,11 +43,19 @@ private:
     double nearToPenaltyArea(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
                              rcsc::Vector2D ball_pos, double max_radius2);
 
+    double betweenGoalAngle(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
+                             rcsc::Vector2D ball_pos, double max_radius2);
+
+    double nearToPassLine(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
+                            rcsc::Vector2D ball_pos, double max_radius2);
+
     double nearToGoal(rcsc::Vector2D check_point, double start_x, double max_radius2);
 
     double coverDengerPassArea(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D opp_pos,
                                rcsc::Vector2D ball_pos, rcsc::Polygon2D denger_area,
                                double dist_path);
+
+
 
     void log_table(std::vector <std::vector<double> > table, std::string name);
 };

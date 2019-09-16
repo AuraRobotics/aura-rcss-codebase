@@ -1159,12 +1159,13 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
                      __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
                      dash_power);
     }
-//    else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
-//        dash_power = std::min(my_inc * 2,
-//                              ServerParam::i().maxDashPower());
-//        dlog.addText(Logger::TEAM,
-//                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
-//                     dash_power);
+    else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
+        dash_power = std::min(my_inc * 2,
+                              ServerParam::i().maxDashPower());
+        dlog.addText(Logger::TEAM,
+                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
+                     dash_power);
+    }
 //    } else if (role_group == Halfback && -25 > ball_pos_lord.x) {
 //        dash_power = std::min(my_inc * 2,
 //                              ServerParam::i().maxDashPower());
