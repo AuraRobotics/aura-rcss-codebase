@@ -13,19 +13,21 @@ CafeModel::CafeModel() {
 
 }
 
+double CafeModel::our_offside_line = 0;
 FastIC *CafeModel::fic;
 
-static FastIC *fic;
 
 CafeModel &CafeModel::instance() {
     static CafeModel s_instance;
     return s_instance;
 }
 
-void CafeModel::updateFastIC(PlayerAgent *agent) {
+void CafeModel::update(PlayerAgent *agent) {
     fic = new FastIC(agent);
-
     fic->setByWorldModel();
+
+
+    calcOurOffsideLine();
 }
 
 FastIC *CafeModel::fastIC() {
@@ -149,7 +151,7 @@ rcsc::PlayerPtrCont CafeModel::getPlayerInBallArea(rcsc::PlayerPtrCont player, S
 }
 
 
-double CafeModel::getOurOffsideLine() const {
+double CafeModel::calcOurOffsideLine() const {
     const PlayerCont teammates = wm->teammates();
     const int goalie_unum = wm->ourGoalieUnum();
 
@@ -183,13 +185,25 @@ double CafeModel::getOurOffsideLine() const {
     if (wm->self().pos().x < offside_line_x) {
         offside_line_x = wm->self().pos().x;
     }
+
+    this->our_offside_line = offside_line_x;
     return offside_line_x;
 }
 
-rcsc::Vector2D CafeModel::getBallLord() const {
+double CafeModel::getOurOffsideLine() const {
+    return our_offside_line;
+}
 
+rcsc::Vector2D CafeModel::getBallLordPos() const {
+    const PlayerObject *ball_lord = getBallLord();
+    if (ball_lord) { return ball_lord->pos(); }
+    return Vector2D::INVALIDATED;
+}
+
+const PlayerObject *CafeModel::getBallLord() const {
+    const PlayerObject *lord;
     if (wm->ball().pos() == Vector2D::INVALIDATED) {
-        return Vector2D::INVALIDATED;
+        return lord;
     }
     const InterceptTable *interceptTable = wm->interceptTable();
 
@@ -199,12 +213,23 @@ rcsc::Vector2D CafeModel::getBallLord() const {
 
     if (mate_min < opp_min) {
         if (interceptTable->fastestTeammate())
-            return interceptTable->fastestTeammate()->pos();
+            return interceptTable->fastestTeammate();
     } else {
         if (interceptTable->fastestOpponent())
-            return interceptTable->fastestOpponent()->pos();
+            return interceptTable->fastestOpponent();
     }
 
-    return Vector2D::INVALIDATED;
+    return lord;
 }
 
+
+rcsc::Vector2D CafeModel::getOptimizedPosition(const rcsc::Vector2D &form_pos) const {
+
+    if (Strategy::defense_mode == Dangerous) {
+        return form_pos;
+    }
+
+    double form_pos_x = std::max(form_pos.x, our_offside_line);
+    form_pos_x = form_pos.x;
+    return Vector2D((form_pos_x + form_pos.x) / 2, form_pos.y);
+}

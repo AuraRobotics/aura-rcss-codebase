@@ -44,9 +44,11 @@ namespace rcsc {
 
         static void polygonOrientation(Polygon2D &poly);
 
-        static Vector2D findFoot(Line2D &line, Vector2D &point);
+        static Vector2D findFoot(const Line2D &line,const Vector2D &point);
 
-        static Vector2D findFoot(Segment2D &segment, Vector2D &point);
+        static Vector2D findFoot(const Segment2D &segment, const Vector2D &point);
+
+        static Vector2D findFootNearThan(const Segment2D &segment, const Vector2D &our, const Vector2D &opp);
 
 
     };

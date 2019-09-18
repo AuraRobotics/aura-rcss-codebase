@@ -79,12 +79,16 @@ const ConstPlayerPtrCont MarkTargetAllocator::getDefensivePlayers() {
 const PlayerPtrCont MarkTargetAllocator::getDengerOpponents() {
     const Vector2D &ball_pos = wm.ball().pos();
 
+
     double ball_radius = 6;
+    if (ball_pos.x < 0) {
+        ball_radius += 4;
+    }
 
     double x_start = -60;
     double x_end = ball_pos.x + ball_radius;
-    if(Strategy::defense_mode == Dangerous){
-        x_end = -29;
+    if (Strategy::defense_mode == Dangerous) {
+        x_end = -25;
     }
     PlayerPtrCont opp_in_range = cm.getPlayerInRangeX(x_start, x_end, false);
     PlayerPtrCont denger_opps;
@@ -92,9 +96,9 @@ const PlayerPtrCont MarkTargetAllocator::getDengerOpponents() {
     const PlayerPtrCont::const_iterator end_dp = opp_in_range.end();
     for (PlayerPtrCont::const_iterator it = opp_in_range.begin(); it != end_dp; it++) {
         if ((*it)->unum() != -1 && (*it)->posValid()) {
-            if(Strategy::defense_mode == Dangerous){
+            if (Strategy::defense_mode == Dangerous) {
                 Vector2D pos = (*it)->pos();
-                if(pos.y < -20 || pos.y > 20){
+                if (pos.y < -20 || pos.y > 20) {
                     continue;
                 }
             }
@@ -105,16 +109,11 @@ const PlayerPtrCont MarkTargetAllocator::getDengerOpponents() {
     return denger_opps;
 }
 
+
 //***************************************************************************
 Hungarian::Matrix &MarkTargetAllocator::createCostMatrix(Hungarian::Matrix &cost_matrix,
                                                          const ConstPlayerPtrCont defensive_player,
                                                          const PlayerPtrCont denger_opp) {
-
-
-    double dist_div = 2;
-    if(Strategy::defense_mode == Dangerous){
-        dist_div = 1;
-    }
 
     int i = 0;
     const ConstPlayerPtrCont::const_iterator end_dp = defensive_player.end();
@@ -124,8 +123,7 @@ Hungarian::Matrix &MarkTargetAllocator::createCostMatrix(Hungarian::Matrix &cost
 
         unsigned mate_unum = (*it_dp)->unum();
         Vector2D mate_form_pos = stra.getPosition(mate_unum);
-        double max_cover_dist = stra.getNearsetPosDistGroup(mate_unum) / dist_div;
-
+        double max_cover_dist = stra.getPlayerZoneRadius(mate_unum);
         cost_matrix.push_back(std::vector<int>());
         const PlayerPtrCont::const_iterator end_op = denger_opp.end();
         for (PlayerPtrCont::const_iterator it_op = denger_opp.begin();
@@ -157,8 +155,12 @@ int MarkTargetAllocator::calcStateCost(const PlayerObject *our_p, const PlayerOb
         return MAX_COST;
     }
 
-    if(mate_to_opp_dist > MAX_DIST_COVER){
+    if (mate_to_opp_dist > MAX_DIST_COVER) {
         return MAX_COST;
+    }
+
+    if(stra.getRoleGroup(our_p->unum()) == Defense){
+        mate_to_opp_dist -= 0;
     }
 
     return mate_to_opp_dist;
@@ -244,18 +246,14 @@ void MarkTargetAllocator::log_draw(const ConstPlayerPtrCont &defensive_player,
                                    const PlayerPtrCont &denger_opp) {
 
 
-
-    double dist_div = 2;
-    if(Strategy::defense_mode == Dangerous){
-        dist_div = 1;
-    }
     const ConstPlayerPtrCont::const_iterator end_dp = defensive_player.end();
     for (ConstPlayerPtrCont::const_iterator it = defensive_player.begin(); it != end_dp; it++) {
         dlog.addRect(Logger::ROLE,
                      (*it)->pos().x - 2, (*it)->pos().y - 2, 4, 4,
                      "#0000ff");
         unsigned mate_unum = (*it)->unum();
-        double max_cover_dist = stra.getNearsetPosDistGroup(mate_unum)/dist_div;
+        double max_cover_dist = stra.getPlayerZoneRadius(mate_unum);
+
         dlog.addText(Logger::MARK,
                      __FILE__": max_cover_dist---- %d :-:> %.2f",
                      mate_unum, max_cover_dist);

@@ -174,6 +174,7 @@ Bhv_SetPlayKickOff::doKick( PlayerAgent * agent )
                     ball_speed * 0.96,
                     1 ).execute( agent );
     agent->setNeckAction( new Neck_ScanField() );
+
 }
 
 /*-------------------------------------------------------------------*/

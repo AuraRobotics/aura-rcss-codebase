@@ -493,7 +493,8 @@ behaviours/sample_player-bhv_defensive_positioning.o: \
  behaviours/../strategy.h behaviours/../utils/algo_utils.h \
  behaviours/../utils/algorithms/hungarian.h \
  behaviours/../utils/geo_utils.h behaviours/../utils/rcsc_utils.h \
- behaviours/bhv_mark_deep.h behaviours/bhv_mark.h \
+ behaviours/bhv_mark_deep.h behaviours/bhv_mark_man.h \
+ behaviours/bhv_block.h \
  behaviours/../utils/allocators/mark_target_allocator.h \
  ../src/chain_action/../cafe_model.h ../src/chain_action/../strategy.h
 
@@ -1639,7 +1640,9 @@ behaviours/../utils/rcsc_utils.h:
 
 behaviours/bhv_mark_deep.h:
 
-behaviours/bhv_mark.h:
+behaviours/bhv_mark_man.h:
+
+behaviours/bhv_block.h:
 
 behaviours/../utils/allocators/mark_target_allocator.h:
 

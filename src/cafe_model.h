@@ -24,7 +24,7 @@ private:
 
     const rcsc::WorldModel *wm;
     static FastIC *fic;
-
+    static double our_offside_line;
 
     CafeModel();
 
@@ -35,7 +35,7 @@ private:
 public:
     static CafeModel &instance();
 
-    static void updateFastIC(PlayerAgent *agent);
+
 
     static FastIC *fastIC();
 
@@ -44,6 +44,8 @@ public:
     CafeModel &i() {
         return instance();
     }
+
+    void update(PlayerAgent *agent);
 
     void create(const rcsc::WorldModel &wm, PlayerAgent *agent);
 
@@ -67,7 +69,13 @@ public:
 
     double getOurOffsideLine() const;
 
-    rcsc::Vector2D getBallLord() const;
+    double calcOurOffsideLine() const;
+
+    rcsc::Vector2D getBallLordPos() const;
+
+    const rcsc::PlayerObject * getBallLord() const;
+
+    rcsc::Vector2D getOptimizedPosition(const rcsc::Vector2D &form_pos) const;
 
 
 private:

@@ -437,14 +437,18 @@ Strategy::createFormation(const std::string &type_name) const {
     return f;
 }
 
-DefenseMode Strategy::defense_mode = Normal;
+
 /*-------------------------------------------------------------------*/
 /*!
 
  */
+DefenseMode Strategy::defense_mode = Normal;
+double Strategy::danger_sep_x = -32;
+double Strategy::danger_set_dist_goal = 28;
 void
 Strategy::update(const WorldModel &wm) {
     static GameTime s_update_time(-1, 0);
+
 
     if (s_update_time == wm.time()) {
         return;
@@ -457,7 +461,7 @@ Strategy::update(const WorldModel &wm) {
 
 
     defense_mode = Normal;
-    if(wm.ball().pos().x < -32 || dist_self_goal < 28){
+    if(wm.ball().pos().x < danger_sep_x || dist_self_goal < danger_set_dist_goal){
         defense_mode = Dangerous;
     }
 
@@ -779,8 +783,9 @@ Strategy::getPosition(const int unum) const {
         return Vector2D::INVALIDATED;
     }
 
+    Vector2D temp_form_pos;
     try {
-        return M_positions.at(number - 1);
+        temp_form_pos = M_positions.at(number - 1);
     }
     catch (std::exception &e) {
         std::cerr << __FILE__ << ':' << __LINE__ << ':'
@@ -788,6 +793,9 @@ Strategy::getPosition(const int unum) const {
                   << std::endl;
         return Vector2D::INVALIDATED;
     }
+
+    return CafeModel::i().getOptimizedPosition(temp_form_pos);
+
 }
 
 /*-------------------------------------------------------------------*/
@@ -1086,7 +1094,7 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
     static bool s_recover_mode = false;
 
     const RoleGroup role_group = stra.getRoleGroup(wm.self().unum());
-    const Vector2D ball_pos_lord = CafeModel::i().getBallLord();//wm.ball().pos();
+    const Vector2D ball_pos_lord = CafeModel::i().getBallLordPos();//wm.ball().pos();
     const Vector2D self_pos = wm.self().pos();
 
     if (wm.self().staminaModel().capacityIsEmpty()) {
@@ -1152,7 +1160,7 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
                      __FILE__": (get_normal_dash_power) !bound dash_power=%.1f",
                      dash_power);
     }
-    else if(self_pos.x < -35 && (get_ball_area(wm) == BA_Danger || ball_pos_lord.x)){
+    else if(self_pos.x < -35 && (get_ball_area(wm) == BA_Danger )){
         dash_power = std::min(my_inc * 1.8,
                               ServerParam::i().maxDashPower());
         dlog.addText(Logger::TEAM,
@@ -1160,7 +1168,7 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
                      dash_power);
     }
     else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
-        dash_power = std::min(my_inc * 2,
+        dash_power = std::min(my_inc * 20.1,
                               ServerParam::i().maxDashPower());
         dlog.addText(Logger::TEAM,
                      __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
@@ -1251,4 +1259,18 @@ Vector2D Strategy::getNearsetPos(unsigned unum, RoleGroup role_group) const {
         }
     }
     return near_pos;
+}
+
+#define MIN_COVER_DIST 8.5
+
+double Strategy::getPlayerZoneRadius(unsigned unum) const {
+    double dist_div = 1.25;
+    if (Strategy::defense_mode == Dangerous) {
+        dist_div = 1.3;
+    }
+    double cover_radius = getNearsetPosDistGroup(unum) / dist_div;
+    if (Strategy::defense_mode == Dangerous) {
+        cover_radius = std::max(cover_radius, MIN_COVER_DIST);
+    }
+    return cover_radius;
 }

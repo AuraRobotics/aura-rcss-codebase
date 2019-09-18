@@ -100,8 +100,6 @@ void
 RoleOffensiveHalf::doMove(PlayerAgent *agent) {
     if (Bhv_Intercept().execute(agent)) {
         return;
-    } else if (Bhv_Block().execute(agent)) {
-        return;
     } else if (Bhv_DefhalfPositioning().execute(agent)) {
         return;
     }

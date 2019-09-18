@@ -289,8 +289,8 @@ void geoUtils::polygonOrientation(Polygon2D &poly) {
 
 // Function to find foot of perpendicular from
 // a point in 2 D plane to a Line
-Vector2D geoUtils::findFoot(Line2D &line,
-                            Vector2D &point) {
+Vector2D geoUtils::findFoot(const Line2D &line,
+                            const Vector2D &point) {
     const double a = line.a();
     const double b = line.b();
     const double c = line.c();
@@ -303,8 +303,8 @@ Vector2D geoUtils::findFoot(Line2D &line,
 }
 
 
-Vector2D geoUtils::findFoot(Segment2D &segment,
-                            Vector2D &point) {
+Vector2D geoUtils::findFoot(const Segment2D &segment,
+                            const Vector2D &point) {
 
     Line2D line = segment.line();
 
@@ -324,5 +324,19 @@ Vector2D geoUtils::findFoot(Segment2D &segment,
         return result;
     }
 
+    return Vector2D::INVALIDATED;
+}
+
+Vector2D geoUtils::findFootNearThan(const Segment2D &segment, const Vector2D &our, const Vector2D &opp) {
+
+    Vector2D diraction = segment.terminal() - segment.origin();
+    double length = segment.terminal().dist(segment.origin());
+    diraction.setLength(1);
+
+    for(Vector2D temp_pos = segment.origin(); temp_pos.dist(segment.origin()) < length; temp_pos += diraction){
+        if(temp_pos.dist(our) + 2 < temp_pos.dist(opp) ){
+            return temp_pos;
+        }
+    }
     return Vector2D::INVALIDATED;
 }

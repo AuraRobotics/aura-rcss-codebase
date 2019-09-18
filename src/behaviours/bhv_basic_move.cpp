@@ -43,7 +43,7 @@
 #include <rcsc/player/player_agent.h>
 #include <rcsc/player/debug_client.h>
 #include <rcsc/player/intercept_table.h>
-
+#include <rcsc/action/neck_scan_field.h>
 #include <rcsc/common/logger.h>
 #include <rcsc/common/server_param.h>
 
@@ -90,10 +90,12 @@ Bhv_BasicMove::execute( PlayerAgent * agent )
          && wm.ball().distFromSelf() < 18.0 )
     {
         agent->setNeckAction( new Neck_TurnToBall() );
+//        agent->setNeckAction( new Neck_TurnToBallOrScan() );
     }
     else
     {
         agent->setNeckAction( new Neck_TurnToBallOrScan() );
+//        agent->setNeckAction( new Neck_ScanField() );
     }
 
     return true;

@@ -227,7 +227,8 @@ SamplePlayer::actionImpl() {
     //
     Strategy::instance().update(world());
     FieldAnalyzer::instance().update(world());
-    CafeModel::updateFastIC(this);
+    CafeModel::instance().update(this);
+
     //
     // prepare action chain
     //
@@ -559,7 +560,7 @@ SamplePlayer::doPreprocess() {
     // set default change view
     //
 
-    this->setViewAction(new View_Tactical());
+//    this->setViewAction(new View_Tactical());
 
     //
     // check shoot chance
@@ -802,7 +803,12 @@ bool SamplePlayer::test() {
     const CafeModel &cm = CafeModel::i();
 
 
+    if (world().gameMode().type() == GameMode::PlayOn && world().self().unum() != 1) {
 
+        dlog.addCircle(Logger::TEAM,
+                       cm.getBallLordPos(), 0.8, "#c603fc", true);
+
+    }
 
 
     double our_offside_line = cm.getOurOffsideLine();
@@ -878,12 +884,7 @@ bool SamplePlayer::test() {
                  opp_cycle, mate_cycle, min_player);
 
 
-    if (world().gameMode().type() == GameMode::PlayOn && world().self().unum() != 1) {
 
-        dlog.addCircle(Logger::TEAM,
-                       cm.getBallLord(), 0.8, "#f0000f", true);
-
-    }
 
 //    PlayerObject * player = world().teammatesFromBall()[0];
 //

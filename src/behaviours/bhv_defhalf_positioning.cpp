@@ -18,7 +18,9 @@
 #include "../utils/rcsc_utils.h"
 #include "../utils/allocators/mark_target_allocator.h"
 
-#include "bhv_mark.h"
+#include "bhv_mark_zone.h"
+#include "bhv_mark_man.h"
+#include "bhv_block.h"
 
 using namespace rcsc;
 
@@ -26,18 +28,8 @@ bool Bhv_DefhalfPositioning::execute(rcsc::PlayerAgent *agent) {
 
 
     const WorldModel &wm = agent->world();
-//    const Strategy &stra = Strategy::i();
-//    /*--------------------------------------------------------*/
-//    // chase ball
-//    const int self_min = wm.interceptTable()->selfReachCycle();
-//    const int mate_min = wm.interceptTable()->teammateReachCycle();
-//    const int opp_min = wm.interceptTable()->opponentReachCycle();
-//
-//    if (wm.existKickableOpponent() || (self_min > opp_min + 3 && mate_min > opp_min + 3)) {
-//        return false;
-//    }
-
-
+    const Strategy &stra = Strategy::i();
+    const CafeModel &cm = CafeModel::i();
 
     MarkTargetAllocator targetAllocator(wm);
 
@@ -55,12 +47,26 @@ bool Bhv_DefhalfPositioning::execute(rcsc::PlayerAgent *agent) {
     /////////////////////////////////////////////////////
     dlog.addText(Logger::TEAM,
                  __FILE__": ------------------- target for mark %p: %d     %.2f %.2f",
-                 target_opp , target_opp->unum(), target_opp->pos().x , target_opp->pos().y);
+                 target_opp, target_opp->unum(), target_opp->pos().x, target_opp->pos().y);
     /////////////////////////////////////////////////////////////
-//
-    if (Bhv_Mark(target_opp).execute(agent)) {
-        return true;
+
+    const PlayerObject *ball_lord = cm.getBallLord();
+    if(ball_lord->unum() == target_opp->unum()){
+        if (Bhv_Block(target_opp).execute(agent)) {
+            return true;
+        }
     }
+
+    if (Strategy::defense_mode == Normal) {
+        if (Bhv_MarkZone(target_opp).execute(agent)) {
+            return true;
+        }
+    } else if (Strategy::defense_mode == Dangerous) {
+        if (Bhv_MarkMan(target_opp).execute(agent)) {
+            return true;
+        }
+    }
+
 
     return false;
 }

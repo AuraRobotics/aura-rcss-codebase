@@ -496,7 +496,8 @@ behaviours/sample_player-bhv_defhalf_positioning.o: \
  behaviours/../utils/rcsc_utils.h \
  behaviours/../utils/allocators/mark_target_allocator.h \
  ../src/chain_action/../cafe_model.h ../src/chain_action/../strategy.h \
- behaviours/bhv_mark.h
+ behaviours/bhv_mark_zone.h behaviours/bhv_mark_man.h \
+ behaviours/bhv_block.h
 
 /usr/include/stdc-predef.h:
 
@@ -1644,4 +1645,8 @@ behaviours/../utils/allocators/mark_target_allocator.h:
 
 ../src/chain_action/../strategy.h:
 
-behaviours/bhv_mark.h:
+behaviours/bhv_mark_zone.h:
+
+behaviours/bhv_mark_man.h:
+
+behaviours/bhv_block.h:

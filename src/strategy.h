@@ -105,6 +105,8 @@ public:
         BA_None
     };
 
+    static double danger_sep_x;
+    static double danger_set_dist_goal;
     static DefenseMode defense_mode;
 private:
     //
@@ -259,6 +261,8 @@ public:
     double getNearsetPosDist(unsigned unum, RoleGroup role_group = None) const;
 
     double getNearsetPosDistGroup(unsigned unum) const;
+
+    double getPlayerZoneRadius(unsigned unum) const;
 
     rcsc::Vector2D getNearsetPos(unsigned unum, RoleGroup role_group = None) const;
 

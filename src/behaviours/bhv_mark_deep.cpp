@@ -89,8 +89,8 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
     const CafeModel &cm = CafeModel::i();
 
     Vector2D self_pos = Strategy::i().getPosition(wm.self().unum()); // TODO check self_pos is ok
-    Vector2D ball_pos = cm.getBallLord();//wm.ball().pos();
-    Vector2D opp_pos = target_opp->pos();
+    Vector2D ball_pos = cm.getBallLordPos();//wm.ball().pos();
+    Vector2D opp_pos = target_opp->pos() + target_opp->vel();
 
     int x_offside = cm.getOurOffsideLine(); //TODO change name
 
@@ -107,7 +107,7 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
     Vector2D best_pos = Vector2D::INVALIDATED;
 
 
-    Vector2D ball_next_pos = cm.getBallLord();
+    Vector2D ball_next_pos = cm.getBallLordPos();
 
 
     ////DEBUG
@@ -141,53 +141,32 @@ Vector2D Bhv_MarkDeep::getDefensivePos(rcsc::PlayerAgent *agent) {
             }
 
             double temp_score = 0;
-            if (Strategy::defense_mode == Normal) {
-
-                double cover_danger =
-                        coverDengerPassArea(check_point, self_pos, opp_pos, ball_next_pos, dengerArea, path_dist) * 0.6;
-                double near_to_goal_line =
-                        nearToGoalLine(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.35;
-                double near_to_penalt =
-                        nearToPenaltyArea(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.35;
-                double near_to_goal = nearToGoal(check_point, check_line_x.first, 2 * search_radius) * 0.2;
 
 
+            double cover_danger =
+                    coverDengerPassArea(check_point, self_pos, opp_pos, ball_next_pos, dengerArea, path_dist) * 0.6;
+            double near_to_goal_line =
+                    nearToGoalLine(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.35;
+            double near_to_penalt =
+                    nearToPenaltyArea(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.35;
+            double near_to_goal = nearToGoal(check_point, check_line_x.first, 2 * search_radius) * 0.2;
 
 
-                temp_score += cover_danger;
-                temp_score += near_to_goal_line;
-                temp_score += near_to_penalt;
-                temp_score += near_to_goal;
+            temp_score += cover_danger;
+            temp_score += near_to_goal_line;
+            temp_score += near_to_penalt;
+            temp_score += near_to_goal;
 
 
 
-                ///////////
-                table_cover.back().push_back(cover_danger);
-                table_goal_line.back().push_back(near_to_goal_line);
-                table_near_penalty.back().push_back(near_to_penalt);
-                table_near_goal.back().push_back(near_to_goal);
-                ///////////////////////////////////////////////////
+            ///////////
+            table_cover.back().push_back(cover_danger);
+            table_goal_line.back().push_back(near_to_goal_line);
+            table_near_penalty.back().push_back(near_to_penalt);
+            table_near_goal.back().push_back(near_to_goal);
+            ///////////////////////////////////////////////////
 
-            } else if (Strategy::defense_mode == Dangerous) {
 
-                double near_to_goal_line = nearToGoalLine(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0;
-                double between_goal_angle = betweenGoalAngle(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0;
-                double near_to_target = nearToTarget(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0;
-                double near_to_pass_line = nearToPassLine(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 1.0;
-
-                temp_score += near_to_goal_line;
-                temp_score += between_goal_angle;
-                temp_score += near_to_target;
-                temp_score += near_to_pass_line;
-
-                ///////////////////////////////
-                table_goal_line.back().push_back(near_to_goal_line);
-                table_near_target.back().push_back(near_to_target);
-                table_near_to_pass_line.back().push_back(near_to_pass_line);
-                table_between_goal_angle.back().push_back(between_goal_angle);
-                /////////////////////////////////
-
-            }
 
 
             if (max_score < temp_score) {
@@ -268,7 +247,7 @@ double Bhv_MarkDeep::betweenGoalAngle(rcsc::Vector2D check_point, rcsc::Vector2D
     const Vector2D &our_goal = SP.ourTeamGoalPos();
 
     double origin_goal_angle = (Vector2D(our_goal.x, our_goal.y - 7).th() - opp_pos.th()).degree();
-    double terminal_goal_angle = (Vector2D(our_goal.x, our_goal.y + 7).th() - opp_pos.th()).degree() ;
+    double terminal_goal_angle = (Vector2D(our_goal.x, our_goal.y + 7).th() - opp_pos.th()).degree();
 
     double delta_angle_check = (check_point.th() - opp_pos.th()).degree();
     double delta_angle_teminal = origin_goal_angle - terminal_goal_angle;
@@ -280,8 +259,7 @@ double Bhv_MarkDeep::betweenGoalAngle(rcsc::Vector2D check_point, rcsc::Vector2D
     );
 
 
-
-    if(delta_angle_check > 0 && delta_angle_check < delta_angle_teminal){
+    if (delta_angle_check > 0 && delta_angle_check < delta_angle_teminal) {
         return 1;
     }
     return 0;

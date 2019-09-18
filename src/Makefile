@@ -162,7 +162,8 @@ am__objects_3 = behaviours/sample_player-bhv_basic_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_defensive_positioning.$(OBJEXT) \
 	behaviours/sample_player-bhv_defhalf_positioning.$(OBJEXT) \
 	behaviours/sample_player-bhv_block.$(OBJEXT) \
-	behaviours/sample_player-bhv_mark.$(OBJEXT) \
+	behaviours/sample_player-bhv_mark_zone.$(OBJEXT) \
+	behaviours/sample_player-bhv_mark_man.$(OBJEXT) \
 	behaviours/sample_player-bhv_mark_deep.$(OBJEXT) \
 	behaviours/sample_player-bhv_intercept.$(OBJEXT)
 am__objects_4 = roles/sample_player-soccer_role.$(OBJEXT) \
@@ -448,8 +449,10 @@ BHV_SOURCE = \
     behaviours/bhv_defhalf_positioning.cpp \
     behaviours/bhv_block.h \
     behaviours/bhv_block.cpp\
-    behaviours/bhv_mark.h \
-    behaviours/bhv_mark.cpp \
+    behaviours/bhv_mark_zone.h \
+    behaviours/bhv_mark_zone.cpp \
+    behaviours/bhv_mark_man.h \
+    behaviours/bhv_mark_man.cpp \
     behaviours/bhv_mark_deep.h \
     behaviours/bhv_mark_deep.cpp \
     behaviours/bhv_intercept.h \
@@ -900,7 +903,10 @@ behaviours/sample_player-bhv_defhalf_positioning.$(OBJEXT):  \
 behaviours/sample_player-bhv_block.$(OBJEXT):  \
 	behaviours/$(am__dirstamp) \
 	behaviours/$(DEPDIR)/$(am__dirstamp)
-behaviours/sample_player-bhv_mark.$(OBJEXT):  \
+behaviours/sample_player-bhv_mark_zone.$(OBJEXT):  \
+	behaviours/$(am__dirstamp) \
+	behaviours/$(DEPDIR)/$(am__dirstamp)
+behaviours/sample_player-bhv_mark_man.$(OBJEXT):  \
 	behaviours/$(am__dirstamp) \
 	behaviours/$(DEPDIR)/$(am__dirstamp)
 behaviours/sample_player-bhv_mark_deep.$(OBJEXT):  \
@@ -1064,8 +1070,9 @@ include behaviours/$(DEPDIR)/sample_player-bhv_goalie_basic_move.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_goalie_chase_ball.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_goalie_free_kick.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_intercept.Po
-include behaviours/$(DEPDIR)/sample_player-bhv_mark.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_mark_deep.Po
+include behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Po
+include behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_penalty_kick.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_prepare_set_play_kick.Po
 include behaviours/$(DEPDIR)/sample_player-bhv_set_play.Po
@@ -1889,19 +1896,33 @@ behaviours/sample_player-bhv_block.obj: behaviours/bhv_block.cpp
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_block.obj `if test -f 'behaviours/bhv_block.cpp'; then $(CYGPATH_W) 'behaviours/bhv_block.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_block.cpp'; fi`
 
-behaviours/sample_player-bhv_mark.o: behaviours/bhv_mark.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark.Tpo -c -o behaviours/sample_player-bhv_mark.o `test -f 'behaviours/bhv_mark.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark.cpp
-	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_mark.Tpo behaviours/$(DEPDIR)/sample_player-bhv_mark.Po
-#	$(AM_V_CXX)source='behaviours/bhv_mark.cpp' object='behaviours/sample_player-bhv_mark.o' libtool=no \
+behaviours/sample_player-bhv_mark_zone.o: behaviours/bhv_mark_zone.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark_zone.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Tpo -c -o behaviours/sample_player-bhv_mark_zone.o `test -f 'behaviours/bhv_mark_zone.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark_zone.cpp
+	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Tpo behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Po
+#	$(AM_V_CXX)source='behaviours/bhv_mark_zone.cpp' object='behaviours/sample_player-bhv_mark_zone.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark.o `test -f 'behaviours/bhv_mark.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark.cpp
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark_zone.o `test -f 'behaviours/bhv_mark_zone.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark_zone.cpp
 
-behaviours/sample_player-bhv_mark.obj: behaviours/bhv_mark.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark.Tpo -c -o behaviours/sample_player-bhv_mark.obj `if test -f 'behaviours/bhv_mark.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark.cpp'; fi`
-	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_mark.Tpo behaviours/$(DEPDIR)/sample_player-bhv_mark.Po
-#	$(AM_V_CXX)source='behaviours/bhv_mark.cpp' object='behaviours/sample_player-bhv_mark.obj' libtool=no \
+behaviours/sample_player-bhv_mark_zone.obj: behaviours/bhv_mark_zone.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark_zone.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Tpo -c -o behaviours/sample_player-bhv_mark_zone.obj `if test -f 'behaviours/bhv_mark_zone.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark_zone.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark_zone.cpp'; fi`
+	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Tpo behaviours/$(DEPDIR)/sample_player-bhv_mark_zone.Po
+#	$(AM_V_CXX)source='behaviours/bhv_mark_zone.cpp' object='behaviours/sample_player-bhv_mark_zone.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark.obj `if test -f 'behaviours/bhv_mark.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark.cpp'; fi`
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark_zone.obj `if test -f 'behaviours/bhv_mark_zone.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark_zone.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark_zone.cpp'; fi`
+
+behaviours/sample_player-bhv_mark_man.o: behaviours/bhv_mark_man.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark_man.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Tpo -c -o behaviours/sample_player-bhv_mark_man.o `test -f 'behaviours/bhv_mark_man.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark_man.cpp
+	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Tpo behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Po
+#	$(AM_V_CXX)source='behaviours/bhv_mark_man.cpp' object='behaviours/sample_player-bhv_mark_man.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark_man.o `test -f 'behaviours/bhv_mark_man.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark_man.cpp
+
+behaviours/sample_player-bhv_mark_man.obj: behaviours/bhv_mark_man.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark_man.obj -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Tpo -c -o behaviours/sample_player-bhv_mark_man.obj `if test -f 'behaviours/bhv_mark_man.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark_man.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark_man.cpp'; fi`
+	$(AM_V_at)$(am__mv) behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Tpo behaviours/$(DEPDIR)/sample_player-bhv_mark_man.Po
+#	$(AM_V_CXX)source='behaviours/bhv_mark_man.cpp' object='behaviours/sample_player-bhv_mark_man.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/sample_player-bhv_mark_man.obj `if test -f 'behaviours/bhv_mark_man.cpp'; then $(CYGPATH_W) 'behaviours/bhv_mark_man.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/bhv_mark_man.cpp'; fi`
 
 behaviours/sample_player-bhv_mark_deep.o: behaviours/bhv_mark_deep.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_mark_deep.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_mark_deep.Tpo -c -o behaviours/sample_player-bhv_mark_deep.o `test -f 'behaviours/bhv_mark_deep.cpp' || echo '$(srcdir)/'`behaviours/bhv_mark_deep.cpp

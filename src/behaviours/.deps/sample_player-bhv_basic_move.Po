@@ -505,6 +505,7 @@ behaviours/sample_player-bhv_basic_move.o: behaviours/bhv_basic_move.cpp \
  /usr/include/boost/function/function_template.hpp \
  /usr/include/boost/detail/no_exceptions_support.hpp \
  /usr/include/boost/core/no_exceptions_support.hpp \
+ /usr/local/include/rcsc/action/neck_scan_field.h \
  /usr/local/include/rcsc/common/logger.h \
  /usr/local/include/rcsc/geom/sector_2d.h \
  /usr/local/include/rcsc/common/server_param.h \
@@ -1677,6 +1678,8 @@ behaviours/bhv_basic_tackle.h:
 /usr/include/boost/detail/no_exceptions_support.hpp:
 
 /usr/include/boost/core/no_exceptions_support.hpp:
+
+/usr/local/include/rcsc/action/neck_scan_field.h:
 
 /usr/local/include/rcsc/common/logger.h:
 
