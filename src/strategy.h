@@ -229,6 +229,9 @@ public:
 
     rcsc::Vector2D getPosition(const int unum) const;
 
+    SituationType getSituation() const {
+        return M_current_situation;
+    }
 
 private:
     void updateSituation(const rcsc::WorldModel &wm);

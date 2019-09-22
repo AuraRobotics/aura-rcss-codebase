@@ -264,7 +264,7 @@ behaviours/sample_player-bhv_basic_move.o: behaviours/bhv_basic_move.cpp \
  /usr/local/include/rcsc/formation/sample_data.h \
  /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
- behaviours/bhv_basic_tackle.h \
+ behaviours/defense/bhv_basic_tackle.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
  /usr/local/include/rcsc/action/arm_point_to_point.h \
@@ -1163,7 +1163,7 @@ behaviours/../roles/soccer_role.h:
 
 /usr/include/c++/5/bits/vector.tcc:
 
-behaviours/bhv_basic_tackle.h:
+behaviours/defense/bhv_basic_tackle.h:
 
 /usr/local/include/rcsc/action/basic_actions.h:
 

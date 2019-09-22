@@ -7,9 +7,6 @@
 
 #include <rcsc/player/soccer_action.h>
 #include <rcsc/player/player_object.h>
-#include <rcsc/geom/vector_2d.h>
-#include <rcsc/geom/polygon_2d.h>
-#include "../cafe_model.h"
 
 
 class Bhv_DefensivePositioning

@@ -7,11 +7,11 @@
 
 #include <rcsc/common/logger.h>
 #include <rcsc/common/server_param.h>
-#include "../cafe_model.h"
-#include "../strategy.h"
-#include "../utils/algo_utils.h"
-#include "../utils/geo_utils.h"
-#include "../utils/rcsc_utils.h"
+#include "../../cafe_model.h"
+#include "../../strategy.h"
+#include "../../utils/algo_utils.h"
+#include "../../utils/geo_utils.h"
+#include "../../utils/rcsc_utils.h"
 
 #include <rcsc/player/player_agent.h>
 #include <rcsc/action/basic_actions.h>

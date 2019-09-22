@@ -31,7 +31,7 @@
 #include "bhv_goalie_chase_ball.h"
 
 #include "bhv_goalie_basic_move.h"
-#include "bhv_basic_tackle.h"
+#include "defense/bhv_basic_tackle.h"
 
 #include <rcsc/action/basic_actions.h>
 #include <rcsc/action/body_go_to_point.h>

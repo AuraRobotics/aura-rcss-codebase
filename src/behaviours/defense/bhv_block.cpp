@@ -16,10 +16,10 @@
 #include <rcsc/action/body_go_to_point.h>
 #include <rcsc/action/neck_turn_to_ball_or_scan.h>
 #include <rcsc/action/neck_turn_to_low_conf_teammate.h>
-#include "../actions/neck_offensive_intercept_neck.h"
-#include "../utils/geo_utils.h"
-#include "../strategy.h"
-#include "../cafe_model.h"
+#include "../../actions/neck_offensive_intercept_neck.h"
+#include "../../utils/geo_utils.h"
+#include "../../strategy.h"
+#include "../../cafe_model.h"
 
 
 #include <iostream>

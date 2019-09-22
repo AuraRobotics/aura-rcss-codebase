@@ -32,7 +32,7 @@
 
 #include "../strategy.h"
 
-#include "bhv_basic_tackle.h"
+#include "defense/bhv_basic_tackle.h"
 
 #include <rcsc/action/basic_actions.h>
 #include <rcsc/action/body_go_to_point.h>

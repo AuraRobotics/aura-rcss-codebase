@@ -32,12 +32,16 @@
 
 
 #include "bhv_chain_action.h"
+#include "../strategy.h"
 #include "../behaviours/bhv_basic_offensive_kick.h"
 #include "../behaviours/bhv_basic_move.h"
-#include "../behaviours/bhv_block.h"
-#include "../behaviours/bhv_intercept.h"
+#include "../behaviours/defense/bhv_block.h"
+#include "../behaviours/defense/bhv_intercept.h"
+#include "../behaviours/defense/bhv_defensive_positioning.h"
+#include "../behaviours/offense/bhv_offensive_positioning.h"
 #include <rcsc/player/player_agent.h>
 #include <rcsc/player/debug_client.h>
+
 #include <rcsc/common/logger.h>
 
 using namespace rcsc;
@@ -97,8 +101,24 @@ RoleCenterForward::doKick(PlayerAgent *agent) {
  */
 void
 RoleCenterForward::doMove(PlayerAgent *agent) {
+    const Strategy &stra = Strategy::i();
+
     if (Bhv_Intercept().execute(agent)) {
         return;
     }
+
+    switch (stra.getSituation()){
+        case Defense_Situation:
+            if (Bhv_DefensivePositioning().execute(agent)) {
+                return;
+            }
+            break;
+        case Offense_Situation:
+            if (Bhv_OffensivePositioning().execute(agent)) {
+                return;
+            }
+            break;
+    }
+
     Bhv_BasicMove().execute(agent);
 }

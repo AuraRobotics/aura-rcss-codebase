@@ -266,8 +266,12 @@ roles/sample_player-role_center_forward.o: roles/role_center_forward.cpp \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
  /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
+ roles/../strategy.h roles/../roles/soccer_role.h \
+ /usr/local/include/rcsc/formation/formation.h \
+ /usr/local/include/rcsc/formation/sample_data.h \
  roles/../behaviours/bhv_basic_offensive_kick.h \
- roles/../behaviours/bhv_basic_move.h roles/../behaviours/bhv_block.h \
+ roles/../behaviours/bhv_basic_move.h \
+ roles/../behaviours/defense/bhv_block.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/world_model.h \
  /usr/local/include/rcsc/player/self_object.h \
@@ -483,7 +487,9 @@ roles/sample_player-role_center_forward.o: roles/role_center_forward.cpp \
  /usr/include/boost/function/function_template.hpp \
  /usr/include/boost/detail/no_exceptions_support.hpp \
  /usr/include/boost/core/no_exceptions_support.hpp \
- roles/../behaviours/bhv_intercept.h \
+ roles/../behaviours/defense/bhv_intercept.h \
+ roles/../behaviours/defense/bhv_defensive_positioning.h \
+ roles/../behaviours/offense/bhv_offensive_positioning.h \
  /usr/local/include/rcsc/common/logger.h \
  /usr/local/include/rcsc/geom/sector_2d.h
 
@@ -1135,11 +1141,19 @@ roles/soccer_role.h:
 
 /usr/include/c++/5/bits/vector.tcc:
 
+roles/../strategy.h:
+
+roles/../roles/soccer_role.h:
+
+/usr/local/include/rcsc/formation/formation.h:
+
+/usr/local/include/rcsc/formation/sample_data.h:
+
 roles/../behaviours/bhv_basic_offensive_kick.h:
 
 roles/../behaviours/bhv_basic_move.h:
 
-roles/../behaviours/bhv_block.h:
+roles/../behaviours/defense/bhv_block.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 
@@ -1607,7 +1621,11 @@ roles/../behaviours/bhv_block.h:
 
 /usr/include/boost/core/no_exceptions_support.hpp:
 
-roles/../behaviours/bhv_intercept.h:
+roles/../behaviours/defense/bhv_intercept.h:
+
+roles/../behaviours/defense/bhv_defensive_positioning.h:
+
+roles/../behaviours/offense/bhv_offensive_positioning.h:
 
 /usr/local/include/rcsc/common/logger.h:
 

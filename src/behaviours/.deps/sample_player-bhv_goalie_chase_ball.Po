@@ -256,7 +256,7 @@ behaviours/sample_player-bhv_goalie_chase_ball.o: \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
- behaviours/bhv_goalie_basic_move.h behaviours/bhv_basic_tackle.h \
+ behaviours/bhv_goalie_basic_move.h behaviours/defense/bhv_basic_tackle.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
  /usr/local/include/rcsc/action/arm_point_to_point.h \
@@ -1113,7 +1113,7 @@ behaviours/bhv_goalie_chase_ball.h:
 
 behaviours/bhv_goalie_basic_move.h:
 
-behaviours/bhv_basic_tackle.h:
+behaviours/defense/bhv_basic_tackle.h:
 
 /usr/local/include/rcsc/action/basic_actions.h:
 

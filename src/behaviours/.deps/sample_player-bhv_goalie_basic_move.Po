@@ -252,7 +252,7 @@ behaviours/sample_player-bhv_goalie_basic_move.o: \
  /usr/include/c++/5/bits/algorithmfwd.h \
  /usr/include/c++/5/bits/stl_heap.h \
  /usr/include/boost/smart_ptr/detail/operator_bool.hpp \
- behaviours/bhv_basic_tackle.h \
+ behaviours/defense/bhv_basic_tackle.h \
  behaviours/../actions/neck_goalie_turn_neck.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
@@ -1107,7 +1107,7 @@ behaviours/bhv_goalie_basic_move.h:
 
 /usr/include/boost/smart_ptr/detail/operator_bool.hpp:
 
-behaviours/bhv_basic_tackle.h:
+behaviours/defense/bhv_basic_tackle.h:
 
 behaviours/../actions/neck_goalie_turn_neck.h:
 

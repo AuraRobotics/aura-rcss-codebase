@@ -30,7 +30,7 @@
 
 #include "bhv_goalie_basic_move.h"
 
-#include "bhv_basic_tackle.h"
+#include "defense/bhv_basic_tackle.h"
 #include "../actions/neck_goalie_turn_neck.h"
 
 #include <rcsc/action/basic_actions.h>

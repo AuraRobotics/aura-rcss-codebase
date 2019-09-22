@@ -18,11 +18,32 @@ UTILSSOURCES = \
     utils/allocators/mark_target_allocator.cpp
 
 
+BHV_Defense_SOURCE = \
+    behaviours/defense/bhv_basic_tackle.h \
+    behaviours/defense/bhv_basic_tackle.cpp \
+    behaviours/defense/bhv_defensive_positioning.h \
+    behaviours/defense/bhv_defensive_positioning.cpp \
+    behaviours/defense/bhv_block.h \
+    behaviours/defense/bhv_block.cpp\
+    behaviours/defense/bhv_mark_zone.h \
+    behaviours/defense/bhv_mark_zone.cpp \
+    behaviours/defense/bhv_mark_man.h \
+    behaviours/defense/bhv_mark_man.cpp \
+    behaviours/defense/bhv_mark_deep.h \
+    behaviours/defense/bhv_mark_deep.cpp \
+    behaviours/defense/bhv_intercept.h \
+    behaviours/defense/bhv_intercept.cpp
+
+
+BHV_Offense_SOURCE = \
+    behaviours/offense/bhv_offensive_positioning.h \
+    behaviours/offense/bhv_offensive_positioning.cpp
 
 BHV_SOURCE = \
+    $(BHV_Defense_SOURCE) \
+    $(BHV_Offense_SOURCE) \
     behaviours/bhv_basic_move.cpp \
 	behaviours/bhv_basic_offensive_kick.cpp \
-	behaviours/bhv_basic_tackle.cpp \
 	behaviours/bhv_custom_before_kick_off.cpp \
 	behaviours/bhv_go_to_static_ball.cpp \
 	behaviours/bhv_goalie_basic_move.cpp \
@@ -39,7 +60,6 @@ BHV_SOURCE = \
 	behaviours/bhv_penalty_kick.cpp \
     behaviours/bhv_basic_move.h \
     behaviours/bhv_basic_offensive_kick.h \
-    behaviours/bhv_basic_tackle.h \
     behaviours/bhv_custom_before_kick_off.h \
     behaviours/bhv_go_to_static_ball.h \
     behaviours/bhv_goalie_basic_move.h \
@@ -53,22 +73,7 @@ BHV_SOURCE = \
    	behaviours/bhv_set_play_kick_in.h \
    	behaviours/bhv_set_play_kick_off.h \
     behaviours/bhv_their_goal_kick_move.h \
-    behaviours/bhv_penalty_kick.h \
-    behaviours/bhv_defensive_positioning.h \
-    behaviours/bhv_defensive_positioning.cpp \
-    behaviours/bhv_defhalf_positioning.h \
-    behaviours/bhv_defhalf_positioning.cpp \
-    behaviours/bhv_block.h \
-    behaviours/bhv_block.cpp\
-    behaviours/bhv_mark_zone.h \
-    behaviours/bhv_mark_zone.cpp \
-    behaviours/bhv_mark_man.h \
-    behaviours/bhv_mark_man.cpp \
-    behaviours/bhv_mark_deep.h \
-    behaviours/bhv_mark_deep.cpp \
-    behaviours/bhv_intercept.h \
-    behaviours/bhv_intercept.cpp
-
+    behaviours/bhv_penalty_kick.h
 
 
 ROLE_SOURCE = \

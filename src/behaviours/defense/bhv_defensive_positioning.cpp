@@ -13,19 +13,19 @@
 #include <rcsc/common/logger.h>
 #include <rcsc/common/server_param.h>
 #include <rcsc/player/intercept_table.h>
-#include "../cafe_model.h"
-#include "../strategy.h"
-#include "../utils/algo_utils.h"
-#include "../utils/geo_utils.h"
-#include "../utils/rcsc_utils.h"
+#include "../../cafe_model.h"
+#include "../../strategy.h"
+#include "../../utils/algo_utils.h"
+#include "../../utils/geo_utils.h"
+#include "../../utils/rcsc_utils.h"
 #include "bhv_mark_deep.h"
 #include "bhv_mark_man.h"
+#include "bhv_mark_zone.h"
 #include "bhv_block.h"
-#include "../utils/allocators/mark_target_allocator.h"
+#include "../../utils/allocators/mark_target_allocator.h"
 
 
 using namespace rcsc;
-
 
 bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
 
@@ -41,7 +41,7 @@ bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
     }
 
     PlayerObject *target_opp = targetAllocator.getMarkTarget();
-    if (target_opp == NULL) {
+    if (!target_opp) {
         return false;
     }
 
@@ -59,14 +59,26 @@ bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
     }
 
     if(Strategy::defense_mode == Normal){
-        if (Bhv_MarkDeep(target_opp).execute(agent)) {
-            return true;
+        if(stra.getRoleGroup(wm.self().unum()) == Defense){
+            if (Bhv_MarkDeep(target_opp).execute(agent)) {
+                return true;
+            }
+        }else if(stra.getRoleGroup(wm.self().unum()) == Defense){
+            if (Bhv_MarkZone(target_opp).execute(agent)) {
+                return true;
+            }
         }
     }else if(Strategy::defense_mode == Dangerous){
         if (Bhv_MarkMan(target_opp).execute(agent)) {
             return true;
         }
     }
+
+
+
+
+
+
 
     return false;
 }
