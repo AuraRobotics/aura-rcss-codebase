@@ -229,6 +229,8 @@ public:
 
     rcsc::Vector2D getPosition(const int unum) const;
 
+    std::vector <rcsc::Vector2D> getPositions() const;
+
     SituationType getSituation() const {
         return M_current_situation;
     }

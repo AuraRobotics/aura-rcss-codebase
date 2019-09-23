@@ -150,7 +150,8 @@ am__objects_3 =  \
 	behaviours/defense/sample_player-bhv_mark_man.$(OBJEXT) \
 	behaviours/defense/sample_player-bhv_mark_deep.$(OBJEXT) \
 	behaviours/defense/sample_player-bhv_intercept.$(OBJEXT)
-am__objects_4 = behaviours/offense/sample_player-bhv_offensive_positioning.$(OBJEXT)
+am__objects_4 = behaviours/offense/sample_player-bhv_offensive_positioning.$(OBJEXT) \
+	behaviours/offense/sample_player-bhv_pass_position.$(OBJEXT)
 am__objects_5 = $(am__objects_3) $(am__objects_4) \
 	behaviours/sample_player-bhv_basic_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_basic_offensive_kick.$(OBJEXT) \
@@ -197,7 +198,8 @@ am__objects_9 = utils/sample_player-utils.$(OBJEXT) \
 	utils/algorithms/sample_player-hungarian.$(OBJEXT) \
 	utils/estimators/sample_player-HERMES_FastIC.$(OBJEXT) \
 	utils/estimators/sample_player-player_estimator.$(OBJEXT) \
-	utils/allocators/sample_player-mark_target_allocator.$(OBJEXT)
+	utils/allocators/sample_player-mark_target_allocator.$(OBJEXT) \
+	utils/allocators/sample_player-player_relationship.$(OBJEXT)
 am__objects_10 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -408,7 +410,9 @@ UTILSSOURCES = \
     utils/estimators/player_estimator.h \
     utils/estimators/player_estimator.cpp \
     utils/allocators/mark_target_allocator.h \
-    utils/allocators/mark_target_allocator.cpp
+    utils/allocators/mark_target_allocator.cpp \
+    utils/allocators/player_relationship.h \
+    utils/allocators/player_relationship.cpp
 
 BHV_Defense_SOURCE = \
     behaviours/defense/bhv_basic_tackle.h \
@@ -428,7 +432,9 @@ BHV_Defense_SOURCE = \
 
 BHV_Offense_SOURCE = \
     behaviours/offense/bhv_offensive_positioning.h \
-    behaviours/offense/bhv_offensive_positioning.cpp
+    behaviours/offense/bhv_offensive_positioning.cpp \
+    behaviours/offense/bhv_pass_position.h \
+    behaviours/offense/bhv_pass_position.cpp 
 
 BHV_SOURCE = \
     $(BHV_Defense_SOURCE) \
@@ -881,6 +887,9 @@ behaviours/offense/$(DEPDIR)/$(am__dirstamp):
 behaviours/offense/sample_player-bhv_offensive_positioning.$(OBJEXT):  \
 	behaviours/offense/$(am__dirstamp) \
 	behaviours/offense/$(DEPDIR)/$(am__dirstamp)
+behaviours/offense/sample_player-bhv_pass_position.$(OBJEXT):  \
+	behaviours/offense/$(am__dirstamp) \
+	behaviours/offense/$(DEPDIR)/$(am__dirstamp)
 behaviours/$(am__dirstamp):
 	@$(MKDIR_P) behaviours
 	@: > behaviours/$(am__dirstamp)
@@ -1041,6 +1050,9 @@ utils/allocators/$(DEPDIR)/$(am__dirstamp):
 utils/allocators/sample_player-mark_target_allocator.$(OBJEXT):  \
 	utils/allocators/$(am__dirstamp) \
 	utils/allocators/$(DEPDIR)/$(am__dirstamp)
+utils/allocators/sample_player-player_relationship.$(OBJEXT):  \
+	utils/allocators/$(am__dirstamp) \
+	utils/allocators/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -1104,6 +1116,7 @@ include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_deep.Po
 include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_man.Po
 include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_zone.Po
 include behaviours/offense/$(DEPDIR)/sample_player-bhv_offensive_positioning.Po
+include behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_cross.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_direct_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_self_pass.Po
@@ -1157,6 +1170,7 @@ include utils/$(DEPDIR)/sample_player-rcsc_utils.Po
 include utils/$(DEPDIR)/sample_player-utils.Po
 include utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po
 include utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Po
+include utils/allocators/$(DEPDIR)/sample_player-player_relationship.Po
 include utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po
 include utils/estimators/$(DEPDIR)/sample_player-player_estimator.Po
 
@@ -1749,6 +1763,20 @@ behaviours/offense/sample_player-bhv_offensive_positioning.obj: behaviours/offen
 #	$(AM_V_CXX)source='behaviours/offense/bhv_offensive_positioning.cpp' object='behaviours/offense/sample_player-bhv_offensive_positioning.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/offense/sample_player-bhv_offensive_positioning.obj `if test -f 'behaviours/offense/bhv_offensive_positioning.cpp'; then $(CYGPATH_W) 'behaviours/offense/bhv_offensive_positioning.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/offense/bhv_offensive_positioning.cpp'; fi`
+
+behaviours/offense/sample_player-bhv_pass_position.o: behaviours/offense/bhv_pass_position.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/offense/sample_player-bhv_pass_position.o -MD -MP -MF behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Tpo -c -o behaviours/offense/sample_player-bhv_pass_position.o `test -f 'behaviours/offense/bhv_pass_position.cpp' || echo '$(srcdir)/'`behaviours/offense/bhv_pass_position.cpp
+	$(AM_V_at)$(am__mv) behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Tpo behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Po
+#	$(AM_V_CXX)source='behaviours/offense/bhv_pass_position.cpp' object='behaviours/offense/sample_player-bhv_pass_position.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/offense/sample_player-bhv_pass_position.o `test -f 'behaviours/offense/bhv_pass_position.cpp' || echo '$(srcdir)/'`behaviours/offense/bhv_pass_position.cpp
+
+behaviours/offense/sample_player-bhv_pass_position.obj: behaviours/offense/bhv_pass_position.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/offense/sample_player-bhv_pass_position.obj -MD -MP -MF behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Tpo -c -o behaviours/offense/sample_player-bhv_pass_position.obj `if test -f 'behaviours/offense/bhv_pass_position.cpp'; then $(CYGPATH_W) 'behaviours/offense/bhv_pass_position.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/offense/bhv_pass_position.cpp'; fi`
+	$(AM_V_at)$(am__mv) behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Tpo behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Po
+#	$(AM_V_CXX)source='behaviours/offense/bhv_pass_position.cpp' object='behaviours/offense/sample_player-bhv_pass_position.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/offense/sample_player-bhv_pass_position.obj `if test -f 'behaviours/offense/bhv_pass_position.cpp'; then $(CYGPATH_W) 'behaviours/offense/bhv_pass_position.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/offense/bhv_pass_position.cpp'; fi`
 
 behaviours/sample_player-bhv_basic_move.o: behaviours/bhv_basic_move.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_basic_move.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_basic_move.Tpo -c -o behaviours/sample_player-bhv_basic_move.o `test -f 'behaviours/bhv_basic_move.cpp' || echo '$(srcdir)/'`behaviours/bhv_basic_move.cpp
@@ -2365,6 +2393,20 @@ utils/allocators/sample_player-mark_target_allocator.obj: utils/allocators/mark_
 #	$(AM_V_CXX)source='utils/allocators/mark_target_allocator.cpp' object='utils/allocators/sample_player-mark_target_allocator.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-mark_target_allocator.obj `if test -f 'utils/allocators/mark_target_allocator.cpp'; then $(CYGPATH_W) 'utils/allocators/mark_target_allocator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/mark_target_allocator.cpp'; fi`
+
+utils/allocators/sample_player-player_relationship.o: utils/allocators/player_relationship.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-player_relationship.o -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-player_relationship.Tpo -c -o utils/allocators/sample_player-player_relationship.o `test -f 'utils/allocators/player_relationship.cpp' || echo '$(srcdir)/'`utils/allocators/player_relationship.cpp
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-player_relationship.Tpo utils/allocators/$(DEPDIR)/sample_player-player_relationship.Po
+#	$(AM_V_CXX)source='utils/allocators/player_relationship.cpp' object='utils/allocators/sample_player-player_relationship.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-player_relationship.o `test -f 'utils/allocators/player_relationship.cpp' || echo '$(srcdir)/'`utils/allocators/player_relationship.cpp
+
+utils/allocators/sample_player-player_relationship.obj: utils/allocators/player_relationship.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-player_relationship.obj -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-player_relationship.Tpo -c -o utils/allocators/sample_player-player_relationship.obj `if test -f 'utils/allocators/player_relationship.cpp'; then $(CYGPATH_W) 'utils/allocators/player_relationship.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/player_relationship.cpp'; fi`
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-player_relationship.Tpo utils/allocators/$(DEPDIR)/sample_player-player_relationship.Po
+#	$(AM_V_CXX)source='utils/allocators/player_relationship.cpp' object='utils/allocators/sample_player-player_relationship.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-player_relationship.obj `if test -f 'utils/allocators/player_relationship.cpp'; then $(CYGPATH_W) 'utils/allocators/player_relationship.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/player_relationship.cpp'; fi`
 
 sample_player-cafe_model.o: cafe_model.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp

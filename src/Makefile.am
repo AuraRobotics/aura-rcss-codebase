@@ -15,7 +15,10 @@ UTILSSOURCES = \
     utils/estimators/player_estimator.h \
     utils/estimators/player_estimator.cpp \
     utils/allocators/mark_target_allocator.h \
-    utils/allocators/mark_target_allocator.cpp
+    utils/allocators/mark_target_allocator.cpp \
+    utils/allocators/player_relationship.h \
+    utils/allocators/player_relationship.cpp
+
 
 
 BHV_Defense_SOURCE = \
@@ -37,7 +40,10 @@ BHV_Defense_SOURCE = \
 
 BHV_Offense_SOURCE = \
     behaviours/offense/bhv_offensive_positioning.h \
-    behaviours/offense/bhv_offensive_positioning.cpp
+    behaviours/offense/bhv_offensive_positioning.cpp \
+    behaviours/offense/bhv_pass_position.h \
+    behaviours/offense/bhv_pass_position.cpp 
+
 
 BHV_SOURCE = \
     $(BHV_Defense_SOURCE) \

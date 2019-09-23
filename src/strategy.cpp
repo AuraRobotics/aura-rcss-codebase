@@ -772,6 +772,14 @@ Strategy::getPositionType(const int unum) const {
 /*!
 
  */
+std::vector<Vector2D> Strategy::getPositions() const {
+    return M_positions;
+}
+
+/*-------------------------------------------------------------------*/
+/*!
+
+ */
 Vector2D
 Strategy::getPosition(const int unum) const {
     const int number = roleNumber(unum);
