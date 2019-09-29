@@ -28,6 +28,7 @@ void CafeModel::update(PlayerAgent *agent) {
 
 
     calcOurOffsideLine();
+    player_rel->calc(agent);
 }
 
 FastIC *CafeModel::fastIC() {
@@ -36,6 +37,8 @@ FastIC *CafeModel::fastIC() {
 
 void CafeModel::create(const rcsc::WorldModel &wm, PlayerAgent *agent) {
     this->wm = &wm;
+
+    player_rel = new PlayerRelationship(wm);
 }
 
 

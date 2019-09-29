@@ -481,6 +481,13 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/boost/function/function_template.hpp \
  /usr/include/boost/detail/no_exceptions_support.hpp \
  /usr/include/boost/core/no_exceptions_support.hpp \
+ utils/allocators/player_relationship.h ../src/chain_action/../strategy.h \
+ /usr/local/include/rcsc/geom/delaunay_triangulation.h \
+ /usr/include/boost/array.hpp /usr/include/boost/swap.hpp \
+ /usr/include/boost/core/swap.hpp /usr/include/boost/detail/iterator.hpp \
+ /usr/include/c++/5/iterator /usr/include/c++/5/bits/stream_iterator.h \
+ /usr/include/boost/functional/hash_fwd.hpp \
+ /usr/include/boost/functional/hash/hash_fwd.hpp \
  /usr/local/include/rcsc/player/intercept_table.h
 
 /usr/include/stdc-predef.h:
@@ -1604,5 +1611,27 @@ utils/estimators/HERMES_FastIC.h:
 /usr/include/boost/detail/no_exceptions_support.hpp:
 
 /usr/include/boost/core/no_exceptions_support.hpp:
+
+utils/allocators/player_relationship.h:
+
+../src/chain_action/../strategy.h:
+
+/usr/local/include/rcsc/geom/delaunay_triangulation.h:
+
+/usr/include/boost/array.hpp:
+
+/usr/include/boost/swap.hpp:
+
+/usr/include/boost/core/swap.hpp:
+
+/usr/include/boost/detail/iterator.hpp:
+
+/usr/include/c++/5/iterator:
+
+/usr/include/c++/5/bits/stream_iterator.h:
+
+/usr/include/boost/functional/hash_fwd.hpp:
+
+/usr/include/boost/functional/hash/hash_fwd.hpp:
 
 /usr/local/include/rcsc/player/intercept_table.h:

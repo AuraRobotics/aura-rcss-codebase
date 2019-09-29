@@ -747,9 +747,9 @@ SamplePlayer::createActionGenerator() const {
     //
     // shoot
     //
-    g->addGenerator(new ActGen_RangeActionChainLengthFilter
-                            (new ActGen_Shoot(),
-                             2, ActGen_RangeActionChainLengthFilter::MAX));
+//    g->addGenerator(new ActGen_RangeActionChainLengthFilter
+//                            (new ActGen_Shoot(),
+//                             2, ActGen_RangeActionChainLengthFilter::MAX));
 
     //
     // strict check pass
@@ -760,8 +760,8 @@ SamplePlayer::createActionGenerator() const {
     //
     // cross
     //
-    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_Cross(), 1));
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_Cross(), 1));
 
     //
     // direct pass
@@ -773,14 +773,14 @@ SamplePlayer::createActionGenerator() const {
     //
     // short dribble
     //
-    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_ShortDribble(), 1));
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_ShortDribble(), 1));
 
     //
     // self pass (long dribble)
     //
-    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_SelfPass(), 1));
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_SelfPass(), 1));
 
     //
     // simple dribble

@@ -34,3 +34,20 @@ double rcscUtils::maxDistBall() {
     return max_speed / (1 - dencay);
 }
 
+int rcscUtils::ballCycle(double dist, double speed ) {
+    const static ServerParam &SP = ServerParam::i();
+    double dencay = SP.ballDecay();
+    double max_speed = SP.ballSpeedMax();
+    if(speed == -1){
+        speed = max_speed;
+    }
+    int cycle = 0;
+    while(dist > 0){
+        dist -= speed;
+        speed *= dencay;
+        cycle ++;
+        if(cycle >= 50) break;
+    }
+
+    return cycle;
+}

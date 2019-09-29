@@ -488,16 +488,17 @@ sample_player-strategy.o: strategy.cpp /usr/include/stdc-predef.h \
  /usr/include/boost/detail/no_exceptions_support.hpp \
  /usr/include/boost/core/no_exceptions_support.hpp \
  /usr/local/include/rcsc/common/logger.h \
- /usr/local/include/rcsc/geom/sector_2d.h roles/role_keepaway_keeper.h \
- roles/role_keepaway_taker.h \
- /usr/local/include/rcsc/formation/formation_static.h \
- /usr/local/include/rcsc/formation/formation_dt.h \
+ /usr/local/include/rcsc/geom/sector_2d.h \
+ utils/allocators/player_relationship.h ../src/chain_action/../strategy.h \
  /usr/local/include/rcsc/geom/delaunay_triangulation.h \
  /usr/include/boost/array.hpp /usr/include/boost/swap.hpp \
  /usr/include/boost/core/swap.hpp /usr/include/boost/detail/iterator.hpp \
  /usr/include/c++/5/iterator /usr/include/c++/5/bits/stream_iterator.h \
  /usr/include/boost/functional/hash_fwd.hpp \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
+ roles/role_keepaway_keeper.h roles/role_keepaway_taker.h \
+ /usr/local/include/rcsc/formation/formation_static.h \
+ /usr/local/include/rcsc/formation/formation_dt.h \
  /usr/local/include/rcsc/player/intercept_table.h \
  /usr/local/include/rcsc/param/cmd_line_parser.h \
  /usr/local/include/rcsc/param/param_parser.h /usr/include/c++/5/set \
@@ -2003,13 +2004,9 @@ utils/estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/geom/sector_2d.h:
 
-roles/role_keepaway_keeper.h:
+utils/allocators/player_relationship.h:
 
-roles/role_keepaway_taker.h:
-
-/usr/local/include/rcsc/formation/formation_static.h:
-
-/usr/local/include/rcsc/formation/formation_dt.h:
+../src/chain_action/../strategy.h:
 
 /usr/local/include/rcsc/geom/delaunay_triangulation.h:
 
@@ -2028,6 +2025,14 @@ roles/role_keepaway_taker.h:
 /usr/include/boost/functional/hash_fwd.hpp:
 
 /usr/include/boost/functional/hash/hash_fwd.hpp:
+
+roles/role_keepaway_keeper.h:
+
+roles/role_keepaway_taker.h:
+
+/usr/local/include/rcsc/formation/formation_static.h:
+
+/usr/local/include/rcsc/formation/formation_dt.h:
 
 /usr/local/include/rcsc/player/intercept_table.h:
 

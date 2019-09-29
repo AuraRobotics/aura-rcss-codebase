@@ -10,6 +10,7 @@
 #include <rcsc/common/server_param.h>
 #include <rcsc/player/player_object.h>
 #include "utils/estimators/HERMES_FastIC.h";
+#include "utils/allocators/player_relationship.h"
 
 namespace rcsc {
     typedef std::vector<const rcsc::PlayerObject *> ConstPlayerPtrCont;
@@ -21,10 +22,11 @@ class CafeModel {
 
 private:
 
-
     const rcsc::WorldModel *wm;
     static FastIC *fic;
     static double our_offside_line;
+
+    PlayerRelationship *player_rel;
 
     CafeModel();
 
@@ -34,7 +36,6 @@ private:
 
 public:
     static CafeModel &instance();
-
 
 
     static FastIC *fastIC();
@@ -73,10 +74,13 @@ public:
 
     rcsc::Vector2D getBallLordPos() const;
 
-    const rcsc::PlayerObject * getBallLord() const;
+    const rcsc::PlayerObject *getBallLord() const;
 
     rcsc::Vector2D getOptimizedPosition(const rcsc::Vector2D &form_pos) const;
 
+    const PlayerRelationship &playerRel() const{
+        return (*player_rel);
+    }
 
 private:
 

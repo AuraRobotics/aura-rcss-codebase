@@ -13,12 +13,12 @@
 
 class Bhv_PassPosition
         : public rcsc::SoccerBehavior {
-    rcsc::PlayerPtrCont receivers;
+    rcsc::AbstractPlayerObject * donor;
 public:
 
 
-    Bhv_PassPosition(rcsc::PlayerPtrCont receivers) {
-        this->receivers = receivers;
+    Bhv_PassPosition(rcsc::AbstractPlayerObject * donor) {
+        this->donor = donor;
     }
 
     bool execute(rcsc::PlayerAgent *agent);

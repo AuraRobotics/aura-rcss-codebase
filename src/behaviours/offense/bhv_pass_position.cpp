@@ -101,7 +101,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
     Vector2D best_pos = Vector2D::INVALIDATED;
 
 
-    Vector2D ball_next_pos = cm.getBallLordPos();
+    Vector2D ball_lord_pos = cm.getBallLordPos();
 
 
     ////DEBUG
@@ -118,7 +118,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
             Vector2D check_point(i, j);
 
 
-            if (!checkPosIsValid(check_point, self_pos, ball_next_pos, x_offside)) {
+            if (!checkPosIsValid(check_point, self_pos, ball_lord_pos, x_offside)) {
                 continue;
             }
 
@@ -126,8 +126,6 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
 
 
             temp_score += 0;
-
-
 
 
             ///////////
@@ -157,14 +155,14 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
 
 
     dlog.addCircle(Logger::TEAM,
-                   ball_next_pos, 0.5, "#ffffff", true);
+                   ball_lord_pos, 0.5, "#ffffff", true);
 
     return best_pos;
 }
 
 
 bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point,
-                                       rcsc::Vector2D opp_pos, rcsc::Vector2D ball_pos, double our_offside_x) {
+                                       rcsc::Vector2D opp_pos, rcsc::Vector2D ball_lord_pos, double our_offside_x) {
     const ServerParam &SP = ServerParam::i();
     const CafeModel &cm = CafeModel::i();
 
@@ -201,7 +199,7 @@ void Bhv_PassPosition::log_table(std::vector <std::vector<double> > table, std::
 
     std::string temp;
     for (int i = 0; i < max_d; i++) {
-        temp += "    ";
+        temp += "   \t";
         for (int j = 0; j < max_d; j++) {
             temp += patch::to_string(arr2[i][j]) + "\t";
         }

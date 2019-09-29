@@ -13,7 +13,7 @@ public:
     static double ballPathDistWithMaxSpeed(int cycle);
     static double maxDistBall(double initial_speed);
     static double maxDistBall();//with max_speed_ball
-
+    static int ballCycle(double dist, double speed = -1);
 };
 
 
