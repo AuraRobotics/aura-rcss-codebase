@@ -14,6 +14,7 @@
 #include <map>
 #include <rcsc/geom/delaunay_triangulation.h>
 #include <rcsc/player/player_object.h>
+#include "../estimators/HERMES_FastIC.h"
 
 #define INT_MAX 5235232342
 
@@ -27,7 +28,7 @@ class PlayerRelationship {
     rcsc::AbstractPlayerCont relationships[11];
     double graph[11][11];
 
-    static std::vector<int> path_to_ [11];
+    static std::vector<int> path_to_[11];
 
 
 public:
@@ -37,12 +38,11 @@ public:
             stra(Strategy::i()) {}
 
 
-    void calc(rcsc::PlayerAgent *agent);
+    void calc(rcsc::PlayerAgent *agent, FastIC * fic);
 
     rcsc::AbstractPlayerCont getNeighbors(const int unum) const;
 
     rcsc::AbstractPlayerCont getPassPath(const int sender, const int resiver) const;
-
 
 
 private:
@@ -52,18 +52,18 @@ private:
 
     const rcsc::AbstractPlayerObject *getPlayerInPos(const rcsc::Vector2D pos);
 
-    const void createGraph();
+    const void createGraph(FastIC * fic);
 
     const void *processPath(const int ball_lord_unum) const;
 
-    const double getCost(int unum_start,const  rcsc::AbstractPlayerObject * end_player);
+    const double getCost(int unum_start, const rcsc::AbstractPlayerObject *end_player);
 
     const int minDistance(int dist[], bool sptSet[]) const;
 
 
-
     void printGraph();
-    void printSolution(int dist[],  int path[11]) const;
+
+    void printSolution(int dist[], int path[11]) const;
 };
 
 

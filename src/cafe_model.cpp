@@ -28,7 +28,7 @@ void CafeModel::update(PlayerAgent *agent) {
 
 
     calcOurOffsideLine();
-    player_rel->calc(agent);
+    player_rel->calc(agent, fic);
 }
 
 FastIC *CafeModel::fastIC() {

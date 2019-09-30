@@ -519,6 +519,7 @@ sample_player-sample_player.o: sample_player.cpp \
  /usr/local/include/rcsc/common/logger.h \
  /usr/local/include/rcsc/geom/sector_2d.h \
  utils/allocators/player_relationship.h ../src/chain_action/../strategy.h \
+ utils/allocators/../estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
  /usr/local/include/rcsc/action/arm_point_to_point.h \
@@ -2147,6 +2148,8 @@ utils/estimators/HERMES_FastIC.h:
 utils/allocators/player_relationship.h:
 
 ../src/chain_action/../strategy.h:
+
+utils/allocators/../estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/action/basic_actions.h:
 

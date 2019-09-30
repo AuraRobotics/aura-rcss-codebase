@@ -12,7 +12,7 @@ using namespace rcsc;
 
 std::vector<int> PlayerRelationship::path_to_[11];
 
-void PlayerRelationship::calc(PlayerAgent *agent) {
+void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
     M_triangulation.clear();
     for (int i = 0; i < 11; i++) {
@@ -25,7 +25,7 @@ void PlayerRelationship::calc(PlayerAgent *agent) {
     M_triangulation.updateVoronoiVertex();
 
     calcRelations();
-    createGraph();
+    createGraph(fic);
 }
 
 void PlayerRelationship::addVertexs() {
@@ -120,10 +120,12 @@ rcsc::AbstractPlayerCont PlayerRelationship::getNeighbors(const int unum) const 
 }
 
 
-
-
 rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const int resiver) const {
-    processPath(sender);
+    static int last_sender = -1;
+    if (last_sender != sender) {
+        processPath(sender);
+        last_sender = sender;
+    }
     std::vector<int> path_pass = path_to_[resiver - 1];
     AbstractPlayerCont path_pass_objects;
     for (int i = 0; i < path_pass.size(); i++) {
@@ -137,13 +139,18 @@ rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const
 /*
  *
  */
-const void PlayerRelationship::createGraph() {
+static FastIC *fic;
+
+const void PlayerRelationship::createGraph(FastIC *fastIC) {
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
-            graph[i][j] = 999;
+            graph[i][j] = INT_MAX;
         }
     }
+
+    fic = fastIC;
+    fic->setByWorldModel();
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < relationships[i].size(); j++) {
@@ -166,10 +173,45 @@ const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPla
     Vector2D player_first_pos = player_first->pos();
     Vector2D player_second_pos = player_second->pos();
 
-    double dist_ = player_first_pos.dist(player_second_pos);
+    double pass_dist = player_first_pos.dist(player_second_pos);
+
+    double ball_speed = 2.3;//TODO
 
     double cost = 0;
-    cost += rcscUtils::ballCycle(dist_) * 10;
+    const int pass_cycle = rcscUtils::ballCycle(pass_dist, ball_speed);
+    cost += pass_cycle * 10;
+
+
+    Vector2D donor_to_me_vel = player_second_pos - player_first_pos;
+    donor_to_me_vel.setLength(ball_speed);
+
+    fic->refresh();
+    fic->setBall(player_first_pos + donor_to_me_vel, donor_to_me_vel, 0);
+    fic->calculate();
+
+    const int fastest_opp_cycle = fic->getFastestOpponentReachCycle();
+
+
+    if (fastest_opp_cycle < pass_cycle) {
+
+
+        const AbstractPlayerObject *fastest_opp = fic->getFastestOpponent();
+        int opp_unum = -1;
+        if (fastest_opp != NULL)
+            opp_unum = fastest_opp->unum();
+        dlog.addText(Logger::TEAM,
+                     __FILE__":   ignore edge of  %d -> %d      with %d      opp_cycle : %d , pass_cycle : %d    mate_cycle : %d",
+                     unum_first,
+                     player_second->unum(), opp_unum, fastest_opp_cycle, pass_cycle,
+                     fic->getFastestTeammateReachCycle());
+        return INT_MAX;
+    }
+
+    //////////////////////////////////
+    dlog.addLine(Logger::PASS,
+                 player_first_pos, player_second_pos,
+                 "#42a7f5");
+    ///////////////////////
 
     return cost;
 }
@@ -181,11 +223,14 @@ const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPla
 
 void PlayerRelationship::printGraph() {
     dlog.addText(Logger::TEAM,
-                 __FILE__":   %s -----------------", "graph");
+                 __FILE__":   %s -----------------", "graph pass ");
     std::string temp;
     for (int i = 0; i < 11; i++) {
         temp += "   \t";
         for (int j = 0; j < 11; j++) {
+            int cost = graph[i][j];
+            if (cost == INT_MAX)
+                cost = 0;
             temp += patch::to_string(graph[i][j]) + "\t";
         }
         rcsc::dlog.addText(rcsc::Logger::TEAM,
@@ -230,7 +275,7 @@ const void *PlayerRelationship::processPath(const int ball_lord_unum) const {
 
         // Update dist value of the adjacent vertices of the picked vertex.
         for (int v = 0; v < V; v++) {
-            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+            if (!sptSet[v] && graph[u][v] && dist[u] < INT_MAX
                 && dist[u] + graph[u][v] < dist[v]) {
                 dist[v] = dist[u] + graph[u][v];
                 path[v] = u;

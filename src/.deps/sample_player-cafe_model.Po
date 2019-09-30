@@ -488,6 +488,7 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/iterator /usr/include/c++/5/bits/stream_iterator.h \
  /usr/include/boost/functional/hash_fwd.hpp \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
+ utils/allocators/../estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/player/intercept_table.h
 
 /usr/include/stdc-predef.h:
@@ -1633,5 +1634,7 @@ utils/allocators/player_relationship.h:
 /usr/include/boost/functional/hash_fwd.hpp:
 
 /usr/include/boost/functional/hash/hash_fwd.hpp:
+
+utils/allocators/../estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/player/intercept_table.h:

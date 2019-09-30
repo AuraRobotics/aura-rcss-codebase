@@ -10,14 +10,15 @@
 #include <rcsc/player/player_agent.h>
 #include <rcsc/geom/vector_2d.h>
 #include <rcsc/geom/polygon_2d.h>
+#include "../../utils/estimators/HERMES_FastIC.h"
 
 class Bhv_PassPosition
         : public rcsc::SoccerBehavior {
-    rcsc::AbstractPlayerObject * donor;
+    const rcsc::AbstractPlayerObject *donor;
 public:
 
 
-    Bhv_PassPosition(rcsc::AbstractPlayerObject * donor) {
+    Bhv_PassPosition(const rcsc::AbstractPlayerObject *donor) {
         this->donor = donor;
     }
 
@@ -29,6 +30,14 @@ private:
 
     bool checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
                          rcsc::Vector2D ball_pos, double our_offside_x);
+
+
+    double nearToBodyDir(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
+                         rcsc::Vector2D ball_pos, double max_radius2, rcsc::PlayerAgent *agent);
+
+    double nearToGoal(rcsc::Vector2D check_point,  double max_radius2);
+
+    void fastICConfig(FastIC *fastIC, rcsc::PlayerAgent *agent);
 
     void log_table(std::vector <std::vector<double> > table, std::string name);
 };

@@ -499,10 +499,12 @@ behaviours/offense/sample_player-bhv_offensive_positioning.o: \
  /usr/include/c++/5/iterator /usr/include/c++/5/bits/stream_iterator.h \
  /usr/include/boost/functional/hash_fwd.hpp \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
+ behaviours/offense/../../utils/allocators/../estimators/HERMES_FastIC.h \
  behaviours/offense/../../strategy.h \
  behaviours/offense/../../utils/allocators/player_relationship.h \
  behaviours/offense/./bhv_pass_position.h \
- /usr/local/include/rcsc/geom/polygon_2d.h
+ /usr/local/include/rcsc/geom/polygon_2d.h \
+ behaviours/offense/./../../utils/estimators/HERMES_FastIC.h
 
 /usr/include/stdc-predef.h:
 
@@ -1652,6 +1654,8 @@ behaviours/offense/../../utils/allocators/player_relationship.h:
 
 /usr/include/boost/functional/hash/hash_fwd.hpp:
 
+behaviours/offense/../../utils/allocators/../estimators/HERMES_FastIC.h:
+
 behaviours/offense/../../strategy.h:
 
 behaviours/offense/../../utils/allocators/player_relationship.h:
@@ -1659,3 +1663,5 @@ behaviours/offense/../../utils/allocators/player_relationship.h:
 behaviours/offense/./bhv_pass_position.h:
 
 /usr/local/include/rcsc/geom/polygon_2d.h:
+
+behaviours/offense/./../../utils/estimators/HERMES_FastIC.h:

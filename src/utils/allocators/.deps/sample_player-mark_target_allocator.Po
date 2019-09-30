@@ -493,6 +493,7 @@ utils/allocators/sample_player-mark_target_allocator.o: \
  /usr/include/c++/5/iterator /usr/include/c++/5/bits/stream_iterator.h \
  /usr/include/boost/functional/hash_fwd.hpp \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
+ ../src/chain_action/../utils/allocators/../estimators/HERMES_FastIC.h \
  utils/allocators/../algorithms/hungarian.h \
  utils/allocators/../../strategy.h utils/allocators/../algo_utils.h \
  ../src/chain_action/../utils/utils.cpp /usr/include/c++/5/sstream \
@@ -1643,6 +1644,8 @@ utils/allocators/mark_target_allocator.h:
 /usr/include/boost/functional/hash_fwd.hpp:
 
 /usr/include/boost/functional/hash/hash_fwd.hpp:
+
+../src/chain_action/../utils/allocators/../estimators/HERMES_FastIC.h:
 
 utils/allocators/../algorithms/hungarian.h:
 

@@ -33,8 +33,6 @@ bool Bhv_OffensivePositioning::execute(rcsc::PlayerAgent *agent) {
 
     AbstractPlayerCont player_neighber = cm.playerRel().getNeighbors(wm.self().unum());
 
-    AbstractPlayerObject *donor_player;
-
     //DEBUG
     for (AbstractPlayerCont::const_iterator
                  o = player_neighber.begin(),
@@ -73,9 +71,11 @@ bool Bhv_OffensivePositioning::execute(rcsc::PlayerAgent *agent) {
                  __FILE__": ----> size pass path :: --> %d  ::::::     ) ", pass_path.size());
 
     //////////////////////////////////////
+    if(pass_path.size() <= 1){
+        return false;
+    }
 
-
-
+    const AbstractPlayerObject *donor_player = pass_path[1];
     if (Bhv_PassPosition(donor_player).execute(agent)) {
         return true;
     }
