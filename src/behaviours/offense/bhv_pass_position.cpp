@@ -101,7 +101,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
     Vector2D self_pos = wm.self().pos();
     Vector2D ball_pos = cm.getBallLordPos();//wm.ball().pos();
 
-    int x_offside = cm.getOurOffsideLine(); //TODO change name
+    int x_offside = wm.offsideLineX(); //TODO change name
 
     double path_dist = rcscUtils::ballPathDistWithMaxSpeed(20);//TODO why 20?
 
@@ -150,7 +150,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
                 continue;
             }
 
-            double ball_speed = 2;//TODO
+            double ball_speed = 3;//TODO
 
             Vector2D donor_to_me_vel = check_point - donor_pos;
             donor_to_me_vel.setLength(ball_speed);
@@ -257,10 +257,14 @@ void Bhv_PassPosition::fastICConfig(FastIC *fastIC, rcsc::PlayerAgent *agent) {
 }
 
 bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D opp_pos, rcsc::Vector2D ball_lord_pos,
-                                       double our_offside_x) {
+                                       double offside_x) {
     const ServerParam &SP = ServerParam::i();
     const CafeModel &cm = CafeModel::i();
 
+
+    if(check_point.x > offside_x){
+        return false;
+    }
 
     return true;
 }

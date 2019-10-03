@@ -7,10 +7,12 @@
 #include <map>
 #include <iostream>
 #include "../rcsc_utils.h"
+#include "./area_pass_generator.h"
 
 using namespace rcsc;
 
 std::vector<int> PlayerRelationship::path_to_[11];
+FastIC *PlayerRelationship::fic;
 
 void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
@@ -26,6 +28,14 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
     calcRelations();
     createGraph(fic);
+
+    AreaPassGenerator area_pass_generator(relationships, wm, fic);
+    area_pass_generator.generate();
+
+    for (int i = 0; i < 11; i++) {
+        area_pass[i] = area_pass_generator.getAreaPass(i + 1);
+    }
+
 }
 
 void PlayerRelationship::addVertexs() {
@@ -119,6 +129,13 @@ rcsc::AbstractPlayerCont PlayerRelationship::getNeighbors(const int unum) const 
     return relationships[unum - 1];
 }
 
+rcsc::AbstractPlayerCont PlayerRelationship::getShortPass(const int unum) const {
+    return short_pass[unum - 1];
+}
+
+AreaPassCont PlayerRelationship::getAreaPass(const int unum) const {
+    return area_pass[unum -1];
+}
 
 rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const int resiver) const {
     static int last_sender = -1;
@@ -145,9 +162,13 @@ const void PlayerRelationship::createGraph(FastIC *fastIC) {
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
-            graph[i][j] = INT_MAX;
+            graph_full[i][j] = INT_MAX;
+            graph_pass[i][j] = INT_MAX;
         }
+
+        short_pass[i].clear();
     }
+
 
     fic = fastIC;
     fic->setByWorldModel();
@@ -155,38 +176,61 @@ const void PlayerRelationship::createGraph(FastIC *fastIC) {
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < relationships[i].size(); j++) {
             int temp_unum = relationships[i][j]->unum();
-            if (temp_unum > 0)
-                graph[i][temp_unum - 1] = getCost(i + 1, relationships[i][j]);
+            if (temp_unum > 0) {
+                graph_full[i][temp_unum - 1] = getCost(i + 1, relationships[i][j]);
+                if (ignoreIterceptPass(i + 1, relationships[i][j])) {
+                    continue;
+                }
+                graph_pass[i][temp_unum - 1] = getCost(i + 1, relationships[i][j]);
+                short_pass[i].push_back(relationships[i][j]);
+            }
+
         }
     }
 
 
-    printGraph();
-}
+    printGraph(graph_full, "graph full");
+    printGraph(graph_pass, "graph pass");
 
+    //////////////////////////////
+
+    const AbstractPlayerCont::const_iterator pass_end = short_pass[wm.self().unum() -1 ].end();
+    for (AbstractPlayerCont::const_iterator pass_resiver_it = short_pass[wm.self().unum() -1 ].begin();
+         pass_resiver_it != pass_end;
+         ++pass_resiver_it) {
+
+        dlog.addLine(Logger::PASS,
+                     wm.self().pos(), (*pass_resiver_it)->pos(),
+                     "#42a7f5");
+    }
+
+    //////////////////////
+
+
+}
 
 /*
  *
  */
-const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPlayerObject *player_second) {
+
+bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::AbstractPlayerObject *player_second) {
+
     const AbstractPlayerObject *player_first = wm.ourPlayer(unum_first);
-    Vector2D player_first_pos = player_first->pos();
-    Vector2D player_second_pos = player_second->pos();
+    const Vector2D &player_first_pos = player_first->pos();
+    const Vector2D &player_second_pos = player_second->pos();
+
 
     double pass_dist = player_first_pos.dist(player_second_pos);
+    const double max_receive_ball_speed = 1.24;
 
-    double ball_speed = 2.3;//TODO
+    double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
 
-    double cost = 0;
-    const int pass_cycle = rcscUtils::ballCycle(pass_dist, ball_speed);
-    cost += pass_cycle * 10;
-
-
+    const int pass_cycle = rcscUtils::ballCycle(pass_dist, pass_speed);
     Vector2D donor_to_me_vel = player_second_pos - player_first_pos;
-    donor_to_me_vel.setLength(ball_speed);
+    donor_to_me_vel.setLength(pass_speed);
 
     fic->refresh();
-    fic->setBall(player_first_pos + donor_to_me_vel, donor_to_me_vel, 0);
+    fic->setBall(player_first_pos + donor_to_me_vel, donor_to_me_vel, 0); //TODO donor_to_me_vel
     fic->calculate();
 
     const int fastest_opp_cycle = fic->getFastestOpponentReachCycle();
@@ -197,18 +241,48 @@ const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPla
 
         const AbstractPlayerObject *fastest_opp = fic->getFastestOpponent();
         int opp_unum = -1;
-        if (fastest_opp != NULL)
+        if (fastest_opp != NULL) {
             opp_unum = fastest_opp->unum();
-        dlog.addText(Logger::TEAM,
-                     __FILE__":   ignore edge of  %d -> %d      with %d      opp_cycle : %d , pass_cycle : %d    mate_cycle : %d",
-                     unum_first,
-                     player_second->unum(), opp_unum, fastest_opp_cycle, pass_cycle,
-                     fic->getFastestTeammateReachCycle());
+            dlog.addText(Logger::TEAM,
+                         __FILE__":   ignore edge of  %d -> %d      with %d      opp_cycle : %d , pass_cycle : %d    mate_cycle : %d",
+                         unum_first,
+                         player_second->unum(), opp_unum, fastest_opp_cycle, pass_cycle,
+                         fic->getFastestTeammateReachCycle());
+        }
+        return true;
+    }
+
+    if (player_second->goalie()) {
+        return true;
+    }
+
+
+    return false;
+}
+
+/*
+ *
+ */
+const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPlayerObject *player_second) {
+    const AbstractPlayerObject *player_first = wm.ourPlayer(unum_first);
+    const Vector2D &player_first_pos = player_first->pos();
+    const Vector2D &player_second_pos = player_second->pos();
+
+    if (player_second->goalie()) {
         return INT_MAX;
     }
 
+    double pass_dist = player_first_pos.dist(player_second_pos);
+    const double max_receive_ball_speed = 1.24;
+
+    double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
+
+    double cost = 0;
+    const int pass_cycle = rcscUtils::ballCycle(pass_dist, pass_speed);
+    cost += pass_cycle * 10;
+
     //////////////////////////////////
-    dlog.addLine(Logger::PASS,
+    dlog.addLine(Logger::WORLD,
                  player_first_pos, player_second_pos,
                  "#42a7f5");
     ///////////////////////
@@ -221,9 +295,9 @@ const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPla
  */
 #include "../utils.cpp"
 
-void PlayerRelationship::printGraph() {
+void PlayerRelationship::printGraph(double (*graph)[11], std::string name) {
     dlog.addText(Logger::TEAM,
-                 __FILE__":   %s -----------------", "graph pass ");
+                 __FILE__":   %s -----------------", name);
     std::string temp;
     for (int i = 0; i < 11; i++) {
         temp += "   \t";
@@ -248,6 +322,8 @@ const int V = 11;
 
 const void *PlayerRelationship::processPath(const int ball_lord_unum) const {
 
+    const double (*graph)[11] = graph_full;
+
     int dist[V]; // The output array. dist[i] will hold the shortest
     // distance from src to i
 
@@ -258,7 +334,7 @@ const void *PlayerRelationship::processPath(const int ball_lord_unum) const {
 
     // Initialize all distances as INFINITE and stpSet[] as false
     for (int i = 0; i < V; i++) {
-        dist[i] = 10000;//MAX_INT
+        dist[i] = INT_MAX;
         sptSet[i] = false;
     }
 
@@ -275,7 +351,7 @@ const void *PlayerRelationship::processPath(const int ball_lord_unum) const {
 
         // Update dist value of the adjacent vertices of the picked vertex.
         for (int v = 0; v < V; v++) {
-            if (!sptSet[v] && graph[u][v] && dist[u] < INT_MAX
+            if (!sptSet[v] && graph[u][v] && dist[u] < 100000
                 && dist[u] + graph[u][v] < dist[v]) {
                 dist[v] = dist[u] + graph[u][v];
                 path[v] = u;
@@ -305,23 +381,23 @@ const void *PlayerRelationship::processPath(const int ball_lord_unum) const {
 /////////////////////////////////////////////////////////
 void PlayerRelationship::printSolution(int dist[], int path[11]) const {
 
-    dlog.addText(Logger::TEAM,
+    dlog.addText(Logger::PLAN,
                  __FILE__"Vertex \t\t Distance from Source\n");
     for (int i = 0; i < V; i++) {
 
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::PLAN,
                      __FILE__"%d \t\t %d \n", i, dist[i]);
     }
 
 
     for (int i = 0; i < 11; i++) {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::PLAN,
                      __FILE__"Vertex \t\t PATH from Source %d:\n   ", i + 1);
         std::string temp;
         for (int j = 0; j < path_to_[i].size(); j++) {
             temp += patch::to_string(path_to_[i][j] + 1) + "\t";
         }
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::PLAN,
                      __FILE__"\t\t%s \t", temp.c_str());
     }
 
@@ -331,7 +407,7 @@ void PlayerRelationship::printSolution(int dist[], int path[11]) const {
 
 const int PlayerRelationship::minDistance(int dist[], bool sptSet[]) const {
     // Initialize min value
-    int min = 100000;//TODO
+    int min = INT_MAX;
     int min_index = -1;
 
     for (int v = 0; v < V; v++)

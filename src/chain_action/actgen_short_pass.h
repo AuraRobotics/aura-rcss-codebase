@@ -6,8 +6,17 @@
 #define CAFE_2D_ACTGEN_SHORT_PASS_H
 
 
-class actgen_short_pass {
+#include "action_generator.h"
 
+class ActGen_ShortPass
+        : public ActionGenerator {
+
+public:
+    virtual
+    void generate( std::vector< ActionStatePair > * result,
+                   const PredictState & state,
+                   const rcsc::WorldModel & wm,
+                   const std::vector< ActionStatePair > & path ) const;
 };
 
 

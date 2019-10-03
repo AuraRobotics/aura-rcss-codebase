@@ -738,11 +738,31 @@ SamplePlayer::createFieldEvaluator() const {
 #include "actgen_short_dribble.h"
 #include "actgen_simple_dribble.h"
 #include "actgen_shoot.h"
+#include "chain_action/actgen_short_pass.h"
+#include "chain_action/actgen_area_pass.h"
 #include "actgen_action_chain_length_filter.h"
 
 ActionGenerator::ConstPtr
 SamplePlayer::createActionGenerator() const {
     CompositeActionGenerator *g = new CompositeActionGenerator();
+
+
+
+    //
+    //  short pass
+    //
+
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_ShortPass(), 1));
+
+
+
+    //
+    //  area pass
+    //
+
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_AreaPass(), 3));
 
     //
     // shoot
@@ -754,8 +774,8 @@ SamplePlayer::createActionGenerator() const {
     //
     // strict check pass
     //
-    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_StrictCheckPass(), 1));
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_StrictCheckPass(), 1));
 
     //
     // cross
@@ -772,15 +792,15 @@ SamplePlayer::createActionGenerator() const {
 
     //
     // short dribble
-    //
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_ShortDribble(), 1));
+
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_ShortDribble(), 1));
 
     //
     // self pass (long dribble)
     //
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_SelfPass(), 1));
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_SelfPass(), 1));
 
     //
     // simple dribble
@@ -850,7 +870,6 @@ bool SamplePlayer::test() {
     dlog.addRect(Logger::TEAM,
                  wm.self().pos().x - 2.1, wm.self().pos().y - 2.1, 4.1, 4.1,
                  "#0000ff");
-
 
 
     const PlayerAgent *agent = this;

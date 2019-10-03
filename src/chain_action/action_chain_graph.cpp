@@ -429,7 +429,7 @@ ActionChainGraph::calculateResultBestFirstSearch( const WorldModel & wm,
                                   ( current_state.ball().pos(), current_evaluation ) );
 #endif
     M_result = empty_path;
-    M_best_evaluation = current_evaluation;
+    M_best_evaluation = current_evaluation; // TODO
 
     queue.push( std::pair< std::vector< ActionStatePair >, double >
                 ( empty_path, current_evaluation ) );

@@ -14,6 +14,9 @@ public:
     static double maxDistBall(double initial_speed);
     static double maxDistBall();//with max_speed_ball
     static int ballCycle(double dist, double speed = -1);
+
+    static double ball_speed_after_dist(double dist, double speed);
+    static double first_speed_pass(double dist, double speed_target);
 };
 
 

@@ -500,6 +500,8 @@ behaviours/defense/sample_player-bhv_defensive_positioning.o: \
  /usr/include/boost/functional/hash_fwd.hpp \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
  behaviours/defense/../../utils/allocators/../estimators/HERMES_FastIC.h \
+ behaviours/defense/../../utils/allocators/./area_pass_generator.h \
+ behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h \
  behaviours/defense/../../strategy.h \
  behaviours/defense/../../utils/algo_utils.h \
  behaviours/defense/../../utils/algorithms/hungarian.h \
@@ -1662,6 +1664,10 @@ behaviours/defense/../../utils/allocators/player_relationship.h:
 /usr/include/boost/functional/hash/hash_fwd.hpp:
 
 behaviours/defense/../../utils/allocators/../estimators/HERMES_FastIC.h:
+
+behaviours/defense/../../utils/allocators/./area_pass_generator.h:
+
+behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h:
 
 behaviours/defense/../../strategy.h:
 

@@ -141,7 +141,9 @@ am__objects_2 = chain_action/sample_player-actgen_cross.$(OBJEXT) \
 	chain_action/sample_player-short_dribble_generator.$(OBJEXT) \
 	chain_action/sample_player-simple_pass_checker.$(OBJEXT) \
 	chain_action/sample_player-strict_check_pass_generator.$(OBJEXT) \
-	chain_action/sample_player-tackle_generator.$(OBJEXT)
+	chain_action/sample_player-tackle_generator.$(OBJEXT) \
+	chain_action/sample_player-actgen_short_pass.$(OBJEXT) \
+	chain_action/sample_player-actgen_area_pass.$(OBJEXT)
 am__objects_3 =  \
 	behaviours/defense/sample_player-bhv_basic_tackle.$(OBJEXT) \
 	behaviours/defense/sample_player-bhv_defensive_positioning.$(OBJEXT) \
@@ -199,7 +201,8 @@ am__objects_9 = utils/sample_player-utils.$(OBJEXT) \
 	utils/estimators/sample_player-HERMES_FastIC.$(OBJEXT) \
 	utils/estimators/sample_player-player_estimator.$(OBJEXT) \
 	utils/allocators/sample_player-mark_target_allocator.$(OBJEXT) \
-	utils/allocators/sample_player-player_relationship.$(OBJEXT)
+	utils/allocators/sample_player-player_relationship.$(OBJEXT) \
+	utils/allocators/sample_player-area_pass_generator.$(OBJEXT)
 am__objects_10 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -412,7 +415,9 @@ UTILSSOURCES = \
     utils/allocators/mark_target_allocator.h \
     utils/allocators/mark_target_allocator.cpp \
     utils/allocators/player_relationship.h \
-    utils/allocators/player_relationship.cpp
+    utils/allocators/player_relationship.cpp \
+    utils/allocators/area_pass_generator.h \
+    utils/allocators/area_pass_generator.cpp
 
 BHV_Defense_SOURCE = \
     behaviours/defense/bhv_basic_tackle.h \
@@ -601,7 +606,11 @@ CHAINACTIONSOURCES = \
 	chain_action/strict_check_pass_generator.cpp \
 	chain_action/strict_check_pass_generator.h \
 	chain_action/tackle_generator.cpp \
-	chain_action/tackle_generator.h
+	chain_action/tackle_generator.h \
+	chain_action/actgen_short_pass.h \
+	chain_action/actgen_short_pass.cpp \
+	chain_action/actgen_area_pass.h \
+	chain_action/actgen_area_pass.cpp
 
 COACHSOURCES = \
 	sample_coach.cpp \
@@ -851,6 +860,12 @@ chain_action/sample_player-strict_check_pass_generator.$(OBJEXT):  \
 chain_action/sample_player-tackle_generator.$(OBJEXT):  \
 	chain_action/$(am__dirstamp) \
 	chain_action/$(DEPDIR)/$(am__dirstamp)
+chain_action/sample_player-actgen_short_pass.$(OBJEXT):  \
+	chain_action/$(am__dirstamp) \
+	chain_action/$(DEPDIR)/$(am__dirstamp)
+chain_action/sample_player-actgen_area_pass.$(OBJEXT):  \
+	chain_action/$(am__dirstamp) \
+	chain_action/$(DEPDIR)/$(am__dirstamp)
 behaviours/defense/$(am__dirstamp):
 	@$(MKDIR_P) behaviours/defense
 	@: > behaviours/defense/$(am__dirstamp)
@@ -1053,6 +1068,9 @@ utils/allocators/sample_player-mark_target_allocator.$(OBJEXT):  \
 utils/allocators/sample_player-player_relationship.$(OBJEXT):  \
 	utils/allocators/$(am__dirstamp) \
 	utils/allocators/$(DEPDIR)/$(am__dirstamp)
+utils/allocators/sample_player-area_pass_generator.$(OBJEXT):  \
+	utils/allocators/$(am__dirstamp) \
+	utils/allocators/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -1117,11 +1135,13 @@ include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_man.Po
 include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_zone.Po
 include behaviours/offense/$(DEPDIR)/sample_player-bhv_offensive_positioning.Po
 include behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Po
+include chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_cross.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_direct_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_self_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_shoot.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_short_dribble.Po
+include chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_simple_dribble.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_strict_check_pass.Po
 include chain_action/$(DEPDIR)/sample_player-action_chain_graph.Po
@@ -1169,6 +1189,7 @@ include utils/$(DEPDIR)/sample_player-geo_utils.Po
 include utils/$(DEPDIR)/sample_player-rcsc_utils.Po
 include utils/$(DEPDIR)/sample_player-utils.Po
 include utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po
+include utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Po
 include utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Po
 include utils/allocators/$(DEPDIR)/sample_player-player_relationship.Po
 include utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po
@@ -1651,6 +1672,34 @@ chain_action/sample_player-tackle_generator.obj: chain_action/tackle_generator.c
 #	$(AM_V_CXX)source='chain_action/tackle_generator.cpp' object='chain_action/sample_player-tackle_generator.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-tackle_generator.obj `if test -f 'chain_action/tackle_generator.cpp'; then $(CYGPATH_W) 'chain_action/tackle_generator.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/tackle_generator.cpp'; fi`
+
+chain_action/sample_player-actgen_short_pass.o: chain_action/actgen_short_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_short_pass.o -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Tpo -c -o chain_action/sample_player-actgen_short_pass.o `test -f 'chain_action/actgen_short_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_short_pass.cpp
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_short_pass.cpp' object='chain_action/sample_player-actgen_short_pass.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_short_pass.o `test -f 'chain_action/actgen_short_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_short_pass.cpp
+
+chain_action/sample_player-actgen_short_pass.obj: chain_action/actgen_short_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_short_pass.obj -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Tpo -c -o chain_action/sample_player-actgen_short_pass.obj `if test -f 'chain_action/actgen_short_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_short_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_short_pass.cpp'; fi`
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_short_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_short_pass.cpp' object='chain_action/sample_player-actgen_short_pass.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_short_pass.obj `if test -f 'chain_action/actgen_short_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_short_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_short_pass.cpp'; fi`
+
+chain_action/sample_player-actgen_area_pass.o: chain_action/actgen_area_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_area_pass.o -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Tpo -c -o chain_action/sample_player-actgen_area_pass.o `test -f 'chain_action/actgen_area_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_area_pass.cpp
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_area_pass.cpp' object='chain_action/sample_player-actgen_area_pass.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_area_pass.o `test -f 'chain_action/actgen_area_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_area_pass.cpp
+
+chain_action/sample_player-actgen_area_pass.obj: chain_action/actgen_area_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_area_pass.obj -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Tpo -c -o chain_action/sample_player-actgen_area_pass.obj `if test -f 'chain_action/actgen_area_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_area_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_area_pass.cpp'; fi`
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_area_pass.cpp' object='chain_action/sample_player-actgen_area_pass.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_area_pass.obj `if test -f 'chain_action/actgen_area_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_area_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_area_pass.cpp'; fi`
 
 behaviours/defense/sample_player-bhv_basic_tackle.o: behaviours/defense/bhv_basic_tackle.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/defense/sample_player-bhv_basic_tackle.o -MD -MP -MF behaviours/defense/$(DEPDIR)/sample_player-bhv_basic_tackle.Tpo -c -o behaviours/defense/sample_player-bhv_basic_tackle.o `test -f 'behaviours/defense/bhv_basic_tackle.cpp' || echo '$(srcdir)/'`behaviours/defense/bhv_basic_tackle.cpp
@@ -2407,6 +2456,20 @@ utils/allocators/sample_player-player_relationship.obj: utils/allocators/player_
 #	$(AM_V_CXX)source='utils/allocators/player_relationship.cpp' object='utils/allocators/sample_player-player_relationship.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-player_relationship.obj `if test -f 'utils/allocators/player_relationship.cpp'; then $(CYGPATH_W) 'utils/allocators/player_relationship.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/player_relationship.cpp'; fi`
+
+utils/allocators/sample_player-area_pass_generator.o: utils/allocators/area_pass_generator.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-area_pass_generator.o -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Tpo -c -o utils/allocators/sample_player-area_pass_generator.o `test -f 'utils/allocators/area_pass_generator.cpp' || echo '$(srcdir)/'`utils/allocators/area_pass_generator.cpp
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Tpo utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Po
+#	$(AM_V_CXX)source='utils/allocators/area_pass_generator.cpp' object='utils/allocators/sample_player-area_pass_generator.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-area_pass_generator.o `test -f 'utils/allocators/area_pass_generator.cpp' || echo '$(srcdir)/'`utils/allocators/area_pass_generator.cpp
+
+utils/allocators/sample_player-area_pass_generator.obj: utils/allocators/area_pass_generator.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-area_pass_generator.obj -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Tpo -c -o utils/allocators/sample_player-area_pass_generator.obj `if test -f 'utils/allocators/area_pass_generator.cpp'; then $(CYGPATH_W) 'utils/allocators/area_pass_generator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/area_pass_generator.cpp'; fi`
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Tpo utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Po
+#	$(AM_V_CXX)source='utils/allocators/area_pass_generator.cpp' object='utils/allocators/sample_player-area_pass_generator.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-area_pass_generator.obj `if test -f 'utils/allocators/area_pass_generator.cpp'; then $(CYGPATH_W) 'utils/allocators/area_pass_generator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/area_pass_generator.cpp'; fi`
 
 sample_player-cafe_model.o: cafe_model.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp

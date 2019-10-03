@@ -26,29 +26,6 @@ bool Bhv_OffensivePositioning::execute(rcsc::PlayerAgent *agent) {
                  __FILE__": Bhv_OffensivePositioning execute -- ");
 
 
-//    PlayerRelationship player_relationship(wm);
-//
-//    player_relationship.calc();
-
-
-    AbstractPlayerCont player_neighber = cm.playerRel().getNeighbors(wm.self().unum());
-
-    //DEBUG
-    for (AbstractPlayerCont::const_iterator
-                 o = player_neighber.begin(),
-                 end = player_neighber.end();
-         o != end;
-         ++o) {
-        (*o)->unum();
-        dlog.addText(Logger::TEAM,
-                     __FILE__": ----> %d  ::::::   %.2f %.2f  ) ", (*o)->unum(), (*o)->pos().x, (*o)->pos().y);
-
-
-        dlog.addCircle(Logger::TEAM,
-                       (*o)->pos(), 0.5, "#34ebcc", true);
-    }
-    //////////////////////////////////////
-
     AbstractPlayerCont pass_path = cm.playerRel().getPassPath(cm.getBallLord()->unum(), wm.self().unum());
     ////DEBUG
     Vector2D temp_r = Vector2D::INVALIDATED;

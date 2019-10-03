@@ -501,6 +501,8 @@ behaviours/offense/sample_player-bhv_pass_position.o: \
  /usr/include/boost/functional/hash_fwd.hpp \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
  behaviours/offense/../../utils/allocators/../estimators/HERMES_FastIC.h \
+ behaviours/offense/../../utils/allocators/./area_pass_generator.h \
+ behaviours/offense/../../utils/allocators/./../estimators/HERMES_FastIC.h \
  behaviours/offense/../../strategy.h \
  behaviours/offense/../../utils/algo_utils.h \
  behaviours/offense/../../utils/algorithms/hungarian.h \
@@ -1683,6 +1685,10 @@ behaviours/offense/../../utils/allocators/player_relationship.h:
 /usr/include/boost/functional/hash/hash_fwd.hpp:
 
 behaviours/offense/../../utils/allocators/../estimators/HERMES_FastIC.h:
+
+behaviours/offense/../../utils/allocators/./area_pass_generator.h:
+
+behaviours/offense/../../utils/allocators/./../estimators/HERMES_FastIC.h:
 
 behaviours/offense/../../strategy.h:
 

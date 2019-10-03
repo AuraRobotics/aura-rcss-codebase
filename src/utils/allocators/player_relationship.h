@@ -15,8 +15,7 @@
 #include <rcsc/geom/delaunay_triangulation.h>
 #include <rcsc/player/player_object.h>
 #include "../estimators/HERMES_FastIC.h"
-
-#define INT_MAX 5235232342
+#include "./area_pass_generator.h"
 
 class PlayerRelationship {
 
@@ -24,11 +23,18 @@ class PlayerRelationship {
     const rcsc::ServerParam &SP;
     const Strategy &stra;
 
+    static FastIC *fic;
+
     rcsc::DelaunayTriangulation M_triangulation;
     rcsc::AbstractPlayerCont relationships[11];
-    double graph[11][11];
+    double graph_full[11][11];
+    double graph_pass[11][11];
 
     static std::vector<int> path_to_[11];
+
+    rcsc::AbstractPlayerCont short_pass[11];
+    AreaPassCont area_pass[11];
+
 
 
 public:
@@ -38,12 +44,17 @@ public:
             stra(Strategy::i()) {}
 
 
-    void calc(rcsc::PlayerAgent *agent, FastIC * fic);
+    void calc(rcsc::PlayerAgent *agent, FastIC *fic);
+
+
 
     rcsc::AbstractPlayerCont getNeighbors(const int unum) const;
 
     rcsc::AbstractPlayerCont getPassPath(const int sender, const int resiver) const;
 
+    rcsc::AbstractPlayerCont getShortPass(const int unum) const;
+
+    AreaPassCont getAreaPass(const int unum) const;
 
 private:
     void addVertexs();
@@ -52,16 +63,18 @@ private:
 
     const rcsc::AbstractPlayerObject *getPlayerInPos(const rcsc::Vector2D pos);
 
-    const void createGraph(FastIC * fic);
+    const void createGraph(FastIC *fic);
 
     const void *processPath(const int ball_lord_unum) const;
 
-    const double getCost(int unum_start, const rcsc::AbstractPlayerObject *end_player);
+    bool ignoreIterceptPass(int unum_first, const rcsc::AbstractPlayerObject *player_second);
+
+    const double getCost(int unum_first, const rcsc::AbstractPlayerObject *player_second);
 
     const int minDistance(int dist[], bool sptSet[]) const;
 
 
-    void printGraph();
+    void printGraph(double (*graph)[11], std::string name);
 
     void printSolution(int dist[], int path[11]) const;
 };

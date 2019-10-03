@@ -17,7 +17,9 @@ UTILSSOURCES = \
     utils/allocators/mark_target_allocator.h \
     utils/allocators/mark_target_allocator.cpp \
     utils/allocators/player_relationship.h \
-    utils/allocators/player_relationship.cpp
+    utils/allocators/player_relationship.cpp \
+    utils/allocators/area_pass_generator.h \
+    utils/allocators/area_pass_generator.cpp
 
 
 
@@ -211,7 +213,11 @@ CHAINACTIONSOURCES = \
 	chain_action/strict_check_pass_generator.cpp \
 	chain_action/strict_check_pass_generator.h \
 	chain_action/tackle_generator.cpp \
-	chain_action/tackle_generator.h
+	chain_action/tackle_generator.h \
+	chain_action/actgen_short_pass.h \
+	chain_action/actgen_short_pass.cpp \
+	chain_action/actgen_area_pass.h \
+	chain_action/actgen_area_pass.cpp
 
 COACHSOURCES = \
 	sample_coach.cpp \

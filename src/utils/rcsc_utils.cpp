@@ -51,3 +51,41 @@ int rcscUtils::ballCycle(double dist, double speed ) {
 
     return cycle;
 }
+
+
+double rcscUtils::ball_speed_after_dist(double dist, double speed) {
+    const static ServerParam &SP = ServerParam::i();
+    double dencay = SP.ballDecay();
+    double max_speed = SP.ballSpeedMax();
+    if(speed == -1){
+        speed = max_speed;
+    }
+    int cycle = 0;
+    while(dist > 0){
+        dist -= speed;
+        speed *= dencay;
+        cycle ++;
+        if(cycle >= 50) break;
+    }
+
+    return speed;
+}
+
+double rcscUtils::first_speed_pass(double dist, double speed_target) {
+    const static ServerParam &SP = ServerParam::i();
+    double dencay = SP.ballDecay();
+    double max_speed = SP.ballSpeedMax();
+
+    int cycle = 0;
+    while(dist > 0){
+        dist -= speed_target;
+        speed_target /= dencay;
+
+        cycle ++;
+        if(max_speed <= speed_target) break;
+        if(cycle >= 50) break;
+    }
+    return speed_target;
+}
+
+

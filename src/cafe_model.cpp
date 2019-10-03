@@ -236,3 +236,10 @@ rcsc::Vector2D CafeModel::getOptimizedPosition(const rcsc::Vector2D &form_pos) c
     form_pos_x = form_pos.x;
     return Vector2D((form_pos_x + form_pos.x) / 2, form_pos.y);
 }
+
+
+const rcsc::PlayerObject * CafeModel::nearsetOpp(const int unum) {
+
+
+
+}

@@ -52,15 +52,14 @@ static const int VALID_PLAYER_THRESHOLD = 8;
 /*!
 
  */
-static double evaluate_state( const PredictState & state );
+static double evaluate_state(const PredictState &state);
 
 
 /*-------------------------------------------------------------------*/
 /*!
 
  */
-SampleFieldEvaluator::SampleFieldEvaluator()
-{
+SampleFieldEvaluator::SampleFieldEvaluator() {
 
 }
 
@@ -68,8 +67,7 @@ SampleFieldEvaluator::SampleFieldEvaluator()
 /*!
 
  */
-SampleFieldEvaluator::~SampleFieldEvaluator()
-{
+SampleFieldEvaluator::~SampleFieldEvaluator() {
 
 }
 
@@ -78,16 +76,28 @@ SampleFieldEvaluator::~SampleFieldEvaluator()
 
  */
 double
-SampleFieldEvaluator::operator()( const PredictState & state,
-                                  const std::vector< ActionStatePair > & /*path*/ ) const
-{
-    const double final_state_evaluation = evaluate_state( state );
+SampleFieldEvaluator::operator()(const PredictState &state,
+                                 const std::vector <ActionStatePair> & /*path*/ ) const {
+    const double final_state_evaluation = evaluate_state(state);
 
     //
     // ???
     //
 
     double result = final_state_evaluation;
+
+
+    /////DEBUG
+    const AbstractPlayerObject *holder = state.ballHolder();
+    int holder_unum = -1;
+
+    if (holder) {
+        holder_unum = holder->unum();
+    }
+//    dlog.addText(Logger::PLAN,
+//                 __FILE__":  score  %d -----------------> %.2f",holder_unum,  result);
+//
+    ////////////////////////
 
     return result;
 }
@@ -99,11 +109,10 @@ SampleFieldEvaluator::operator()( const PredictState & state,
  */
 static
 double
-evaluate_state( const PredictState & state )
-{
-    const ServerParam & SP = ServerParam::i();
+evaluate_state(const PredictState &state) {
+    const ServerParam &SP = ServerParam::i();
 
-    const AbstractPlayerObject * holder = state.ballHolder();
+    const AbstractPlayerObject *holder = state.ballHolder();
 
 #ifdef DEBUG_PRINT
     dlog.addText( Logger::ACTION_CHAIN,
@@ -113,13 +122,12 @@ evaluate_state( const PredictState & state )
     //
     // if holder is invalid, return bad evaluation
     //
-    if ( ! holder )
-    {
+    if (!holder) {
 #ifdef DEBUG_PRINT
         dlog.addText( Logger::ACTION_CHAIN,
                       "(eval) XXX null holder" );
 #endif
-        return - DBL_MAX / 2.0;
+        return -DBL_MAX / 2.0;
     }
 
     const int holder_unum = holder->unum();
@@ -128,9 +136,8 @@ evaluate_state( const PredictState & state )
     //
     // ball is in opponent goal
     //
-    if ( state.ball().pos().x > + ( SP.pitchHalfLength() - 0.1 )
-         && state.ball().pos().absY() < SP.goalHalfWidth() + 2.0 )
-    {
+    if (state.ball().pos().x > +(SP.pitchHalfLength() - 0.1)
+        && state.ball().pos().absY() < SP.goalHalfWidth() + 2.0) {
 #ifdef DEBUG_PRINT
         dlog.addText( Logger::ACTION_CHAIN,
                       "(eval) *** in opponent goal" );
@@ -141,9 +148,8 @@ evaluate_state( const PredictState & state )
     //
     // ball is in our goal
     //
-    if ( state.ball().pos().x < - ( SP.pitchHalfLength() - 0.1 )
-         && state.ball().pos().absY() < SP.goalHalfWidth() )
-    {
+    if (state.ball().pos().x < -(SP.pitchHalfLength() - 0.1)
+        && state.ball().pos().absY() < SP.goalHalfWidth()) {
 #ifdef DEBUG_PRINT
         dlog.addText( Logger::ACTION_CHAIN,
                       "(eval) XXX in our goal" );
@@ -156,15 +162,14 @@ evaluate_state( const PredictState & state )
     //
     // out of pitch
     //
-    if ( state.ball().pos().absX() > SP.pitchHalfLength()
-         || state.ball().pos().absY() > SP.pitchHalfWidth() )
-    {
+    if (state.ball().pos().absX() > SP.pitchHalfLength()
+        || state.ball().pos().absY() > SP.pitchHalfWidth()) {
 #ifdef DEBUG_PRINT
         dlog.addText( Logger::ACTION_CHAIN,
                       "(eval) XXX out of pitch" );
 #endif
 
-        return - DBL_MAX / 2.0;
+        return -DBL_MAX / 2.0;
     }
 
 
@@ -173,8 +178,8 @@ evaluate_state( const PredictState & state )
     //
     double point = state.ball().pos().x;
 
-    point += std::max( 0.0,
-                       40.0 - ServerParam::i().theirTeamGoalPos().dist( state.ball().pos() ) );
+    point += std::max(0.0,
+                      40.0 - ServerParam::i().theirTeamGoalPos().dist(state.ball().pos()));
 
 #ifdef DEBUG_PRINT
     dlog.addText( Logger::ACTION_CHAIN,
@@ -185,23 +190,36 @@ evaluate_state( const PredictState & state )
                   "(eval) initial value (%f)", point );
 #endif
 
+
+    double *dist_opp = new double(DBL_MAX);
+    const AbstractPlayerObject *nearest_opp = state.getOpponentNearestTo(holder->pos(), 1, dist_opp);
+
+    if (dist_opp && (*dist_opp) < 5) {
+        return -DBL_MAX / 2.0;
+    }
+
+
+    if (dist_opp && (*dist_opp) < 10) {
+        point -= 10 - (*dist_opp) ;
+    }
+
+
+
     //
     // add bonus for goal, free situation near offside line
     //
-    if ( FieldAnalyzer::can_shoot_from
-         ( holder->unum() == state.self().unum(),
-           holder->pos(),
-           state.getPlayerCont( new OpponentOrUnknownPlayerPredicate( state.ourSide() ) ),
-           VALID_PLAYER_THRESHOLD ) )
-    {
+    if (FieldAnalyzer::can_shoot_from
+            (holder->unum() == state.self().unum(),
+             holder->pos(),
+             state.getPlayerCont(new OpponentOrUnknownPlayerPredicate(state.ourSide())),
+             VALID_PLAYER_THRESHOLD)) {
         point += 1.0e+6;
 #ifdef DEBUG_PRINT
         dlog.addText( Logger::ACTION_CHAIN,
                       "(eval) bonus for goal %f (%f)", 1.0e+6, point );
 #endif
 
-        if ( holder_unum == state.self().unum() )
-        {
+        if (holder_unum == state.self().unum()) {
             point += 5.0e+5;
 #ifdef DEBUG_PRINT
             dlog.addText( Logger::ACTION_CHAIN,

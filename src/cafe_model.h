@@ -82,6 +82,8 @@ public:
         return (*player_rel);
     }
 
+
+    const rcsc::PlayerObject * nearsetOpp(const int unum);
 private:
 
 };
