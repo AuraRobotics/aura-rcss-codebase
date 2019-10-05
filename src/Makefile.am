@@ -220,7 +220,9 @@ CHAINACTIONSOURCES = \
 	chain_action/actgen_short_pass.h \
 	chain_action/actgen_short_pass.cpp \
 	chain_action/actgen_area_pass.h \
-	chain_action/actgen_area_pass.cpp
+	chain_action/actgen_area_pass.cpp \
+	chain_action/actgen_deep_pass.h \
+	chain_action/actgen_deep_pass.cpp
 
 COACHSOURCES = \
 	sample_coach.cpp \

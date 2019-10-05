@@ -528,7 +528,8 @@ behaviours/defense/sample_player-bhv_block.o: \
  /usr/include/boost/functional/hash/hash_fwd.hpp \
  behaviours/defense/../../utils/allocators/../estimators/HERMES_FastIC.h \
  behaviours/defense/../../utils/allocators/./area_pass_generator.h \
- behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h
+ behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h \
+ behaviours/defense/../../utils/allocators/./deep_pass_generator.h
 
 /usr/include/stdc-predef.h:
 
@@ -1739,3 +1740,5 @@ behaviours/defense/../../utils/allocators/../estimators/HERMES_FastIC.h:
 behaviours/defense/../../utils/allocators/./area_pass_generator.h:
 
 behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h:
+
+behaviours/defense/../../utils/allocators/./deep_pass_generator.h:

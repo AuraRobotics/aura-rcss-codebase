@@ -522,6 +522,7 @@ sample_player-sample_player.o: sample_player.cpp \
  utils/allocators/../estimators/HERMES_FastIC.h \
  utils/allocators/./area_pass_generator.h \
  utils/allocators/./../estimators/HERMES_FastIC.h \
+ utils/allocators/./deep_pass_generator.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
  /usr/local/include/rcsc/action/arm_point_to_point.h \
@@ -2157,6 +2158,8 @@ utils/allocators/../estimators/HERMES_FastIC.h:
 utils/allocators/./area_pass_generator.h:
 
 utils/allocators/./../estimators/HERMES_FastIC.h:
+
+utils/allocators/./deep_pass_generator.h:
 
 /usr/local/include/rcsc/action/basic_actions.h:
 

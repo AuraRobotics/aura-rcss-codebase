@@ -491,6 +491,7 @@ sample_player-cafe_model.o: cafe_model.cpp /usr/include/stdc-predef.h \
  utils/allocators/../estimators/HERMES_FastIC.h \
  utils/allocators/./area_pass_generator.h \
  utils/allocators/./../estimators/HERMES_FastIC.h \
+ utils/allocators/./deep_pass_generator.h \
  /usr/local/include/rcsc/player/intercept_table.h
 
 /usr/include/stdc-predef.h:
@@ -1642,5 +1643,7 @@ utils/allocators/../estimators/HERMES_FastIC.h:
 utils/allocators/./area_pass_generator.h:
 
 utils/allocators/./../estimators/HERMES_FastIC.h:
+
+utils/allocators/./deep_pass_generator.h:
 
 /usr/local/include/rcsc/player/intercept_table.h:

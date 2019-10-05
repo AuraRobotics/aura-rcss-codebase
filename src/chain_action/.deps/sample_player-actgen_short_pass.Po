@@ -500,6 +500,7 @@ chain_action/sample_player-actgen_short_pass.o: \
  /usr/include/boost/core/no_exceptions_support.hpp \
  chain_action/../utils/allocators/./area_pass_generator.h \
  chain_action/../utils/allocators/./../estimators/HERMES_FastIC.h \
+ chain_action/../utils/allocators/./deep_pass_generator.h \
  chain_action/../cafe_model.h chain_action/../strategy.h \
  chain_action/../utils/estimators/HERMES_FastIC.h \
  chain_action/../utils/allocators/player_relationship.h \
@@ -1668,6 +1669,8 @@ chain_action/../utils/allocators/../estimators/HERMES_FastIC.h:
 chain_action/../utils/allocators/./area_pass_generator.h:
 
 chain_action/../utils/allocators/./../estimators/HERMES_FastIC.h:
+
+chain_action/../utils/allocators/./deep_pass_generator.h:
 
 chain_action/../cafe_model.h:
 

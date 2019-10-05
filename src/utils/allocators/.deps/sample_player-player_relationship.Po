@@ -493,8 +493,8 @@ utils/allocators/sample_player-player_relationship.o: \
  /usr/include/boost/core/no_exceptions_support.hpp \
  utils/allocators/./area_pass_generator.h \
  utils/allocators/./../estimators/HERMES_FastIC.h \
- utils/allocators/../rcsc_utils.h \
- utils/allocators/./deep_pass_generator.h utils/allocators/../utils.cpp \
+ utils/allocators/./deep_pass_generator.h \
+ utils/allocators/../rcsc_utils.h utils/allocators/../utils.cpp \
  /usr/include/c++/5/sstream /usr/include/c++/5/bits/sstream.tcc
 
 /usr/include/stdc-predef.h:
@@ -1641,9 +1641,9 @@ utils/allocators/./area_pass_generator.h:
 
 utils/allocators/./../estimators/HERMES_FastIC.h:
 
-utils/allocators/../rcsc_utils.h:
-
 utils/allocators/./deep_pass_generator.h:
+
+utils/allocators/../rcsc_utils.h:
 
 utils/allocators/../utils.cpp:
 

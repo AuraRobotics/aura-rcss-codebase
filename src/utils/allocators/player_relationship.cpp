@@ -45,6 +45,10 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
     DeepPassGenerator deep_pass_generator(relationships, wm, fic);
     deep_pass_generator.generate();
+
+    for ( int i=0; i< 11; i++){
+        deep_pass[i] = deep_pass_generator.getDirectPass(i + 1);
+    }
 }
 
 void PlayerRelationship::addVertexs() {
@@ -144,6 +148,10 @@ rcsc::AbstractPlayerCont PlayerRelationship::getShortPass(const int unum) const 
 
 AreaPassCont PlayerRelationship::getAreaPass(const int unum) const {
     return area_pass[unum -1];
+}
+
+DeepPassCont PlayerRelationship::getDeepPass(const int unum) const {
+    return deep_pass[unum -1];
 }
 
 rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const int resiver) const {

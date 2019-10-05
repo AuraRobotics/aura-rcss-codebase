@@ -502,6 +502,7 @@ behaviours/defense/sample_player-bhv_mark_man.o: \
  behaviours/defense/../../utils/allocators/../estimators/HERMES_FastIC.h \
  behaviours/defense/../../utils/allocators/./area_pass_generator.h \
  behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h \
+ behaviours/defense/../../utils/allocators/./deep_pass_generator.h \
  behaviours/defense/../../strategy.h \
  behaviours/defense/../../utils/algo_utils.h \
  behaviours/defense/../../utils/algorithms/hungarian.h \
@@ -1688,6 +1689,8 @@ behaviours/defense/../../utils/allocators/../estimators/HERMES_FastIC.h:
 behaviours/defense/../../utils/allocators/./area_pass_generator.h:
 
 behaviours/defense/../../utils/allocators/./../estimators/HERMES_FastIC.h:
+
+behaviours/defense/../../utils/allocators/./deep_pass_generator.h:
 
 behaviours/defense/../../strategy.h:
 
