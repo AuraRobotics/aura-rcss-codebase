@@ -292,7 +292,7 @@ sample_player-sample_player.o: sample_player.cpp \
  /usr/local/include/rcsc/geom/region_2d.h \
  /usr/local/include/rcsc/geom/size_2d.h \
  /usr/local/include/rcsc/geom/line_2d.h \
- ../src/chain_action/action_state_pair.h communication.h \
+ ../src/chain_action/action_state_pair.h communication/communication.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -484,8 +484,8 @@ sample_player-sample_player.o: sample_player.cpp \
  /usr/include/boost/function/function_template.hpp \
  /usr/include/boost/detail/no_exceptions_support.hpp \
  /usr/include/boost/core/no_exceptions_support.hpp strategy.h \
- soccer_role.h /usr/local/include/rcsc/factory.h /usr/include/c++/5/stack \
- /usr/include/c++/5/bits/stl_stack.h \
+ roles/soccer_role.h /usr/local/include/rcsc/factory.h \
+ /usr/include/c++/5/stack /usr/include/c++/5/bits/stl_stack.h \
  /usr/local/include/rcsc/formation/formation.h \
  /usr/local/include/rcsc/formation/sample_data.h \
  ../src/chain_action/field_analyzer.h \
@@ -504,14 +504,24 @@ sample_player-sample_player.o: sample_player.cpp \
  ../src/chain_action/action_chain_graph.h \
  ../src/chain_action/action_generator.h \
  ../src/chain_action/field_evaluator.h sample_field_evaluator.h \
- ../src/chain_action/predict_state.h sample_communication.h \
- keepaway_communication.h bhv_penalty_kick.h \
- /usr/local/include/rcsc/player/soccer_action.h bhv_set_play.h \
- bhv_set_play_kick_in.h bhv_set_play_indirect_free_kick.h \
- bhv_custom_before_kick_off.h \
- ../src/chain_action/bhv_strict_check_shoot.h view_tactical.h \
- intention_receive.h /usr/local/include/rcsc/player/soccer_intention.h \
+ ../src/chain_action/predict_state.h communication/sample_communication.h \
+ communication/communication.h communication/keepaway_communication.h \
+ behaviours/bhv_penalty_kick.h \
+ /usr/local/include/rcsc/player/soccer_action.h behaviours/bhv_set_play.h \
+ behaviours/bhv_set_play_kick_in.h \
+ behaviours/bhv_set_play_indirect_free_kick.h \
+ behaviours/bhv_custom_before_kick_off.h \
+ ../src/chain_action/bhv_strict_check_shoot.h actions/view_tactical.h \
+ communication/intention_receive.h \
+ /usr/local/include/rcsc/player/soccer_intention.h \
  /usr/include/c++/5/queue /usr/include/c++/5/bits/stl_queue.h \
+ cafe_model.h utils/estimators/HERMES_FastIC.h \
+ /usr/local/include/rcsc/common/logger.h \
+ /usr/local/include/rcsc/geom/sector_2d.h \
+ utils/allocators/player_relationship.h ../src/chain_action/../strategy.h \
+ utils/allocators/../estimators/HERMES_FastIC.h \
+ utils/allocators/./area_pass_generator.h \
+ utils/allocators/./../estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
  /usr/local/include/rcsc/action/arm_point_to_point.h \
@@ -546,8 +556,6 @@ sample_player-sample_player.o: sample_player.cpp \
  /usr/local/include/rcsc/common/audio_message.h \
  /usr/local/include/rcsc/player/freeform_parser.h \
  /usr/local/include/rcsc/common/basic_client.h \
- /usr/local/include/rcsc/common/logger.h \
- /usr/local/include/rcsc/geom/sector_2d.h \
  /usr/local/include/rcsc/common/player_param.h \
  /usr/local/include/rcsc/common/audio_memory.h \
  /usr/local/include/rcsc/param/param_map.h \
@@ -914,8 +922,11 @@ sample_player-sample_player.o: sample_player.cpp \
  ../src/chain_action/actgen_strict_check_pass.h \
  ../src/chain_action/actgen_short_dribble.h \
  ../src/chain_action/actgen_simple_dribble.h \
- ../src/chain_action/actgen_shoot.h \
- ../src/chain_action/actgen_action_chain_length_filter.h
+ ../src/chain_action/actgen_shoot.h chain_action/actgen_short_pass.h \
+ chain_action/action_generator.h chain_action/actgen_area_pass.h \
+ ../src/chain_action/actgen_action_chain_length_filter.h \
+ utils/geo_utils.h /usr/local/include/rcsc/geom/polygon_2d.h \
+ utils/estimators/player_estimator.h
 
 /usr/include/stdc-predef.h:
 
@@ -1621,7 +1632,7 @@ sample_player.h:
 
 ../src/chain_action/action_state_pair.h:
 
-communication.h:
+communication/communication.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 
@@ -2041,7 +2052,7 @@ communication.h:
 
 strategy.h:
 
-soccer_role.h:
+roles/soccer_role.h:
 
 /usr/local/include/rcsc/factory.h:
 
@@ -2099,33 +2110,53 @@ sample_field_evaluator.h:
 
 ../src/chain_action/predict_state.h:
 
-sample_communication.h:
+communication/sample_communication.h:
 
-keepaway_communication.h:
+communication/communication.h:
 
-bhv_penalty_kick.h:
+communication/keepaway_communication.h:
+
+behaviours/bhv_penalty_kick.h:
 
 /usr/local/include/rcsc/player/soccer_action.h:
 
-bhv_set_play.h:
+behaviours/bhv_set_play.h:
 
-bhv_set_play_kick_in.h:
+behaviours/bhv_set_play_kick_in.h:
 
-bhv_set_play_indirect_free_kick.h:
+behaviours/bhv_set_play_indirect_free_kick.h:
 
-bhv_custom_before_kick_off.h:
+behaviours/bhv_custom_before_kick_off.h:
 
 ../src/chain_action/bhv_strict_check_shoot.h:
 
-view_tactical.h:
+actions/view_tactical.h:
 
-intention_receive.h:
+communication/intention_receive.h:
 
 /usr/local/include/rcsc/player/soccer_intention.h:
 
 /usr/include/c++/5/queue:
 
 /usr/include/c++/5/bits/stl_queue.h:
+
+cafe_model.h:
+
+utils/estimators/HERMES_FastIC.h:
+
+/usr/local/include/rcsc/common/logger.h:
+
+/usr/local/include/rcsc/geom/sector_2d.h:
+
+utils/allocators/player_relationship.h:
+
+../src/chain_action/../strategy.h:
+
+utils/allocators/../estimators/HERMES_FastIC.h:
+
+utils/allocators/./area_pass_generator.h:
+
+utils/allocators/./../estimators/HERMES_FastIC.h:
 
 /usr/local/include/rcsc/action/basic_actions.h:
 
@@ -2194,10 +2225,6 @@ intention_receive.h:
 /usr/local/include/rcsc/player/freeform_parser.h:
 
 /usr/local/include/rcsc/common/basic_client.h:
-
-/usr/local/include/rcsc/common/logger.h:
-
-/usr/local/include/rcsc/geom/sector_2d.h:
 
 /usr/local/include/rcsc/common/player_param.h:
 
@@ -2987,4 +3014,16 @@ intention_receive.h:
 
 ../src/chain_action/actgen_shoot.h:
 
+chain_action/actgen_short_pass.h:
+
+chain_action/action_generator.h:
+
+chain_action/actgen_area_pass.h:
+
 ../src/chain_action/actgen_action_chain_length_filter.h:
+
+utils/geo_utils.h:
+
+/usr/local/include/rcsc/geom/polygon_2d.h:
+
+utils/estimators/player_estimator.h:

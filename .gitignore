@@ -8,6 +8,8 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+*.o
+autom4te.cache
 # Generated files
 .idea/**/contentModel.xml
 

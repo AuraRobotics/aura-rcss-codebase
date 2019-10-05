@@ -1,92 +1,148 @@
 ## Process this file with automake to produce Makefile.in
-UTILSSOURCES = \
-    utils/geoUtils.cpp
 
-UTILSHEADERS = \
-    utils/geoUtils.h
+UTILSSOURCES = \
+    utils/utils.cpp \
+    utils/rcsc_utils.h \
+    utils/rcsc_utils.cpp \
+    utils/geo_utils.h \
+    utils/geo_utils.cpp \
+    utils/algo_utils.h \
+    utils/algo_utils.cpp \
+    utils/algorithms/hungarian.h \
+    utils/algorithms/hungarian.cpp \
+    utils/estimators/HERMES_FastIC.h \
+    utils/estimators/HERMES_FastIC.cpp \
+    utils/estimators/player_estimator.h \
+    utils/estimators/player_estimator.cpp \
+    utils/allocators/mark_target_allocator.h \
+    utils/allocators/mark_target_allocator.cpp \
+    utils/allocators/player_relationship.h \
+    utils/allocators/player_relationship.cpp \
+    utils/allocators/area_pass_generator.h \
+    utils/allocators/area_pass_generator.cpp \
+    utils/allocators/deep_pass_generator.h \
+    utils/allocators/deep_pass_generator.cpp
+
+
+
+
+BHV_Defense_SOURCE = \
+    behaviours/defense/bhv_basic_tackle.h \
+    behaviours/defense/bhv_basic_tackle.cpp \
+    behaviours/defense/bhv_defensive_positioning.h \
+    behaviours/defense/bhv_defensive_positioning.cpp \
+    behaviours/defense/bhv_block.h \
+    behaviours/defense/bhv_block.cpp\
+    behaviours/defense/bhv_mark_zone.h \
+    behaviours/defense/bhv_mark_zone.cpp \
+    behaviours/defense/bhv_mark_man.h \
+    behaviours/defense/bhv_mark_man.cpp \
+    behaviours/defense/bhv_mark_deep.h \
+    behaviours/defense/bhv_mark_deep.cpp \
+    behaviours/defense/bhv_intercept.h \
+    behaviours/defense/bhv_intercept.cpp
+
+
+BHV_Offense_SOURCE = \
+    behaviours/offense/bhv_offensive_positioning.h \
+    behaviours/offense/bhv_offensive_positioning.cpp \
+    behaviours/offense/bhv_pass_position.h \
+    behaviours/offense/bhv_pass_position.cpp 
+
+
+BHV_SOURCE = \
+    $(BHV_Defense_SOURCE) \
+    $(BHV_Offense_SOURCE) \
+    behaviours/bhv_basic_move.cpp \
+	behaviours/bhv_basic_offensive_kick.cpp \
+	behaviours/bhv_custom_before_kick_off.cpp \
+	behaviours/bhv_go_to_static_ball.cpp \
+	behaviours/bhv_goalie_basic_move.cpp \
+	behaviours/bhv_goalie_chase_ball.cpp \
+	behaviours/bhv_goalie_free_kick.cpp \
+	behaviours/bhv_prepare_set_play_kick.cpp \
+	behaviours/bhv_set_play.cpp \
+	behaviours/bhv_set_play_free_kick.cpp \
+	behaviours/bhv_set_play_goal_kick.cpp \
+	behaviours/bhv_set_play_indirect_free_kick.cpp \
+	behaviours/bhv_set_play_kick_in.cpp \
+	behaviours/bhv_set_play_kick_off.cpp \
+	behaviours/bhv_their_goal_kick_move.cpp \
+	behaviours/bhv_penalty_kick.cpp \
+    behaviours/bhv_basic_move.h \
+    behaviours/bhv_basic_offensive_kick.h \
+    behaviours/bhv_custom_before_kick_off.h \
+    behaviours/bhv_go_to_static_ball.h \
+    behaviours/bhv_goalie_basic_move.h \
+    behaviours/bhv_goalie_chase_ball.h \
+    behaviours/bhv_goalie_free_kick.h \
+    behaviours/bhv_prepare_set_play_kick.h \
+    behaviours/bhv_set_play.h \
+   	behaviours/bhv_set_play_free_kick.h \
+   	behaviours/bhv_set_play_goal_kick.h \
+   	behaviours/bhv_set_play_indirect_free_kick.h \
+   	behaviours/bhv_set_play_kick_in.h \
+   	behaviours/bhv_set_play_kick_off.h \
+    behaviours/bhv_their_goal_kick_move.h \
+    behaviours/bhv_penalty_kick.h
+
+
+ROLE_SOURCE = \
+    roles/soccer_role.h \
+    roles/role_center_back.h \
+    roles/role_center_forward.h \
+    roles/role_defensive_half.h \
+    roles/role_goalie.h \
+    roles/role_offensive_half.h \
+    roles/role_sample.h \
+    roles/role_side_back.h \
+    roles/role_side_forward.h \
+    roles/role_side_half.h \
+    roles/role_keepaway_keeper.h \
+    roles/role_keepaway_taker.h \
+    roles/soccer_role.cpp \
+    roles/role_center_back.cpp \
+    roles/role_center_forward.cpp \
+    roles/role_defensive_half.cpp \
+    roles/role_goalie.cpp \
+    roles/role_offensive_half.cpp \
+    roles/role_sample.cpp \
+    roles/role_side_back.cpp \
+    roles/role_side_forward.cpp \
+    roles/role_side_half.cpp \
+    roles/role_keepaway_keeper.cpp \
+    roles/role_keepaway_taker.cpp
+
+COMM_SOURCE = \
+    communication/communication.h \
+	communication/sample_communication.h \
+	communication/keepaway_communication.h \
+	communication/intention_receive.h \
+    communication/intention_wait_after_set_play_kick.h \
+    communication/sample_communication.cpp \
+    communication/keepaway_communication.cpp \
+    communication/intention_receive.cpp \
+    communication/intention_wait_after_set_play_kick.cpp
+
+ACTIONS_SOURCE = \
+	actions/neck_default_intercept_neck.h \
+	actions/neck_goalie_turn_neck.h \
+	actions/neck_offensive_intercept_neck.h \
+	actions/view_tactical.h \
+	actions/neck_default_intercept_neck.cpp \
+	actions/neck_goalie_turn_neck.cpp \
+	actions/neck_offensive_intercept_neck.cpp \
+	actions/view_tactical.cpp
 
 PLAYERSOURCES = \
-	bhv_basic_move.cpp \
-	bhv_basic_offensive_kick.cpp \
-	bhv_basic_tackle.cpp \
-	bhv_custom_before_kick_off.cpp \
-	bhv_go_to_static_ball.cpp \
-	bhv_goalie_basic_move.cpp \
-	bhv_goalie_chase_ball.cpp \
-	bhv_goalie_free_kick.cpp \
-	bhv_prepare_set_play_kick.cpp \
-	bhv_set_play.cpp \
-	bhv_set_play_free_kick.cpp \
-	bhv_set_play_goal_kick.cpp \
-	bhv_set_play_indirect_free_kick.cpp \
-	bhv_set_play_kick_in.cpp \
-	bhv_set_play_kick_off.cpp \
-	bhv_their_goal_kick_move.cpp \
-	bhv_penalty_kick.cpp \
-	neck_default_intercept_neck.cpp \
-	neck_goalie_turn_neck.cpp \
-	neck_offensive_intercept_neck.cpp \
-	view_tactical.cpp \
-	intention_receive.cpp \
-	intention_wait_after_set_play_kick.cpp \
-	soccer_role.cpp \
-	role_center_back.cpp \
-	role_center_forward.cpp \
-	role_defensive_half.cpp \
-	role_goalie.cpp \
-	role_offensive_half.cpp \
-	role_sample.cpp \
-	role_side_back.cpp \
-	role_side_forward.cpp \
-	role_side_half.cpp \
-	role_keepaway_keeper.cpp \
-	role_keepaway_taker.cpp \
-	sample_communication.cpp \
-	keepaway_communication.cpp \
+    cafe_model.cpp \
 	sample_field_evaluator.cpp \
 	sample_player.cpp \
 	strategy.cpp \
 	main_player.cpp
 
 PLAYERHEADERS = \
-	bhv_basic_move.h \
-	bhv_basic_offensive_kick.h \
-	bhv_basic_tackle.h \
-	bhv_custom_before_kick_off.h \
-	bhv_go_to_static_ball.h \
-	bhv_goalie_basic_move.h \
-	bhv_goalie_chase_ball.h \
-	bhv_goalie_free_kick.h \
-	bhv_prepare_set_play_kick.h \
-	bhv_set_play.h \
-	bhv_set_play_free_kick.h \
-	bhv_set_play_goal_kick.h \
-	bhv_set_play_indirect_free_kick.h \
-	bhv_set_play_kick_in.h \
-	bhv_set_play_kick_off.h \
-	bhv_their_goal_kick_move.h \
-	bhv_penalty_kick.h \
-	neck_default_intercept_neck.h \
-	neck_goalie_turn_neck.h \
-	neck_offensive_intercept_neck.h \
-	view_tactical.h \
-	intention_receive.h \
-	intention_wait_after_set_play_kick.h \
-	soccer_role.h \
-	role_center_back.h \
-	role_center_forward.h \
-	role_defensive_half.h \
-	role_goalie.h \
-	role_offensive_half.h \
-	role_sample.h \
-	role_side_back.h \
-	role_side_forward.h \
-	role_side_half.h \
-	role_keepaway_keeper.h \
-	role_keepaway_taker.h \
-	communication.h \
-	sample_communication.h \
-	keepaway_communication.h \
+    cafe_model.h\
 	sample_field_evaluator.h \
 	sample_player.h \
 	strategy.h
@@ -160,7 +216,11 @@ CHAINACTIONSOURCES = \
 	chain_action/strict_check_pass_generator.cpp \
 	chain_action/strict_check_pass_generator.h \
 	chain_action/tackle_generator.cpp \
-	chain_action/tackle_generator.h
+	chain_action/tackle_generator.h \
+	chain_action/actgen_short_pass.h \
+	chain_action/actgen_short_pass.cpp \
+	chain_action/actgen_area_pass.h \
+	chain_action/actgen_area_pass.cpp
 
 COACHSOURCES = \
 	sample_coach.cpp \
@@ -231,7 +291,14 @@ noinst_DATA = \
 
 sample_player_SOURCES = \
 	$(CHAINACTIONSOURCES) \
+	$(BHV_SOURCE) \
+	$(ROLE_SOURCE) \
+	$(ACTIONS_SOURCE)  \
+	$(COMM_SOURCE) \
+	$(UTILSSOURCES) \
 	$(PLAYERSOURCES)
+
+
 sample_player_CXXFLAGS = -W -Wall
 sample_player_LDFLAGS =
 sample_player_LDADD =

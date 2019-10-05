@@ -1223,7 +1223,7 @@ FieldAnalyzer::update( const WorldModel & wm )
     Timer timer;
 #endif
 
-    // updateVoronoiDiagram( wm );
+     updateVoronoiDiagram( wm );
 
 #ifdef DEBUG_PRINT
     dlog.addText( Logger::TEAM,

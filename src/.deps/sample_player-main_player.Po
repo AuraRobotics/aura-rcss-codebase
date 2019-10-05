@@ -292,7 +292,7 @@ sample_player-main_player.o: main_player.cpp /usr/include/stdc-predef.h \
  /usr/local/include/rcsc/geom/region_2d.h \
  /usr/local/include/rcsc/geom/size_2d.h \
  /usr/local/include/rcsc/geom/line_2d.h \
- ../src/chain_action/action_state_pair.h communication.h \
+ ../src/chain_action/action_state_pair.h communication/communication.h \
  /usr/local/include/rcsc/player/player_agent.h \
  /usr/local/include/rcsc/player/action_effector.h \
  /usr/local/include/rcsc/player/player_command.h \
@@ -1201,7 +1201,7 @@ sample_player.h:
 
 ../src/chain_action/action_state_pair.h:
 
-communication.h:
+communication/communication.h:
 
 /usr/local/include/rcsc/player/player_agent.h:
 

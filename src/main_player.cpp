@@ -96,7 +96,7 @@ main( int argc, char **argv )
      */
     std::cout << "*****************************************************************\n"
               << " This program is based on agent2d created by Hidehisa Akiyama.\n"
-              << " Copyright 2006 - 2011. Hidehisa Akiyama and Hiroki Shimora.\n"
+              << " Copyright 2006 - 2011. Hidenullptrhisa Akiyama and Hiroki Shimora.\n"
               << " All rights reserved.\n"
               << "*****************************************************************\n"
               << std::flush;

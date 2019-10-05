@@ -32,7 +32,7 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 
-#include "soccer_role.h"
+#include "roles/soccer_role.h"
 
 #include <rcsc/formation/formation.h>
 #include <rcsc/geom/vector_2d.h>
@@ -45,8 +45,9 @@
 // # define USE_GENERIC_FACTORY 1
 
 namespace rcsc {
-class CmdLineParser;
-class WorldModel;
+    class CmdLineParser;
+
+    class WorldModel;
 }
 
 enum PositionType {
@@ -62,6 +63,21 @@ enum SituationType {
     OurSetPlay_Situation,
     OppSetPlay_Situation,
     PenaltyKick_Situation,
+};
+
+
+enum RoleGroup {
+    None, KeepGoal, Defense, Halfback, Offensive
+};
+
+enum RoleType {
+    Goalie, SideBack, CenterBack, DefensiveHalf, SideHalf, OffensiveHalf, SideForward, CenterForward,
+
+    Sample, RoleKeepawayKeeper, RoleKeepawayTaker
+};
+
+enum DefenseMode {
+    Normal, Dangerous
 };
 
 
@@ -83,22 +99,29 @@ public:
 
     enum BallArea {
         BA_CrossBlock, BA_DribbleBlock, BA_DribbleAttack, BA_Cross,
-        BA_Stopper,    BA_DefMidField,  BA_OffMidField,   BA_ShootChance,
+        BA_Stopper, BA_DefMidField, BA_OffMidField, BA_ShootChance,
         BA_Danger,
 
         BA_None
     };
 
+    static double danger_sep_x;
+    static double danger_set_dist_goal;
+    static DefenseMode defense_mode;
 private:
     //
     // factories
     //
 #ifndef USE_GENERIC_FACTORY
-    typedef std::map< std::string, SoccerRole::Creator > RoleFactory;
-    typedef std::map< std::string, rcsc::Formation::Creator > FormationFactory;
+    typedef std::map <std::string, SoccerRole::Creator> RoleFactory;
+    typedef std::map <std::string, rcsc::Formation::Creator> FormationFactory;
+    typedef std::map <std::string, RoleType> RoleTypeMaper;
+    typedef std::map <RoleType, RoleGroup> RoleTypeGroupMaper;
 
     RoleFactory M_role_factory;
+    RoleTypeMaper M_role_type_mapper;
     FormationFactory M_formation_factory;
+    RoleTypeGroupMaper M_role_group_mapper;
 #endif
 
 
@@ -130,47 +153,50 @@ private:
     SituationType M_current_situation;
 
     // role assignment
-    std::vector< int > M_role_number;
+    std::vector<int> M_role_number;
+    std::vector <RoleType> M_role_type;
 
     // current home positions
-    std::vector< PositionType > M_position_types;
-    std::vector< rcsc::Vector2D > M_positions;
+    std::vector <PositionType> M_position_types;
+    std::vector <rcsc::Vector2D> M_positions;
 
     // private for singleton
     Strategy();
 
     // not used
-    Strategy( const Strategy & );
-    const Strategy & operator=( const Strategy & );
+    Strategy(const Strategy &);
+
+    const Strategy &operator=(const Strategy &);
+
 public:
 
     static
-    Strategy & instance();
+    Strategy &instance();
 
     static
     const
-    Strategy & i()
-      {
-          return instance();
-      }
+    Strategy &i() {
+        return instance();
+    }
 
     //
     // initialization
     //
 
-    bool init( rcsc::CmdLineParser & cmd_parser );
-    bool read( const std::string & config_dir );
+    bool init(rcsc::CmdLineParser &cmd_parser);
+
+    bool read(const std::string &config_dir);
 
 
     //
     // update
     //
 
-    void update( const rcsc::WorldModel & wm );
+    void update(const rcsc::WorldModel &wm);
 
 
-    void exchangeRole( const int unum0,
-                       const int unum1 );
+    void exchangeRole(const int unum0,
+                      const int unum1);
 
     //
     // accessor to the current information
@@ -178,39 +204,73 @@ public:
 
     int goalieUnum() const { return M_goalie_unum; }
 
-    int roleNumber( const int unum ) const
-      {
-          if ( unum < 1 || 11 < unum ) return unum;
-          return M_role_number[unum - 1];
-      }
+    int roleNumber(const int unum) const {
+        if (unum < 1 || 11 < unum) return unum;
+        return M_role_number[unum - 1];
+    }
 
-    bool isMarkerType( const int unum ) const;
+    RoleGroup getRoleGroup(const int unum) const {
+        if (unum < 1 || 11 < unum) return None;
+        return M_role_group_mapper.find(M_role_type[unum - 1])->second;
+    }
+
+    RoleType getRoleType(const int unum) const {
+        if (unum < 1 || 11 < unum) return Sample;
+        return M_role_type[unum - 1];
+    }
+
+    bool isMarkerType(const int unum) const;
 
 
-    SoccerRole::Ptr createRole( const int unum,
-                                const rcsc::WorldModel & wm ) const;
-    PositionType getPositionType( const int unum ) const;
-    rcsc::Vector2D getPosition( const int unum ) const;
+    SoccerRole::Ptr createRole(const int unum,
+                               const rcsc::WorldModel &wm) const;
 
+    PositionType getPositionType(const int unum) const;
+
+    rcsc::Vector2D getPosition(const int unum) const;
+
+    std::vector <rcsc::Vector2D> getPositions() const;
+
+    SituationType getSituation() const {
+        return M_current_situation;
+    }
 
 private:
-    void updateSituation( const rcsc::WorldModel & wm );
+    void updateSituation(const rcsc::WorldModel &wm);
+
     // update the current position table
-    void updatePosition( const rcsc::WorldModel & wm );
+    void updatePosition(const rcsc::WorldModel &wm);
 
-    rcsc::Formation::Ptr readFormation( const std::string & filepath );
-    rcsc::Formation::Ptr createFormation( const std::string & type_name ) const;
+    void updateRole(const rcsc::WorldModel &wm);
 
-    rcsc::Formation::Ptr getFormation( const rcsc::WorldModel & wm ) const;
+    rcsc::Formation::Ptr readFormation(const std::string &filepath);
+
+    rcsc::Formation::Ptr createFormation(const std::string &type_name) const;
+
+    rcsc::Formation::Ptr getFormation(const rcsc::WorldModel &wm) const;
 
 public:
     static
-    BallArea get_ball_area( const rcsc::WorldModel & wm );
-    static
-    BallArea get_ball_area( const rcsc::Vector2D & ball_pos );
+    BallArea get_ball_area(const rcsc::WorldModel &wm);
 
     static
-    double get_normal_dash_power( const rcsc::WorldModel & wm );
+    BallArea get_ball_area(const rcsc::Vector2D &ball_pos);
+
+    static
+    double get_normal_dash_power(const rcsc::WorldModel &wm, const Strategy &stra);
+
+    double getDeffanceLine() const;
+
+    std::vector<int> getGroupPlayer(RoleGroup group) const;
+
+    double getNearsetPosDist(unsigned unum, RoleGroup role_group = None) const;
+
+    double getNearsetPosDistGroup(unsigned unum) const;
+
+    double getPlayerZoneRadius(unsigned unum) const;
+
+    rcsc::Vector2D getNearsetPos(unsigned unum, RoleGroup role_group = None) const;
+
 };
 
 #endif

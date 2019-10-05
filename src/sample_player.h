@@ -29,7 +29,7 @@
 
 #include "action_generator.h"
 #include "field_evaluator.h"
-#include "communication.h"
+#include "communication/communication.h"
 
 #include <rcsc/player/player_agent.h>
 #include <vector>
@@ -91,6 +91,8 @@ private:
     bool doShoot();
     bool doForceKick();
     bool doHeardPassReceive();
+
+    bool test();
 
 public:
     virtual
