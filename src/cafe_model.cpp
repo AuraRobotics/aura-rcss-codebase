@@ -226,20 +226,39 @@ const PlayerObject *CafeModel::getBallLord() const {
 }
 
 
-rcsc::Vector2D CafeModel::getOptimizedPosition(const rcsc::Vector2D &form_pos) const {
+rcsc::Vector2D CafeModel::getOptimizedPosition(const rcsc::Vector2D &form_pos, const RoleGroup role_group) const {
 
-    if (Strategy::defense_mode == Dangerous) {
-        return form_pos;
+    SituationType situation_type = Strategy::i().getSituation();
+
+    switch (situation_type) {
+        case Normal_Situation: {
+            return form_pos;
+        }
+        case Offense_Situation: {
+            if (role_group == Offensive) {
+                double their_offside_line_x = wm->offsideLineX();
+                double form_pos_x = std::min(form_pos.x, their_offside_line_x);
+                return Vector2D((form_pos_x + their_offside_line_x) / 2, form_pos.y);
+            }
+            return form_pos;
+        }
+        case Defense_Situation: {
+            if (Strategy::defense_mode == Dangerous) {
+                return form_pos;
+            }
+            double form_pos_x = std::max(form_pos.x, our_offside_line);
+            form_pos_x = form_pos.x;
+            return Vector2D((form_pos_x + form_pos.x) / 2, form_pos.y);
+        }
+
+        default: {
+            return form_pos;
+        }
     }
-
-    double form_pos_x = std::max(form_pos.x, our_offside_line);
-    form_pos_x = form_pos.x;
-    return Vector2D((form_pos_x + form_pos.x) / 2, form_pos.y);
 }
 
 
-const rcsc::PlayerObject * CafeModel::nearsetOpp(const int unum) {
-
+const rcsc::PlayerObject *CafeModel::nearsetOpp(const int unum) {
 
 
 }

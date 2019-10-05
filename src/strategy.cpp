@@ -803,7 +803,7 @@ Strategy::getPosition(const int unum) const {
         return Vector2D::INVALIDATED;
     }
 
-    return CafeModel::i().getOptimizedPosition(temp_form_pos);
+    return CafeModel::i().getOptimizedPosition(temp_form_pos, getRoleGroup(unum));
 
 }
 

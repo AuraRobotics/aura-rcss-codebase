@@ -74,6 +74,7 @@ static double max_area_cover = INT_MIN;
 
 
 static std::vector <std::vector<double> > table_near_to_goal;
+static std::vector <std::vector<double> > table_free_space;
 static std::vector <std::vector<double> > table_body_dir;
 static std::vector <std::vector<double> > table_final_score;
 
@@ -106,7 +107,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
     double path_dist = rcscUtils::ballPathDistWithMaxSpeed(20);//TODO why 20?
 
 
-    double search_radius = 5;//TODO dynamic
+    double search_radius = 7;//TODO dynamic
     std::pair<double, double> check_line_y(self_form_pos.y - search_radius, self_form_pos.y + search_radius);
     std::pair<double, double> check_line_x(self_form_pos.x - search_radius, self_form_pos.x + search_radius);
 
@@ -121,6 +122,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
     ////DEBUG
 
     table_near_to_goal.clear();
+    table_free_space.clear();
     table_body_dir.clear();
     table_final_score.clear();
     ///////////////////////////////////////
@@ -130,20 +132,22 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
     fastICConfig(fastIC, agent);
 
 
-    for (int i = check_line_x.first; i <= check_line_x.second; i++) {
+    for (int i = check_line_x.first; i <= check_line_x.second; i += 2) {
         //////DEBUGG
 
         table_near_to_goal.push_back(std::vector<double>());
+        table_free_space.push_back(std::vector<double>());
         table_body_dir.push_back(std::vector<double>());
         table_final_score.push_back(std::vector<double>());
         /////DEBUG
-        for (int j = check_line_y.first; j <= check_line_y.second; j++) {
+        for (int j = check_line_y.first; j <= check_line_y.second; j += 2) {
             Vector2D check_point(i, j);
 
 
             if (!checkPosIsValid(check_point, self_pos, ball_lord_pos, x_offside)) {
                 ///////////
                 table_near_to_goal.back().push_back(0);
+                table_free_space.back().push_back(0);
                 table_body_dir.back().push_back(0);
                 table_final_score.back().push_back(0);
                 ///////////////////////////////////////////////////
@@ -175,6 +179,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
 
             if (fastestPlayer != NULL && cycle_pass_me > cycle_opp_intercept) {
                 ///////////
+                table_free_space.back().push_back(-0.01);
                 table_near_to_goal.back().push_back(-0.01);
                 table_body_dir.back().push_back(-0.01);
                 table_final_score.back().push_back(-0.01);
@@ -185,15 +190,17 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
             double temp_score = 0;
 
             double near_to_body_dir =
-                    nearToBodyDir(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 1;
+                    nearToBodyDir(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0;
             double near_to_goal = nearToGoal(check_point, 2 * search_radius) * 1;
+            double free_space = freeSpace(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0.3;
 
             temp_score += near_to_body_dir;
             temp_score += near_to_goal;
-
+            temp_score += free_space;
 
             ///////////
             table_near_to_goal.back().push_back(near_to_goal);
+            table_free_space.back().push_back(free_space);
             table_body_dir.back().push_back(near_to_body_dir);
             ///////////////////////////////////////////////////
 
@@ -212,6 +219,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
     }
 
 
+    log_table(table_free_space, "table_free_space ");
     log_table(table_near_to_goal, "table_near_to_goal ");
     log_table(table_body_dir, "table_body_dir ");
     log_table(table_final_score, "final score ");
@@ -262,7 +270,11 @@ bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2
     const CafeModel &cm = CafeModel::i();
 
 
-    if(check_point.x > offside_x){
+    if (check_point.x > offside_x) {
+        return false;
+    }
+
+    if(std::abs(check_point.y) > 32 ){
         return false;
     }
 
@@ -288,11 +300,44 @@ double Bhv_PassPosition::nearToBodyDir(rcsc::Vector2D check_point, rcsc::Vector2
 }
 
 
+double Bhv_PassPosition::freeSpace(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D ball_pos,
+                                   double max_radius2, rcsc::PlayerAgent *agent) {
+    const WorldModel &wm = agent->world();
+
+    double min_dist = INT_MAX;
+
+
+    for (AbstractPlayerCont::const_iterator
+                 o = wm.theirPlayers().begin(),
+                 end = wm.theirPlayers().end();
+         o != end;
+         ++o) {
+
+        if (!(*o)) {
+            continue;
+        }
+
+        Vector2D temp_pos = (*o)->pos();
+        double temp_dist = temp_pos.dist(check_point);
+
+        if (temp_dist < min_dist) {
+            min_dist = temp_dist;
+        }
+
+    }
+
+    if(min_dist > max_radius2){
+        return 1;
+    }
+
+    return min_dist / max_radius2;
+}
+
 double Bhv_PassPosition::nearToGoal(rcsc::Vector2D check_point, double max_radius2) {
     const ServerParam &SP = ServerParam::i();
     const Vector2D our_goal = SP.theirTeamGoalPos();
     double dist_from_goal = our_goal.dist(check_point);
-    return (100 - dist_from_goal) / 100;
+    return (55 - dist_from_goal) / 55;
 }
 
 #include "../../utils/utils.cpp"

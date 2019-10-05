@@ -63,7 +63,7 @@ private:
 
     const rcsc::AbstractPlayerObject *getPlayerInPos(const rcsc::Vector2D pos);
 
-    const void createGraph(FastIC *fic);
+    const void createGraph();
 
     const void *processPath(const int ball_lord_unum) const;
 

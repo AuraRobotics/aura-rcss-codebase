@@ -19,7 +19,10 @@ UTILSSOURCES = \
     utils/allocators/player_relationship.h \
     utils/allocators/player_relationship.cpp \
     utils/allocators/area_pass_generator.h \
-    utils/allocators/area_pass_generator.cpp
+    utils/allocators/area_pass_generator.cpp \
+    utils/allocators/deep_pass_generator.h \
+    utils/allocators/deep_pass_generator.cpp
+
 
 
 

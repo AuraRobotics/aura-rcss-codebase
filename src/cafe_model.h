@@ -76,7 +76,7 @@ public:
 
     const rcsc::PlayerObject *getBallLord() const;
 
-    rcsc::Vector2D getOptimizedPosition(const rcsc::Vector2D &form_pos) const;
+    rcsc::Vector2D getOptimizedPosition(const rcsc::Vector2D &form_pos, const RoleGroup role_group) const;
 
     const PlayerRelationship &playerRel() const{
         return (*player_rel);

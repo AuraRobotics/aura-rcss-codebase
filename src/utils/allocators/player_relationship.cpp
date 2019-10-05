@@ -8,6 +8,7 @@
 #include <iostream>
 #include "../rcsc_utils.h"
 #include "./area_pass_generator.h"
+#include "./deep_pass_generator.h"
 
 using namespace rcsc;
 
@@ -15,6 +16,11 @@ std::vector<int> PlayerRelationship::path_to_[11];
 FastIC *PlayerRelationship::fic;
 
 void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
+
+
+    this->fic = fic;
+    fic->setByWorldModel();
+
 
     M_triangulation.clear();
     for (int i = 0; i < 11; i++) {
@@ -27,7 +33,7 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
     M_triangulation.updateVoronoiVertex();
 
     calcRelations();
-    createGraph(fic);
+    createGraph();
 
     AreaPassGenerator area_pass_generator(relationships, wm, fic);
     area_pass_generator.generate();
@@ -36,6 +42,9 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
         area_pass[i] = area_pass_generator.getAreaPass(i + 1);
     }
 
+
+    DeepPassGenerator deep_pass_generator(relationships, wm, fic);
+    deep_pass_generator.generate();
 }
 
 void PlayerRelationship::addVertexs() {
@@ -158,7 +167,7 @@ rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const
  */
 static FastIC *fic;
 
-const void PlayerRelationship::createGraph(FastIC *fastIC) {
+const void PlayerRelationship::createGraph() {
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
@@ -169,9 +178,6 @@ const void PlayerRelationship::createGraph(FastIC *fastIC) {
         short_pass[i].clear();
     }
 
-
-    fic = fastIC;
-    fic->setByWorldModel();
 
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < relationships[i].size(); j++) {
@@ -219,6 +225,20 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
     const Vector2D &player_first_pos = player_first->pos();
     const Vector2D &player_second_pos = player_second->pos();
 
+    double x_offside = wm.offsideLineX();
+
+
+    if(x_offside < player_second_pos.x){
+        return true;
+    }
+
+    if(player_first_pos.dist(player_second_pos) < 2){
+        return true;
+    }
+    if (player_second->goalie()) {
+        return true;
+    }
+
 
     double pass_dist = player_first_pos.dist(player_second_pos);
     const double max_receive_ball_speed = 1.24;
@@ -252,9 +272,6 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
         return true;
     }
 
-    if (player_second->goalie()) {
-        return true;
-    }
 
 
     return false;

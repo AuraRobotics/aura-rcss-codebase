@@ -202,7 +202,8 @@ am__objects_9 = utils/sample_player-utils.$(OBJEXT) \
 	utils/estimators/sample_player-player_estimator.$(OBJEXT) \
 	utils/allocators/sample_player-mark_target_allocator.$(OBJEXT) \
 	utils/allocators/sample_player-player_relationship.$(OBJEXT) \
-	utils/allocators/sample_player-area_pass_generator.$(OBJEXT)
+	utils/allocators/sample_player-area_pass_generator.$(OBJEXT) \
+	utils/allocators/sample_player-deep_pass_generator.$(OBJEXT)
 am__objects_10 = sample_player-cafe_model.$(OBJEXT) \
 	sample_player-sample_field_evaluator.$(OBJEXT) \
 	sample_player-sample_player.$(OBJEXT) \
@@ -417,7 +418,9 @@ UTILSSOURCES = \
     utils/allocators/player_relationship.h \
     utils/allocators/player_relationship.cpp \
     utils/allocators/area_pass_generator.h \
-    utils/allocators/area_pass_generator.cpp
+    utils/allocators/area_pass_generator.cpp \
+    utils/allocators/deep_pass_generator.h \
+    utils/allocators/deep_pass_generator.cpp
 
 BHV_Defense_SOURCE = \
     behaviours/defense/bhv_basic_tackle.h \
@@ -1071,6 +1074,9 @@ utils/allocators/sample_player-player_relationship.$(OBJEXT):  \
 utils/allocators/sample_player-area_pass_generator.$(OBJEXT):  \
 	utils/allocators/$(am__dirstamp) \
 	utils/allocators/$(DEPDIR)/$(am__dirstamp)
+utils/allocators/sample_player-deep_pass_generator.$(OBJEXT):  \
+	utils/allocators/$(am__dirstamp) \
+	utils/allocators/$(DEPDIR)/$(am__dirstamp)
 
 sample_player$(EXEEXT): $(sample_player_OBJECTS) $(sample_player_DEPENDENCIES) $(EXTRA_sample_player_DEPENDENCIES) 
 	@rm -f sample_player$(EXEEXT)
@@ -1190,6 +1196,7 @@ include utils/$(DEPDIR)/sample_player-rcsc_utils.Po
 include utils/$(DEPDIR)/sample_player-utils.Po
 include utils/algorithms/$(DEPDIR)/sample_player-hungarian.Po
 include utils/allocators/$(DEPDIR)/sample_player-area_pass_generator.Po
+include utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Po
 include utils/allocators/$(DEPDIR)/sample_player-mark_target_allocator.Po
 include utils/allocators/$(DEPDIR)/sample_player-player_relationship.Po
 include utils/estimators/$(DEPDIR)/sample_player-HERMES_FastIC.Po
@@ -2470,6 +2477,20 @@ utils/allocators/sample_player-area_pass_generator.obj: utils/allocators/area_pa
 #	$(AM_V_CXX)source='utils/allocators/area_pass_generator.cpp' object='utils/allocators/sample_player-area_pass_generator.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-area_pass_generator.obj `if test -f 'utils/allocators/area_pass_generator.cpp'; then $(CYGPATH_W) 'utils/allocators/area_pass_generator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/area_pass_generator.cpp'; fi`
+
+utils/allocators/sample_player-deep_pass_generator.o: utils/allocators/deep_pass_generator.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-deep_pass_generator.o -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Tpo -c -o utils/allocators/sample_player-deep_pass_generator.o `test -f 'utils/allocators/deep_pass_generator.cpp' || echo '$(srcdir)/'`utils/allocators/deep_pass_generator.cpp
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Tpo utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Po
+#	$(AM_V_CXX)source='utils/allocators/deep_pass_generator.cpp' object='utils/allocators/sample_player-deep_pass_generator.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-deep_pass_generator.o `test -f 'utils/allocators/deep_pass_generator.cpp' || echo '$(srcdir)/'`utils/allocators/deep_pass_generator.cpp
+
+utils/allocators/sample_player-deep_pass_generator.obj: utils/allocators/deep_pass_generator.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT utils/allocators/sample_player-deep_pass_generator.obj -MD -MP -MF utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Tpo -c -o utils/allocators/sample_player-deep_pass_generator.obj `if test -f 'utils/allocators/deep_pass_generator.cpp'; then $(CYGPATH_W) 'utils/allocators/deep_pass_generator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/deep_pass_generator.cpp'; fi`
+	$(AM_V_at)$(am__mv) utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Tpo utils/allocators/$(DEPDIR)/sample_player-deep_pass_generator.Po
+#	$(AM_V_CXX)source='utils/allocators/deep_pass_generator.cpp' object='utils/allocators/sample_player-deep_pass_generator.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o utils/allocators/sample_player-deep_pass_generator.obj `if test -f 'utils/allocators/deep_pass_generator.cpp'; then $(CYGPATH_W) 'utils/allocators/deep_pass_generator.cpp'; else $(CYGPATH_W) '$(srcdir)/utils/allocators/deep_pass_generator.cpp'; fi`
 
 sample_player-cafe_model.o: cafe_model.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT sample_player-cafe_model.o -MD -MP -MF $(DEPDIR)/sample_player-cafe_model.Tpo -c -o sample_player-cafe_model.o `test -f 'cafe_model.cpp' || echo '$(srcdir)/'`cafe_model.cpp
