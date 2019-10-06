@@ -40,7 +40,7 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 }
 
 void PlayerRelationship::calcKickable() {
-    if(!wm.self().isKickable()){
+    if(!wm.self().isKickable() && wm.self().unum() != 8){
         return;
     }
 
@@ -54,8 +54,8 @@ void PlayerRelationship::calcKickable() {
         area_pass[i] = area_pass_generator.getAreaPass(i + 1);
     }
 
-    std::cout << " time area pass : " << clock() - start_time << std::endl;
-    start_time = clock();
+//    std::cout << " time area pass : " << clock() - start_time << std::endl;
+//    start_time = clock();
 
     DeepPassGenerator deep_pass_generator(relationships, wm, fic);
     deep_pass_generator.generate();
@@ -63,8 +63,8 @@ void PlayerRelationship::calcKickable() {
     for (int i = 0; i < 11; i++) {
         deep_pass[i] = deep_pass_generator.getDirectPass(i + 1);
     }
-    std::cout << " time deep pass : " << clock() - start_time << std::endl;
-    start_time = clock();
+//    std::cout << " time deep pass : " << clock() - start_time << std::endl;
+//    start_time = clock();
 }
 
 void PlayerRelationship::addVertexs() {
@@ -257,7 +257,7 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
         return true;
     }
 
-    if (player_first_pos.dist(player_second_pos) < 2) {
+    if (player_first_pos.dist(player_second_pos) < 4) {
         return true;
     }
     if (player_second->goalie()) {

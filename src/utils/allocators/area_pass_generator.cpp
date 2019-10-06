@@ -38,6 +38,10 @@ void AreaPassGenerator::generate() {
                 continue;
             }
 
+            if((*resiver_it)->pos().dist(sender->pos()) < 5){
+                continue;
+            }
+
             Vector2D best_area_pass = generateAreaPass(sender, (*resiver_it));
             if (best_area_pass == Vector2D::INVALIDATED) {
                 continue;

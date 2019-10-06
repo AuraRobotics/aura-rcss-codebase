@@ -194,10 +194,13 @@ evaluate_state(const PredictState &state) {
     double *dist_opp = new double(DBL_MAX);
     const AbstractPlayerObject *nearest_opp = state.getOpponentNearestTo(holder->pos(), 1, dist_opp);
 
-    if (dist_opp && (*dist_opp) < 5) {
+    if (dist_opp && (*dist_opp) < 2.5) {
         return -DBL_MAX / 2.0;
     }
 
+    if (dist_opp && (*dist_opp) < 5) {
+        return -DBL_MAX / 3.0;
+    }
 
     if (dist_opp && (*dist_opp) < 10) {
         point -= 10 - (*dist_opp) ;

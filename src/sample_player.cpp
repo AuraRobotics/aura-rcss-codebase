@@ -222,6 +222,8 @@ SamplePlayer::initImpl(CmdLineParser &cmd_parser) {
 void
 SamplePlayer::actionImpl() {
 
+
+
     const WorldModel &wm = this->world();
     clock_t start_time = clock();
     //
@@ -256,8 +258,12 @@ SamplePlayer::actionImpl() {
     ActionChainHolder::instance().update(world());
 
 //    }
-
-//    std::cout << " time --------------- : " << clock() - start_time << std::endl;
+    if (clock() - start_time > 20000) {
+        std::cout << " time &&&&#####################################" << std::endl;
+        std::cout << " time &&&&#####################################" << std::endl;
+        std::cout << " time &&&&#####################################" << std::endl;
+        std::cout << " time --------------- : " << clock() - start_time << std::endl;
+    }
 
     if (test()) {
         return;
@@ -746,6 +752,7 @@ SamplePlayer::createFieldEvaluator() const {
 #include "actgen_shoot.h"
 #include "chain_action/actgen_short_pass.h"
 #include "chain_action/actgen_area_pass.h"
+#include "chain_action/actgen_deep_pass.h"
 #include "actgen_action_chain_length_filter.h"
 
 ActionGenerator::ConstPtr
@@ -769,6 +776,13 @@ SamplePlayer::createActionGenerator() const {
 
     g->addGenerator(new ActGen_MaxActionChainLengthFilter
                             (new ActGen_AreaPass(), 1));
+
+    //
+    //  deep pass
+    //
+
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_DeepPass(), 1));
 
     //
     // shoot

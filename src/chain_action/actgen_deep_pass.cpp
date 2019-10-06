@@ -28,7 +28,7 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                  __FILE__":   actgen deepPass -----------------");
 
 
-    return;
+
     const ServerParam &SP = ServerParam::i();
     const Strategy &stra = Strategy::i();
     const CafeModel &cm = CafeModel::i();
@@ -89,15 +89,51 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                                                            angle_ball);
 
         const PlayerType * ptype = resiver->playerTypePtr();
-        const double max_receive_ball_speed = 1.225;
+        const double max_receive_ball_speed = 2;
 //
-        double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
+//        double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
+        double pass_speed = SP.ballSpeedMax();
 //
+        FastIC * fic = cm.fastIC();
+
+        Vector2D donor_to_me_vel = pass_pos - ball_pos;
+        while(pass_speed > 0.5){
+            donor_to_me_vel.setLength(pass_speed);
+
+            fic->refresh();
+            fic->setBall(ball_pos + donor_to_me_vel, donor_to_me_vel, 0);
+            fic->calculate();
+
+            const int pass_cycle = rcscUtils::ballCycle(dist_pass, pass_speed);
+            const AbstractPlayerObject *fastest_player = fic->getFastestPlayer();
+            const int fastest_player_cycle = fic->getFastestPlayerReachCycle();
+            const int fastest_opp_cycle = fic->getFastestOpponentReachCycle();
+
+
+            if (fastest_player == NULL) {
+                pass_speed -= 0.5;
+                continue;
+            }
+
+            if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
+                fastest_player_cycle < pass_cycle + 2 && fastest_player_cycle > 3 &&
+                fastest_player_cycle < fastest_opp_cycle - 3) {
+                break;
+            }
+
+            pass_speed -= 0.5;
+        }
+        if(pass_speed < 0.5){
+            continue;
+        }
+
+        pass_speed -= 0.18;
+
         CooperativeAction::Ptr pass_temp(new Pass(ball_holder_unum,
                                                   receiver_unum,
                                                   pass_pos,
                                                   pass_speed, 0, kick_count, 0,
-                                                  "description area pass"));
+                                                  "description deep pass"));
 
         result->push_back(ActionStatePair(pass_temp,
                                           new PredictState(state,
