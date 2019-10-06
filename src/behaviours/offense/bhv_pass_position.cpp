@@ -144,7 +144,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
             Vector2D check_point(i, j);
 
 
-            if (!checkPosIsValid(check_point, self_pos, ball_lord_pos, x_offside)) {
+            if (!checkPosIsValid(check_point, self_pos, ball_lord_pos, x_offside, wm)) {
                 ///////////
                 table_near_to_goal.back().push_back(0);
                 table_free_space.back().push_back(0);
@@ -265,7 +265,7 @@ void Bhv_PassPosition::fastICConfig(FastIC *fastIC, rcsc::PlayerAgent *agent) {
 }
 
 bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D opp_pos, rcsc::Vector2D ball_lord_pos,
-                                       double offside_x) {
+                                       double offside_x, const WorldModel & wm) {
     const ServerParam &SP = ServerParam::i();
     const CafeModel &cm = CafeModel::i();
 
@@ -276,6 +276,21 @@ bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2
 
     if(std::abs(check_point.y) > 32 ){
         return false;
+    }
+
+    const PlayerObject * nearest_mate = wm.teammatesFromSelf().front();
+    if(nearest_mate && nearest_mate->pos().dist(check_point) < 4.5){
+        return false;
+    }
+
+    const PlayerPtrCont::const_iterator end = wm.opponentsFromSelf().end();
+    for ( PlayerPtrCont::const_iterator o = wm.opponentsFromSelf().begin();
+          o != end;
+          ++o )
+    {
+        if((*o) && (*o)->pos().dist(check_point) < 4){
+            return false;
+        }
     }
 
     return true;

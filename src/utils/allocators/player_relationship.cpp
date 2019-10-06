@@ -20,11 +20,13 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
     this->fic = fic;
     fic->setByWorldModel();
-
+    fic->setMaxCycleAfterFirstFastestPlayer(5);
 
     M_triangulation.clear();
     for (int i = 0; i < 11; i++) {
         relationships[i].clear();
+        area_pass[i].clear();
+        deep_pass[i].clear();
     }
 
     addVertexs();
@@ -34,6 +36,16 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
     calcRelations();
     createGraph();
+    calcKickable();
+}
+
+void PlayerRelationship::calcKickable() {
+    if(!wm.self().isKickable()){
+        return;
+    }
+
+    clock_t start_time = clock();
+
 
     AreaPassGenerator area_pass_generator(relationships, wm, fic);
     area_pass_generator.generate();
@@ -42,13 +54,17 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
         area_pass[i] = area_pass_generator.getAreaPass(i + 1);
     }
 
+    std::cout << " time area pass : " << clock() - start_time << std::endl;
+    start_time = clock();
 
     DeepPassGenerator deep_pass_generator(relationships, wm, fic);
     deep_pass_generator.generate();
 
-    for ( int i=0; i< 11; i++){
+    for (int i = 0; i < 11; i++) {
         deep_pass[i] = deep_pass_generator.getDirectPass(i + 1);
     }
+    std::cout << " time deep pass : " << clock() - start_time << std::endl;
+    start_time = clock();
 }
 
 void PlayerRelationship::addVertexs() {
@@ -147,11 +163,11 @@ rcsc::AbstractPlayerCont PlayerRelationship::getShortPass(const int unum) const 
 }
 
 AreaPassCont PlayerRelationship::getAreaPass(const int unum) const {
-    return area_pass[unum -1];
+    return area_pass[unum - 1];
 }
 
 DeepPassCont PlayerRelationship::getDeepPass(const int unum) const {
-    return deep_pass[unum -1];
+    return deep_pass[unum - 1];
 }
 
 rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const int resiver) const {
@@ -187,15 +203,16 @@ const void PlayerRelationship::createGraph() {
     }
 
 
-    for (int i = 0; i < 11; i++) {
+    for (int i = 1; i < 11; i++) {
         for (int j = 0; j < relationships[i].size(); j++) {
             int temp_unum = relationships[i][j]->unum();
             if (temp_unum > 0) {
-                graph_full[i][temp_unum - 1] = getCost(i + 1, relationships[i][j]);
+                double cost = getCost(i + 1, relationships[i][j]);
+                graph_full[i][temp_unum - 1] = cost;
                 if (ignoreIterceptPass(i + 1, relationships[i][j])) {
                     continue;
                 }
-                graph_pass[i][temp_unum - 1] = getCost(i + 1, relationships[i][j]);
+                graph_pass[i][temp_unum - 1] = cost;
                 short_pass[i].push_back(relationships[i][j]);
             }
 
@@ -203,13 +220,13 @@ const void PlayerRelationship::createGraph() {
     }
 
 
-    printGraph(graph_full, "graph full");
-    printGraph(graph_pass, "graph pass");
+//    printGraph(graph_full, "graph full");
+//    printGraph(graph_pass, "graph pass");
 
     //////////////////////////////
 
-    const AbstractPlayerCont::const_iterator pass_end = short_pass[wm.self().unum() -1 ].end();
-    for (AbstractPlayerCont::const_iterator pass_resiver_it = short_pass[wm.self().unum() -1 ].begin();
+    const AbstractPlayerCont::const_iterator pass_end = short_pass[wm.self().unum() - 1].end();
+    for (AbstractPlayerCont::const_iterator pass_resiver_it = short_pass[wm.self().unum() - 1].begin();
          pass_resiver_it != pass_end;
          ++pass_resiver_it) {
 
@@ -236,11 +253,11 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
     double x_offside = wm.offsideLineX();
 
 
-    if(x_offside < player_second_pos.x){
+    if (x_offside < player_second_pos.x) {
         return true;
     }
 
-    if(player_first_pos.dist(player_second_pos) < 2){
+    if (player_first_pos.dist(player_second_pos) < 2) {
         return true;
     }
     if (player_second->goalie()) {
@@ -281,7 +298,6 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
     }
 
 
-
     return false;
 }
 
@@ -293,7 +309,7 @@ const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPla
     const Vector2D &player_first_pos = player_first->pos();
     const Vector2D &player_second_pos = player_second->pos();
 
-    if (player_second->goalie()) {
+    if (player_second->goalie() || player_second->unum() == 1) {
         return INT_MAX;
     }
 
@@ -306,10 +322,10 @@ const double PlayerRelationship::getCost(int unum_first, const rcsc::AbstractPla
     const int pass_cycle = rcscUtils::ballCycle(pass_dist, pass_speed);
     cost += pass_cycle * 10;
 
-    //////////////////////////////////
-    dlog.addLine(Logger::WORLD,
-                 player_first_pos, player_second_pos,
-                 "#42a7f5");
+    //////////////////////////////////  PERFORMANCE
+//    dlog.addLine(Logger::WORLD,
+//                 player_first_pos, player_second_pos,
+//                 "#42a7f5");
     ///////////////////////
 
     return cost;

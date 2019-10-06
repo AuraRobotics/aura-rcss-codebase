@@ -56,9 +56,6 @@ void ActGen_AreaPass::generate(std::vector <ActionStatePair> *result, const Pred
          area_pass_it != area_pass_end;
          ++area_pass_it) {
 
-
-
-
         const AbstractPlayerObject * resiver = (*area_pass_it).first;
         const Vector2D pass_pos = (*area_pass_it).second;
 

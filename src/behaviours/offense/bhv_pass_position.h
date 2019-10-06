@@ -29,7 +29,7 @@ private:
     rcsc::Vector2D getPassPos(rcsc::PlayerAgent *agent);
 
     bool checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
-                         rcsc::Vector2D ball_pos, double our_offside_x);
+                         rcsc::Vector2D ball_pos, double our_offside_x, const rcsc::WorldModel &wm);
 
 
     double nearToBodyDir(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,

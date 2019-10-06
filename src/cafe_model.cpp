@@ -28,6 +28,8 @@ void CafeModel::update(PlayerAgent *agent) {
 
 
     calcOurOffsideLine();
+
+
     player_rel->calc(agent, fic);
 }
 
@@ -204,7 +206,7 @@ rcsc::Vector2D CafeModel::getBallLordPos() const {
 }
 
 const PlayerObject *CafeModel::getBallLord() const {
-    const PlayerObject *lord;
+    const PlayerObject *lord = NULL;
     if (wm->ball().pos() == Vector2D::INVALIDATED) {
         return lord;
     }

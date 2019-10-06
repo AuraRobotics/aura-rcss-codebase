@@ -46,7 +46,7 @@ void AreaPassGenerator::generate() {
             area_pass[i].push_back(std::make_pair((*resiver_it), best_area_pass));
 
 
-            if (i == wm.self().unum() -1 ) {
+            if (i == wm.self().unum() - 1) {
                 //////////////////////////////////
                 dlog.addText(Logger::CROSS,
                              __FILE__": Area pass ::  %d -> %d  : %.2f %.2f", i + 1, (*resiver_it)->unum(),
@@ -69,10 +69,10 @@ void AreaPassGenerator::generate() {
 
 }
 
-
-static std::vector <std::vector<double> > table_near_goal;
-static std::vector <std::vector<double> > table_near_resiver;
-static std::vector <std::vector<double> > table_final_score;
+//
+//static std::vector <std::vector<double> > table_near_goal;
+//static std::vector <std::vector<double> > table_near_resiver;
+//static std::vector <std::vector<double> > table_final_score;
 
 const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObject *sender,
                                                    const rcsc::AbstractPlayerObject *resiver) {
@@ -97,18 +97,18 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
     Vector2D best_pos = Vector2D::INVALIDATED;
 
 
-    ////DEBUG
-
-    table_near_goal.clear();
-    table_near_resiver.clear();
-    table_final_score.clear();
+//    ////DEBUG
+//
+//    table_near_goal.clear();
+//    table_near_resiver.clear();
+//    table_final_score.clear();
     ///////////////////////////////////////
 
     for (int i = check_line_x.first; i <= check_line_x.second; i += 2) {
         //////DEBUGG
-        table_near_goal.push_back(std::vector<double>());
-        table_near_resiver.push_back(std::vector<double>());
-        table_final_score.push_back(std::vector<double>());
+//        table_near_goal.push_back(std::vector<double>());
+//        table_near_resiver.push_back(std::vector<double>());
+//        table_final_score.push_back(std::vector<double>());
         /////DEBUG
         for (int j = check_line_y.first; j <= check_line_y.second; j += 2) {
             Vector2D check_point(i, j);
@@ -129,8 +129,8 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
             temp_score += near_goal;
 
             ///////////
-            table_near_goal.back().push_back(near_goal);
-            table_near_resiver.back().push_back(near_resiver);
+//            table_near_goal.back().push_back(near_goal);
+//            table_near_resiver.back().push_back(near_resiver);
             ///////////////////////////////////////////////////
 
 
@@ -140,18 +140,18 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
                 best_pos = check_point;
             }
 
-//            dlog.addCircle(Logger::CROSS,
-//                           check_point, 0.5, "#0fff00", false);
+            dlog.addCircle(Logger::CROSS,
+                           check_point, 0.5, "#0fff00", false);
 
-            table_final_score.back().push_back(temp_score);
+//            table_final_score.back().push_back(temp_score);
         }
 
     }
 
-
-    log_table(table_near_goal, "table_near_goal ");
-    log_table(table_near_resiver, "table_near_resiver  ");
-    log_table(table_final_score, "final score ");
+//
+//    log_table(table_near_goal, "table_near_goal ");
+//    log_table(table_near_resiver, "table_near_resiver  ");
+//    log_table(table_final_score, "final score ");
 
 //
 //    dlog.addCircle(Logger::CROSS,
@@ -165,11 +165,11 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
 bool AreaPassGenerator::checkPosIsValid(const rcsc::Vector2D check_point, const rcsc::Vector2D sender_pos,
                                         const rcsc::Vector2D resiver_pos, double x_offside, const int resiver_unum) {
 
-    if(check_point.x > x_offside){
+    if (check_point.x > x_offside) {
         return false;
     }
 
-    if(std::abs(check_point.y) > 31){
+    if (std::abs(check_point.y) > 31) {
         return false;
     }
 

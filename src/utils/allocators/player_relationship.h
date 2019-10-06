@@ -61,9 +61,12 @@ public:
     DeepPassCont getDeepPass(const int unum) const;
 
 private:
+
     void addVertexs();
 
     void calcRelations();
+
+    void calcKickable();
 
     const rcsc::AbstractPlayerObject *getPlayerInPos(const rcsc::Vector2D pos);
 

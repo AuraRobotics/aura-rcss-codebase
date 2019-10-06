@@ -479,7 +479,12 @@ utils/allocators/sample_player-deep_pass_generator.o: \
  /usr/include/boost/core/no_exceptions_support.hpp \
  /usr/local/include/rcsc/common/logger.h \
  /usr/local/include/rcsc/geom/sector_2d.h \
- utils/allocators/../rcsc_utils.h
+ utils/allocators/../rcsc_utils.h utils/allocators/../../strategy.h \
+ utils/allocators/../../roles/soccer_role.h \
+ /usr/local/include/rcsc/factory.h /usr/include/c++/5/stack \
+ /usr/include/c++/5/bits/stl_stack.h \
+ /usr/local/include/rcsc/formation/formation.h \
+ /usr/local/include/rcsc/formation/sample_data.h
 
 /usr/include/stdc-predef.h:
 
@@ -1590,3 +1595,17 @@ utils/allocators/../estimators/HERMES_FastIC.h:
 /usr/local/include/rcsc/geom/sector_2d.h:
 
 utils/allocators/../rcsc_utils.h:
+
+utils/allocators/../../strategy.h:
+
+utils/allocators/../../roles/soccer_role.h:
+
+/usr/local/include/rcsc/factory.h:
+
+/usr/include/c++/5/stack:
+
+/usr/include/c++/5/bits/stl_stack.h:
+
+/usr/local/include/rcsc/formation/formation.h:
+
+/usr/local/include/rcsc/formation/sample_data.h:

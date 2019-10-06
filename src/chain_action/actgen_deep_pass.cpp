@@ -27,6 +27,8 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
     dlog.addText(Logger::Logger::ACTION_CHAIN,
                  __FILE__":   actgen deepPass -----------------");
 
+
+    return;
     const ServerParam &SP = ServerParam::i();
     const Strategy &stra = Strategy::i();
     const CafeModel &cm = CafeModel::i();

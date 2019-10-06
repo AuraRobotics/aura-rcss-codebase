@@ -27,6 +27,7 @@ public:
             relationships(rel), wm(wm) {
         this->fic = fic;
         fic->setByWorldModel();
+        fic->setMaxCycleAfterFirstFastestPlayer(4);
     }
 
 
@@ -35,6 +36,7 @@ public:
     AreaPassCont getAreaPass(const int unum) const {
         if(unum < 1 || unum > 11){
             std::cerr << __FILE__" unum is not True!" << std::endl;
+            exit(0);
         }
         return area_pass[unum -1];
     }

@@ -222,6 +222,8 @@ SamplePlayer::initImpl(CmdLineParser &cmd_parser) {
 void
 SamplePlayer::actionImpl() {
 
+    const WorldModel &wm = this->world();
+    clock_t start_time = clock();
     //
     // update strategy and analyzer
     //
@@ -250,8 +252,12 @@ SamplePlayer::actionImpl() {
     //
     // update action chain
     //
+//    if (wm.self().isKickable()) {
     ActionChainHolder::instance().update(world());
 
+//    }
+
+//    std::cout << " time --------------- : " << clock() - start_time << std::endl;
 
     if (test()) {
         return;
@@ -751,9 +757,9 @@ SamplePlayer::createActionGenerator() const {
     //
     //  short pass
     //
-
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_ShortPass(), 1));
+//
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_ShortPass(), 1));
 
 
 
@@ -762,14 +768,14 @@ SamplePlayer::createActionGenerator() const {
     //
 
     g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_AreaPass(), 3));
+                            (new ActGen_AreaPass(), 1));
 
     //
     // shoot
     //
-//    g->addGenerator(new ActGen_RangeActionChainLengthFilter
-//                            (new ActGen_Shoot(),
-//                             2, ActGen_RangeActionChainLengthFilter::MAX));
+    g->addGenerator(new ActGen_RangeActionChainLengthFilter
+                            (new ActGen_Shoot(),
+                             2, ActGen_RangeActionChainLengthFilter::MAX));
 
     //
     // strict check pass
@@ -805,9 +811,9 @@ SamplePlayer::createActionGenerator() const {
     //
     // simple dribble
     //
-    // g->addGenerator( new ActGen_RangeActionChainLengthFilter
-    //                  ( new ActGen_SimpleDribble(),
-    //                    2, ActGen_RangeActionChainLengthFilter::MAX ) );
+//     g->addGenerator( new ActGen_RangeActionChainLengthFilter
+//                      ( new ActGen_SimpleDribble(),
+//                        2, ActGen_RangeActionChainLengthFilter::MAX ) );
 
     return ActionGenerator::ConstPtr(g);
 }

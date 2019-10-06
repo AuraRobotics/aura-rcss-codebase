@@ -52,7 +52,7 @@ bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
     /////////////////////////////////////////////////////////////
 
     const PlayerObject *ball_lord = cm.getBallLord();
-    if(ball_lord->unum() == target_opp->unum()){
+    if(ball_lord != NULL && ball_lord->unum() == target_opp->unum()){
         if (Bhv_Block(target_opp).execute(agent)) {
             return true;
         }
