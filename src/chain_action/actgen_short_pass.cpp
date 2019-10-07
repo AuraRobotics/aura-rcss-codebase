@@ -64,9 +64,9 @@ void ActGen_ShortPass::generate(std::vector <ActionStatePair> *result, const Pre
 
         dlog.addText(Logger::Logger::ACTION_CHAIN,
                      __FILE__"pass to %d", resiver->unum());
-        dlog.addLine(Logger::ACTION_CHAIN,
-                     ball_holder->pos(), resiver->pos(),
-                     "#a855232");
+//        dlog.addLine(Logger::ACTION_CHAIN,
+//                     ball_holder->pos(), resiver->pos(),
+//                     "#a855232");
 
         const int receiver_unum = resiver->unum();
         Vector2D receiver_pos = resiver->pos();

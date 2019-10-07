@@ -28,7 +28,6 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                  __FILE__":   actgen deepPass -----------------");
 
 
-
     const ServerParam &SP = ServerParam::i();
     const Strategy &stra = Strategy::i();
     const CafeModel &cm = CafeModel::i();
@@ -58,18 +57,16 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
          ++area_pass_it) {
 
 
-
-
-        const AbstractPlayerObject * resiver = (*area_pass_it).first;
+        const AbstractPlayerObject *resiver = (*area_pass_it).first;
         const Vector2D pass_pos = (*area_pass_it).second;
 
-        if(resiver == NULL || resiver->unum() == -1){
+        if (resiver == NULL || resiver->unum() == -1) {
             continue;
         }
 
 
         dlog.addText(Logger::Logger::ACTION_CHAIN,
-                     __FILE__"pass area to %d in pos %.2f %.2f", resiver->unum(), pass_pos.x , pass_pos.y);
+                     __FILE__"pass area to %d in pos %.2f %.2f", resiver->unum(), pass_pos.x, pass_pos.y);
 //        dlog.addLine(Logger::ACTION_CHAIN,
 //                     ball_holder->pos(), resiver->pos(),
 //                     "#a855232");
@@ -79,7 +76,7 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
 //
         double dist_pass = pass_pos.dist(ball_pos);
 
-        if(dist_pass < 5){
+        if (dist_pass < 5) {
             continue;
         }
 
@@ -88,18 +85,17 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                                                            dist_pass,
                                                            angle_ball);
 
-        const PlayerType * ptype = resiver->playerTypePtr();
-        const double max_receive_ball_speed = 2;
+        const PlayerType *ptype = resiver->playerTypePtr();
+        const double max_receive_ball_speed = 0.9;
 //
-//        double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
-        double pass_speed = SP.ballSpeedMax();
+        double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
 //
-        FastIC * fic = cm.fastIC();
+        FastIC *fic = cm.fastIC();
 
         Vector2D donor_to_me_vel = pass_pos - ball_pos;
         Vector2D donor_offset = donor_to_me_vel;
-        donor_offset.setLength(1.1);
-        while(pass_speed > 0.5){
+        donor_offset.setLength(2);
+        while (pass_speed > 0.5) {
             donor_to_me_vel.setLength(pass_speed);
 
             fic->refresh();
@@ -113,23 +109,32 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
 
 
             if (fastest_player == NULL) {
-                pass_speed -= 0.5;
+                pass_speed -= 0.2;
                 continue;
             }
 
+
             if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
-                fastest_player_cycle < pass_cycle + 2 && fastest_player_cycle > pass_cycle - 2 &&
-                fastest_player_cycle < fastest_opp_cycle - 3) {
+                fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle > 3 &&
+                fastest_opp_cycle > fastest_player_cycle + 5) {
+                dlog.addText(Logger::Logger::ACTION_CHAIN,
+                             __FILE__"pass area to %d in pos %.2f %.2f,   fast_palyer : %d , fast_cycle, %d, should cycle : %d , speed : %.2f, opp_cycle : %d ",
+                             resiver->unum(), pass_pos.x, pass_pos.y, fastest_player->unum(), fastest_player_cycle, pass_cycle, pass_speed, fastest_opp_cycle);
+
                 break;
             }
 
-            pass_speed -= 0.5;
+
+            pass_speed -= 0.2;
         }
-        if(pass_speed < 0.5){
+        if (pass_speed < 0.5) {
             continue;
         }
 
-        pass_speed -= 0.18;
+        if (pass_speed > 1.1) {
+            pass_speed -= 0.32;
+        }
+
 
         CooperativeAction::Ptr pass_temp(new Pass(ball_holder_unum,
                                                   receiver_unum,

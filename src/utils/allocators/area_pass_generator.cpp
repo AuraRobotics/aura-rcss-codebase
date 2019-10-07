@@ -93,6 +93,9 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
 
     int x_offside = wm.offsideLineX(); //TODO change name
 
+    if(resiver_pos.x > x_offside){
+        return Vector2D::INVALIDATED;
+    }
     double search_radius = 4;//TODO dynamic
     std::pair<double, double> check_line_y(resiver_pos.y - search_radius, resiver_pos.y + search_radius);
     std::pair<double, double> check_line_x(resiver_pos.x - search_radius, resiver_pos.x + search_radius);
@@ -168,10 +171,6 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
 
 bool AreaPassGenerator::checkPosIsValid(const rcsc::Vector2D check_point, const rcsc::Vector2D sender_pos,
                                         const rcsc::Vector2D resiver_pos, double x_offside, const int resiver_unum) {
-
-    if (check_point.x > x_offside) {
-        return false;
-    }
 
     if (std::abs(check_point.y) > 31) {
         return false;

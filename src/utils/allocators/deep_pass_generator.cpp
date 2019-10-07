@@ -50,7 +50,7 @@ void DeepPassGenerator::generate() {
             if (i == wm.self().unum() - 1) {
                 //////////////////////////////////
                 dlog.addText(Logger::SHOOT,
-                             __FILE__": Deep pass ::  %d -> %d  : %.2f %.2f", i + 1, (*receiver_it)->unum(),
+                             __FILE__": Deep pass ::  %d -> %d  : %.2f %.2f ", i + 1, (*receiver_it)->unum(),
                              best_area_pass.x, best_area_pass.y);
 
                 dlog.addLine(Logger::SHOOT,
@@ -82,7 +82,7 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
     }
 
     int x_offside = wm.offsideLineX(); //TODO change name
-    if(receiver->pos().x > x_offside){
+    if (receiver->pos().x > x_offside) {
         return Vector2D::INVALIDATED;
     }
 
@@ -91,7 +91,6 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
 
     const Vector2D sender_pos = sender->pos();
     const Vector2D receiver_pos = receiver->pos();
-
 
 
     double search_radius = 5;//TODO dynamic
@@ -114,7 +113,7 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
     while (count_dist < search_radius) {
 
 
-        double pass_dist = receiver_pos.dist(to_goal);
+        double pass_dist = sender_pos.dist(to_goal);
         const double max_receive_ball_speed = 1.1;
 
         double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
@@ -122,7 +121,7 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
         Vector2D donor_to_me_vel = to_goal - sender_pos;
         donor_to_me_vel.setLength(pass_speed);
         Vector2D donor_offset = donor_to_me_vel;
-        donor_offset.setLength(1.1);
+        donor_offset.setLength(2);
 
         fic->refresh();
         fic->setBall(sender_pos + donor_offset, donor_to_me_vel, 0); //TODO donor_to_me_vel
@@ -135,11 +134,24 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
 
         if (fastest_player == NULL) {
             count_dist++;
+            if (sender_unum == wm.self().unum() ) {
+                dlog.addText(Logger::SHOOT,
+                             __FILE__": %d  ->>>>> NULL continue !!",
+                             receiver_unum);
+
+            }
             continue;
         }
+
+        if (sender_unum == wm.self().unum() ) {
+            dlog.addText(Logger::SHOOT,
+                         __FILE__": %d  ->>>>>  fastest player unum : %d , reach_cycle : %d , should cycle : %d, ball_speed : %.2f    (%.2f, %.2f) dist : %.2f",
+                         receiver_unum, fastest_player->unum(), fastest_player_cycle, pass_cycle, pass_speed, to_goal.x , to_goal.y, pass_dist );
+
+        }
+
         if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
-            fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle > 3 &&
-            fastest_player_cycle < fastest_opp_cycle - 3) {
+            fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle > 3 && fastest_opp_cycle > fastest_player_cycle + 5) {
             return to_goal;
         }
 
@@ -157,8 +169,8 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
     while (count_dist < search_radius) {
 
 
-        double pass_dist = receiver_pos.dist(to_end);
-        const double max_receive_ball_speed = 0.6;
+        double pass_dist = sender_pos.dist(to_end);
+        const double max_receive_ball_speed = 0.7;
 
         double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
         const int pass_cycle = rcscUtils::ballCycle(pass_dist, pass_speed);
@@ -176,12 +188,26 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
 
         if (fastest_player == NULL) {
             count_dist++;
+            if (sender_unum == wm.self().unum() ) {
+                dlog.addText(Logger::SHOOT,
+                             __FILE__": %d  ->>>>> NULL continue !!",
+                             receiver_unum);
+
+            }
             continue;
         }
 
+
+        if (sender_unum == wm.self().unum() ) {
+            dlog.addText(Logger::SHOOT,
+                         __FILE__": %d  ->>>>>  fastest player unum : %d , reach_cycle : %d , should cycle : %d, ball_speed : %.2f    (%.2f, %.2f) dist : %.2f",
+                         receiver_unum, fastest_player->unum(), fastest_player_cycle, pass_cycle, pass_speed, to_end.x , to_end.y, pass_dist );
+
+        }
+
+
         if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
-            fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle > 3 &&
-            fastest_player_cycle < fastest_opp_cycle - 3) {
+            fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle > 3  && fastest_opp_cycle > fastest_player_cycle + 5) {
             return to_end;
         }
 

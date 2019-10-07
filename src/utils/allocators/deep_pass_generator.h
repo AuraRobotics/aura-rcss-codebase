@@ -18,7 +18,6 @@ class DeepPassGenerator {
     const rcsc::WorldModel &wm;
     static FastIC *fic;
     rcsc::AbstractPlayerCont *relationships;
-
     DeepPassCont direct_pass[11];
 
 

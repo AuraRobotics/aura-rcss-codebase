@@ -685,7 +685,7 @@ SamplePlayer::doHeardPassReceive() {
     Vector2D intercept_pos = wm.ball().inertiaPoint(self_min);
     Vector2D heard_pos = wm.audioMemory().pass().front().receive_pos_;
 
-    dlog.addText(Logger::TEAM,
+    dlog.addText(Logger::COMMUNICATION,
                  __FILE__":  (doHeardPassReceive) heard_pos(%.2f %.2f) intercept_pos(%.2f %.2f)",
                  heard_pos.x, heard_pos.y,
                  intercept_pos.x, intercept_pos.y);
@@ -696,14 +696,14 @@ SamplePlayer::doHeardPassReceive() {
         && self_min < 20
         //&& intercept_pos.dist( heard_pos ) < 3.0 ) //5.0 )
             ) {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::COMMUNICATION,
                      __FILE__": (doHeardPassReceive) intercept cycle=%d. intercept",
                      self_min);
         this->debugClient().addMessage("Comm:Receive:Intercept");
         Body_Intercept().execute(this);
         this->setNeckAction(new Neck_TurnToBall());
     } else {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::COMMUNICATION,
                      __FILE__": (doHeardPassReceive) intercept cycle=%d. go to receive point",
                      self_min);
         this->debugClient().setTarget(heard_pos);

@@ -107,6 +107,8 @@ void PlayerRelationship::calcRelations() {
 
     }
 
+    std::vector<int> added_mates;
+    const int self_unum = wm.self().unum();
 
     for (GraphPos::const_iterator it = relations_pos.begin(); it != relations_pos.end(); it++) {
         const Vector2D main = (*it->first);
@@ -125,6 +127,10 @@ void PlayerRelationship::calcRelations() {
 
             if (player_object != NULL && player_object->unum() != -1) {
                 relationships[main_player_unum - 1].push_back(player_object);
+                if(main_player_unum == self_unum){
+                    added_mates.push_back(player_object->unum());
+                }
+
             }
         }
 
@@ -132,6 +138,24 @@ void PlayerRelationship::calcRelations() {
     }
 
 
+    std::vector<int>::iterator temp_it_find;
+    const PlayerPtrCont::const_iterator t_end = wm.teammatesFromSelf().end();
+    for ( PlayerPtrCont::const_iterator t = wm.teammatesFromSelf().begin();
+          t != t_end;
+          ++t )
+    {
+        if(!(*t)){
+            continue;
+        }
+        temp_it_find = std::find(added_mates.begin(), added_mates.end(), (*t)->unum());
+        if(temp_it_find != added_mates.end()){
+            continue;
+        }
+
+        if((*t)->distFromSelf() < 20){
+            relationships[self_unum - 1].push_back((*t));
+        }
+    }
 
 
 
