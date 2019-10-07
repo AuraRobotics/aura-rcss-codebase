@@ -60,8 +60,7 @@ using namespace rcsc;
 /*!
 
  */
-FieldAnalyzer::FieldAnalyzer()
-{
+FieldAnalyzer::FieldAnalyzer() {
 
 }
 
@@ -70,8 +69,7 @@ FieldAnalyzer::FieldAnalyzer()
 
  */
 FieldAnalyzer &
-FieldAnalyzer::instance()
-{
+FieldAnalyzer::instance() {
     static FieldAnalyzer s_instance;
     return s_instance;
 }
@@ -81,18 +79,17 @@ FieldAnalyzer::instance()
 
  */
 double
-FieldAnalyzer::estimate_virtual_dash_distance( const rcsc::AbstractPlayerObject * player )
-{
-    const int pos_count = std::min( 10, // Magic Number
-                                    std::min( player->seenPosCount(),
-                                              player->posCount() ) );
+FieldAnalyzer::estimate_virtual_dash_distance(const rcsc::AbstractPlayerObject *player) {
+    const int pos_count = std::min(10, // Magic Number
+                                   std::min(player->seenPosCount(),
+                                            player->posCount()));
     const double max_speed = player->playerTypePtr()->realSpeedMax() * 0.8; // Magic Number
 
     double d = 0.0;
-    for ( int i = 1; i <= pos_count; ++i ) // start_value==1 to set the initial_value<1
+    for (int i = 1; i <= pos_count; ++i) // start_value==1 to set the initial_value<1
     {
         //d += max_speed * std::exp( - (i*i) / 20.0 ); // Magic Number
-        d += max_speed * std::exp( - (i*i) / 15.0 ); // Magic Number
+        d += max_speed * std::exp(-(i * i) / 15.0); // Magic Number
     }
 
     return d;
@@ -103,39 +100,35 @@ FieldAnalyzer::estimate_virtual_dash_distance( const rcsc::AbstractPlayerObject 
 
  */
 int
-FieldAnalyzer::predict_player_turn_cycle( const rcsc::PlayerType * ptype,
-                                          const rcsc::AngleDeg & player_body,
-                                          const double & player_speed,
-                                          const double & target_dist,
-                                          const rcsc::AngleDeg & target_angle,
-                                          const double & dist_thr,
-                                          const bool use_back_dash )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::predict_player_turn_cycle(const rcsc::PlayerType *ptype,
+                                         const rcsc::AngleDeg &player_body,
+                                         const double &player_speed,
+                                         const double &target_dist,
+                                         const rcsc::AngleDeg &target_angle,
+                                         const double &dist_thr,
+                                         const bool use_back_dash) {
+    const ServerParam &SP = ServerParam::i();
 
     int n_turn = 0;
 
-    double angle_diff = ( target_angle - player_body ).abs();
+    double angle_diff = (target_angle - player_body).abs();
 
-    if ( use_back_dash
-         && target_dist < 5.0 // Magic Number
-         && angle_diff > 90.0
-         && SP.minDashPower() < -SP.maxDashPower() + 1.0 )
-    {
-        angle_diff = std::fabs( angle_diff - 180.0 );    // assume backward dash
+    if (use_back_dash
+        && target_dist < 5.0 // Magic Number
+        && angle_diff > 90.0
+        && SP.minDashPower() < -SP.maxDashPower() + 1.0) {
+        angle_diff = std::fabs(angle_diff - 180.0);    // assume backward dash
     }
 
     double turn_margin = 180.0;
-    if ( dist_thr < target_dist )
-    {
-        turn_margin = std::max( 15.0, // Magic Number
-                                rcsc::AngleDeg::asin_deg( dist_thr / target_dist ) );
+    if (dist_thr < target_dist) {
+        turn_margin = std::max(15.0, // Magic Number
+                               rcsc::AngleDeg::asin_deg(dist_thr / target_dist));
     }
 
     double speed = player_speed;
-    while ( angle_diff > turn_margin )
-    {
-        angle_diff -= ptype->effectiveTurn( SP.maxMoment(), speed );
+    while (angle_diff > turn_margin) {
+        angle_diff -= ptype->effectiveTurn(SP.maxMoment(), speed);
         speed *= ptype->playerDecay();
         ++n_turn;
     }
@@ -154,122 +147,106 @@ FieldAnalyzer::predict_player_turn_cycle( const rcsc::PlayerType * ptype,
 
  */
 int
-FieldAnalyzer::predict_self_reach_cycle( const WorldModel & wm,
-                                         const Vector2D & target_point,
-                                         const double & dist_thr,
-                                         const int wait_cycle,
-                                         const bool save_recovery,
-                                         StaminaModel * stamina )
-{
-    if ( wm.self().inertiaPoint( wait_cycle ).dist2( target_point ) < std::pow( dist_thr, 2 ) )
-    {
+FieldAnalyzer::predict_self_reach_cycle(const WorldModel &wm,
+                                        const Vector2D &target_point,
+                                        const double &dist_thr,
+                                        const int wait_cycle,
+                                        const bool save_recovery,
+                                        StaminaModel *stamina) {
+    if (wm.self().inertiaPoint(wait_cycle).dist2(target_point) < std::pow(dist_thr, 2)) {
         return 0;
     }
 
-    const ServerParam & SP = ServerParam::i();
-    const PlayerType & ptype = wm.self().playerType();
+    const ServerParam &SP = ServerParam::i();
+    const PlayerType &ptype = wm.self().playerType();
     const double recover_dec_thr = SP.recoverDecThrValue();
 
-    const double first_speed = wm.self().vel().r() * std::pow( ptype.playerDecay(), wait_cycle );
+    const double first_speed = wm.self().vel().r() * std::pow(ptype.playerDecay(), wait_cycle);
 
     StaminaModel first_stamina_model = wm.self().staminaModel();
-    if ( wait_cycle > 0 )
-    {
-        first_stamina_model.simulateWaits( ptype, wait_cycle );
+    if (wait_cycle > 0) {
+        first_stamina_model.simulateWaits(ptype, wait_cycle);
     }
 
-    for ( int cycle = std::max( 0, wait_cycle ); cycle < 30; ++cycle )
-    {
-        const Vector2D inertia_pos = wm.self().inertiaPoint( cycle );
-        const double target_dist = inertia_pos.dist( target_point );
+    for (int cycle = std::max(0, wait_cycle); cycle < 30; ++cycle) {
+        const Vector2D inertia_pos = wm.self().inertiaPoint(cycle);
+        const double target_dist = inertia_pos.dist(target_point);
 
-        if ( target_dist < dist_thr )
-        {
+        if (target_dist < dist_thr) {
             return cycle;
         }
 
         double dash_dist = target_dist - dist_thr * 0.5;
 
-        if ( dash_dist > ptype.realSpeedMax() * ( cycle - wait_cycle ) )
-        {
+        if (dash_dist > ptype.realSpeedMax() * (cycle - wait_cycle)) {
             continue;
         }
 
-        AngleDeg target_angle = ( target_point - inertia_pos ).th();
+        AngleDeg target_angle = (target_point - inertia_pos).th();
 
         //
         // turn
         //
 
-        int n_turn = predict_player_turn_cycle( &ptype,
-                                                wm.self().body(),
-                                                first_speed,
-                                                target_dist,
-                                                target_angle,
-                                                dist_thr,
-                                                false );
-        if ( wait_cycle + n_turn >= cycle )
-        {
+        int n_turn = predict_player_turn_cycle(&ptype,
+                                               wm.self().body(),
+                                               first_speed,
+                                               target_dist,
+                                               target_angle,
+                                               dist_thr,
+                                               false);
+        if (wait_cycle + n_turn >= cycle) {
             continue;
         }
 
         StaminaModel stamina_model = first_stamina_model;
-        if ( n_turn > 0 )
-        {
-            stamina_model.simulateWaits( ptype, n_turn );
+        if (n_turn > 0) {
+            stamina_model.simulateWaits(ptype, n_turn);
         }
 
         //
         // dash
         //
 
-        int n_dash = ptype.cyclesToReachDistance( dash_dist );
-        if ( wait_cycle + n_turn + n_dash > cycle )
-        {
+        int n_dash = ptype.cyclesToReachDistance(dash_dist);
+        if (wait_cycle + n_turn + n_dash > cycle) {
             continue;
         }
 
-        double speed = first_speed * std::pow( ptype.playerDecay(), n_turn );
+        double speed = first_speed * std::pow(ptype.playerDecay(), n_turn);
         double reach_dist = 0.0;
 
         n_dash = 0;
-        while ( wait_cycle + n_turn + n_dash < cycle )
-        {
-            double dash_power = std::min( SP.maxDashPower(), stamina_model.stamina() );
-            if ( save_recovery
-                 && stamina_model.stamina() - dash_power < recover_dec_thr )
-            {
-                dash_power = std::max( 0.0, stamina_model.stamina() - recover_dec_thr );
-                if ( dash_power < 1.0 )
-                {
+        while (wait_cycle + n_turn + n_dash < cycle) {
+            double dash_power = std::min(SP.maxDashPower(), stamina_model.stamina());
+            if (save_recovery
+                && stamina_model.stamina() - dash_power < recover_dec_thr) {
+                dash_power = std::max(0.0, stamina_model.stamina() - recover_dec_thr);
+                if (dash_power < 1.0) {
                     break;
                 }
             }
 
             double accel = dash_power * ptype.dashPowerRate() * stamina_model.effort();
             speed += accel;
-            if ( speed > ptype.playerSpeedMax() )
-            {
+            if (speed > ptype.playerSpeedMax()) {
                 speed = ptype.playerSpeedMax();
             }
 
             reach_dist += speed;
             speed *= ptype.playerDecay();
 
-            stamina_model.simulateDash( ptype, dash_power );
+            stamina_model.simulateDash(ptype, dash_power);
 
             ++n_dash;
 
-            if ( reach_dist >= dash_dist )
-            {
+            if (reach_dist >= dash_dist) {
                 break;
             }
         }
 
-        if ( reach_dist >= dash_dist )
-        {
-            if ( stamina )
-            {
+        if (reach_dist >= dash_dist) {
+            if (stamina) {
                 *stamina = stamina_model;
             }
             return wait_cycle + n_turn + n_dash;
@@ -284,92 +261,84 @@ FieldAnalyzer::predict_self_reach_cycle( const WorldModel & wm,
 
  */
 int
-FieldAnalyzer::predict_player_reach_cycle( const AbstractPlayerObject * player,
-                                           const Vector2D & target_point,
-                                           const double & dist_thr,
-                                           const double & penalty_distance,
-                                           const int body_count_thr,
-                                           const int default_n_turn,
-                                           const int wait_cycle,
-                                           const bool use_back_dash )
-{
-    const PlayerType * ptype = player->playerTypePtr();
+FieldAnalyzer::predict_player_reach_cycle(const AbstractPlayerObject *player,
+                                          const Vector2D &target_point,
+                                          const double &dist_thr,
+                                          const double &penalty_distance,
+                                          const int body_count_thr,
+                                          const int default_n_turn,
+                                          const int wait_cycle,
+                                          const bool use_back_dash) {
+    const PlayerType *ptype = player->playerTypePtr();
 
-    const Vector2D & first_player_pos = ( player->seenPosCount() <= player->posCount()
-                                          ? player->seenPos()
-                                          : player->pos() );
-    const Vector2D & first_player_vel = ( player->seenVelCount() <= player->velCount()
-                                          ? player->seenVel()
-                                          : player->vel() );
-    const double first_player_speed = first_player_vel.r() * std::pow( ptype->playerDecay(), wait_cycle );
+    const Vector2D &first_player_pos = (player->seenPosCount() <= player->posCount()
+                                        ? player->seenPos()
+                                        : player->pos());
+    const Vector2D &first_player_vel = (player->seenVelCount() <= player->velCount()
+                                        ? player->seenVel()
+                                        : player->vel());
+    const double first_player_speed = first_player_vel.r() * std::pow(ptype->playerDecay(), wait_cycle);
 
     int final_reach_cycle = -1;
     {
-        Vector2D inertia_pos = ptype->inertiaFinalPoint( first_player_pos, first_player_vel );
-        double target_dist = inertia_pos.dist( target_point );
+        Vector2D inertia_pos = ptype->inertiaFinalPoint(first_player_pos, first_player_vel);
+        double target_dist = inertia_pos.dist(target_point);
 
-        int n_turn = ( player->bodyCount() > body_count_thr
-                       ? default_n_turn
-                       : predict_player_turn_cycle( ptype,
-                                                    player->body(),
-                                                    first_player_speed,
-                                                    target_dist,
-                                                    ( target_point - inertia_pos ).th(),
-                                                    dist_thr,
-                                                    use_back_dash ) );
-        int n_dash = ptype->cyclesToReachDistance( target_dist + penalty_distance );
+        int n_turn = (player->bodyCount() > body_count_thr
+                      ? default_n_turn
+                      : predict_player_turn_cycle(ptype,
+                                                  player->body(),
+                                                  first_player_speed,
+                                                  target_dist,
+                                                  (target_point - inertia_pos).th(),
+                                                  dist_thr,
+                                                  use_back_dash));
+        int n_dash = ptype->cyclesToReachDistance(target_dist + penalty_distance);
 
         final_reach_cycle = wait_cycle + n_turn + n_dash;
     }
 
     const int max_cycle = 6; // Magic Number
 
-    if ( final_reach_cycle > max_cycle )
-    {
+    if (final_reach_cycle > max_cycle) {
         return final_reach_cycle;
     }
 
-    for ( int cycle = std::max( 0, wait_cycle ); cycle <= max_cycle; ++cycle )
-    {
-        Vector2D inertia_pos = ptype->inertiaPoint( first_player_pos, first_player_vel, cycle );
-        double target_dist = inertia_pos.dist( target_point ) + penalty_distance;
+    for (int cycle = std::max(0, wait_cycle); cycle <= max_cycle; ++cycle) {
+        Vector2D inertia_pos = ptype->inertiaPoint(first_player_pos, first_player_vel, cycle);
+        double target_dist = inertia_pos.dist(target_point) + penalty_distance;
 
-        if ( target_dist < dist_thr )
-        {
+        if (target_dist < dist_thr) {
             return cycle;
         }
 
         double dash_dist = target_dist - dist_thr * 0.5;
 
-        if ( dash_dist < 0.001 )
-        {
+        if (dash_dist < 0.001) {
             return cycle;
         }
 
-        if ( dash_dist > ptype->realSpeedMax() * ( cycle - wait_cycle ) )
-        {
+        if (dash_dist > ptype->realSpeedMax() * (cycle - wait_cycle)) {
             continue;
         }
 
-        int n_dash = ptype->cyclesToReachDistance( dash_dist );
+        int n_dash = ptype->cyclesToReachDistance(dash_dist);
 
-        if ( wait_cycle + n_dash > cycle )
-        {
+        if (wait_cycle + n_dash > cycle) {
             continue;
         }
 
-        int n_turn = ( player->bodyCount() > body_count_thr
-                       ? default_n_turn
-                       : predict_player_turn_cycle( ptype,
-                                                    player->body(),
-                                                    first_player_speed,
-                                                    target_dist,
-                                                    ( target_point - inertia_pos ).th(),
-                                                    dist_thr,
-                                                    use_back_dash ) );
+        int n_turn = (player->bodyCount() > body_count_thr
+                      ? default_n_turn
+                      : predict_player_turn_cycle(ptype,
+                                                  player->body(),
+                                                  first_player_speed,
+                                                  target_dist,
+                                                  (target_point - inertia_pos).th(),
+                                                  dist_thr,
+                                                  use_back_dash));
 
-        if ( wait_cycle + n_turn + n_dash <= cycle )
-        {
+        if (wait_cycle + n_turn + n_dash <= cycle) {
             return cycle;
         }
 
@@ -383,35 +352,41 @@ FieldAnalyzer::predict_player_reach_cycle( const AbstractPlayerObject * player,
 
  */
 int
-FieldAnalyzer::predict_kick_count( const WorldModel & wm,
-                                   const AbstractPlayerObject * kicker,
-                                   const double & first_ball_speed,
-                                   const AngleDeg & ball_move_angle )
-{
-    if ( wm.gameMode().type() != GameMode::PlayOn
-         && ! wm.gameMode().isPenaltyKickMode() )
-    {
+FieldAnalyzer::predict_kick_count(const WorldModel &wm,
+                                  const AbstractPlayerObject *kicker,
+                                  const double &first_ball_speed,
+                                  const AngleDeg &ball_move_angle) {
+    if (wm.gameMode().type() != GameMode::PlayOn
+        && !wm.gameMode().isPenaltyKickMode()) {
         return 1;
     }
 
-    if ( kicker->unum() == wm.self().unum()
-         && wm.self().isKickable() )
-    {
-        Vector2D max_vel = KickTable::calc_max_velocity( ball_move_angle,
-                                                         wm.self().kickRate(),
-                                                         wm.ball().vel() );
-        if ( max_vel.r2() >= std::pow( first_ball_speed, 2 ) )
-        {
+    if (kicker->unum() == wm.self().unum()
+        && wm.self().isKickable()) {
+        Vector2D max_vel = KickTable::calc_max_velocity(ball_move_angle,
+                                                        wm.self().kickRate(),
+                                                        wm.ball().vel());
+        if (max_vel.r2() >= std::pow(first_ball_speed, 2)) {
             return 1;
         }
     }
 
-    if ( first_ball_speed > 2.5 )
-    {
-        return 3;
+    double dist_to_opp = 99999;
+    wm.getOpponentNearestTo(kicker->pos(), 10, &dist_to_opp);
+
+    rcsc::dlog.addText(rcsc::Logger::TEAM,
+                       __FILE__" predict _kick_ count  opponent near ( dist : %.2f )  ", (dist_to_opp));
+    if ((dist_to_opp) < 3) {
+        return 1;
     }
-    else if ( first_ball_speed > 1.5 )
-    {
+    if ((dist_to_opp) < 5.5) {
+        return 2;
+    }
+
+
+    if (first_ball_speed > 2.5) {
+        return 3;
+    } else if (first_ball_speed > 1.5) {
         return 2;
     }
 
@@ -424,28 +399,25 @@ FieldAnalyzer::predict_kick_count( const WorldModel & wm,
 
  */
 Vector2D
-FieldAnalyzer::get_ball_field_line_cross_point( const Vector2D & ball_from,
-                                                const Vector2D & ball_to,
-                                                const Vector2D & p1,
-                                                const Vector2D & p2,
-                                                const double field_back_offset )
-{
-    const Segment2D line( p1, p2 );
-    const Segment2D ball_segment( ball_from, ball_to );
+FieldAnalyzer::get_ball_field_line_cross_point(const Vector2D &ball_from,
+                                               const Vector2D &ball_to,
+                                               const Vector2D &p1,
+                                               const Vector2D &p2,
+                                               const double field_back_offset) {
+    const Segment2D line(p1, p2);
+    const Segment2D ball_segment(ball_from, ball_to);
 
-    const Vector2D cross_point = ball_segment.intersection( line, true );
+    const Vector2D cross_point = ball_segment.intersection(line, true);
 
-    if ( cross_point.isValid() )
-    {
-        if ( Vector2D( ball_to - ball_from ).r() <= EPS )
-        {
+    if (cross_point.isValid()) {
+        if (Vector2D(ball_to - ball_from).r() <= EPS) {
             return cross_point;
         }
 
         return cross_point
-            + Vector2D::polar2vector
-            ( field_back_offset,
-              Vector2D( ball_from - ball_to ).th() );
+               + Vector2D::polar2vector
+                       (field_back_offset,
+                        Vector2D(ball_from - ball_to).th());
     }
 
     return ball_to;
@@ -456,58 +428,56 @@ FieldAnalyzer::get_ball_field_line_cross_point( const Vector2D & ball_from,
 
  */
 Vector2D
-FieldAnalyzer::get_field_bound_predict_ball_pos( const WorldModel & wm,
-                                                 const int predict_step,
-                                                 const double field_back_offset )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_field_bound_predict_ball_pos(const WorldModel &wm,
+                                                const int predict_step,
+                                                const double field_back_offset) {
+    const ServerParam &SP = ServerParam::i();
 
     const Vector2D current_pos = wm.ball().pos();
-    const Vector2D predict_pos = wm.ball().inertiaPoint( predict_step );
+    const Vector2D predict_pos = wm.ball().inertiaPoint(predict_step);
 
     const double wid = SP.pitchHalfWidth();
     const double len = SP.pitchHalfLength();
 
-    const Vector2D corner_1( +len, +wid );
-    const Vector2D corner_2( +len, -wid );
-    const Vector2D corner_3( -len, -wid );
-    const Vector2D corner_4( -len, +wid );
+    const Vector2D corner_1(+len, +wid);
+    const Vector2D corner_2(+len, -wid);
+    const Vector2D corner_3(-len, -wid);
+    const Vector2D corner_4(-len, +wid);
 
-    const Rect2D pitch_rect = Rect2D::from_center( Vector2D( 0.0, 0.0 ),
-                                                   len * 2, wid * 2 );
+    const Rect2D pitch_rect = Rect2D::from_center(Vector2D(0.0, 0.0),
+                                                  len * 2, wid * 2);
 
-    if ( ! pitch_rect.contains( current_pos )
-         && ! pitch_rect.contains( predict_pos ) )
-    {
-        const Vector2D result( bound( -len, current_pos.x, +len ),
-                               bound( -wid, current_pos.y, +wid ) );
+    if (!pitch_rect.contains(current_pos)
+        && !pitch_rect.contains(predict_pos)) {
+        const Vector2D result(bound(-len, current_pos.x, +len),
+                              bound(-wid, current_pos.y, +wid));
 
-        dlog.addText( Logger::TEAM,
-                      __FILE__": getBoundPredictBallPos "
-                      "out of field, "
-                      "current_pos = [%f, %f], predict_pos = [%f, %f], "
-                      "result = [%f, %f]",
-                      current_pos.x, current_pos.y,
-                      predict_pos.x, predict_pos.y,
-                      result.x, result.y );
+        dlog.addText(Logger::TEAM,
+                     __FILE__": getBoundPredictBallPos "
+                     "out of field, "
+                     "current_pos = [%f, %f], predict_pos = [%f, %f], "
+                     "result = [%f, %f]",
+                     current_pos.x, current_pos.y,
+                     predict_pos.x, predict_pos.y,
+                     result.x, result.y);
 
         return result;
     }
 
 
     const Vector2D p0 = predict_pos;
-    const Vector2D p1 = get_ball_field_line_cross_point( current_pos, p0, corner_1, corner_2, field_back_offset );
-    const Vector2D p2 = get_ball_field_line_cross_point( current_pos, p1, corner_2, corner_3, field_back_offset );
-    const Vector2D p3 = get_ball_field_line_cross_point( current_pos, p2, corner_3, corner_4, field_back_offset );
-    const Vector2D p4 = get_ball_field_line_cross_point( current_pos, p3, corner_4, corner_1, field_back_offset );
+    const Vector2D p1 = get_ball_field_line_cross_point(current_pos, p0, corner_1, corner_2, field_back_offset);
+    const Vector2D p2 = get_ball_field_line_cross_point(current_pos, p1, corner_2, corner_3, field_back_offset);
+    const Vector2D p3 = get_ball_field_line_cross_point(current_pos, p2, corner_3, corner_4, field_back_offset);
+    const Vector2D p4 = get_ball_field_line_cross_point(current_pos, p3, corner_4, corner_1, field_back_offset);
 
-    dlog.addText( Logger::TEAM,
-                  __FILE__": getBoundPredictBallPos "
-                  "current_pos = [%f, %f], predict_pos = [%f, %f], "
-                  "result = [%f, %f]",
-                  current_pos.x, current_pos.y,
-                  predict_pos.x, predict_pos.y,
-                  p4.x, p4.y );
+    dlog.addText(Logger::TEAM,
+                 __FILE__": getBoundPredictBallPos "
+                 "current_pos = [%f, %f], predict_pos = [%f, %f], "
+                 "result = [%f, %f]",
+                 current_pos.x, current_pos.y,
+                 predict_pos.x, predict_pos.y,
+                 p4.x, p4.y);
 
     return p4;
 }
@@ -520,36 +490,34 @@ FieldAnalyzer::get_field_bound_predict_ball_pos( const WorldModel & wm,
  */
 namespace {
 
-struct Player {
-    const AbstractPlayerObject * player_;
-    AngleDeg angle_from_pos_;
-    double hide_angle_;
+    struct Player {
+        const AbstractPlayerObject *player_;
+        AngleDeg angle_from_pos_;
+        double hide_angle_;
 
-    Player( const AbstractPlayerObject * player,
-            const Vector2D & pos )
-        : player_( player ),
-          angle_from_pos_(),
-          hide_angle_( 0.0 )
-      {
-          Vector2D inertia_pos = player->inertiaFinalPoint();
-          double control_dist = ( player->goalie()
-                                  ? ServerParam::i().catchAreaLength()
-                                  : player->playerTypePtr()->kickableArea() );
-          double hide_angle_radian = std::asin( std::min( control_dist / inertia_pos.dist( pos ),
-                                                          1.0 ) );
+        Player(const AbstractPlayerObject *player,
+               const Vector2D &pos)
+                : player_(player),
+                  angle_from_pos_(),
+                  hide_angle_(0.0) {
+            Vector2D inertia_pos = player->inertiaFinalPoint();
+            double control_dist = (player->goalie()
+                                   ? ServerParam::i().catchAreaLength()
+                                   : player->playerTypePtr()->kickableArea());
+            double hide_angle_radian = std::asin(std::min(control_dist / inertia_pos.dist(pos),
+                                                          1.0));
 
-          angle_from_pos_ = ( inertia_pos - pos ).th();
-          hide_angle_ = hide_angle_radian * AngleDeg::RAD2DEG;
-      }
+            angle_from_pos_ = (inertia_pos - pos).th();
+            hide_angle_ = hide_angle_radian * AngleDeg::RAD2DEG;
+        }
 
-    struct Compare {
-        bool operator()( const Player & lhs,
-                         const Player & rhs ) const
-          {
-              return lhs.angle_from_pos_.degree() < rhs.angle_from_pos_.degree();
-          }
+        struct Compare {
+            bool operator()(const Player &lhs,
+                            const Player &rhs) const {
+                return lhs.angle_from_pos_.degree() < rhs.angle_from_pos_.degree();
+            }
+        };
     };
-};
 
 }
 
@@ -558,21 +526,19 @@ struct Player {
 
  */
 bool
-FieldAnalyzer::can_shoot_from( const bool is_self,
-                               const Vector2D & pos,
-                               const AbstractPlayerCont & opponents,
-                               const int valid_opponent_threshold )
-{
-    static const double SHOOT_DIST_THR2 = std::pow( 17.0, 2 );
+FieldAnalyzer::can_shoot_from(const bool is_self,
+                              const Vector2D &pos,
+                              const AbstractPlayerCont &opponents,
+                              const int valid_opponent_threshold) {
+    static const double SHOOT_DIST_THR2 = std::pow(17.0, 2);
     //static const double SHOOT_ANGLE_THRESHOLD = 20.0;
-    static const double SHOOT_ANGLE_THRESHOLD = ( is_self
-                                                  ? 20.0
-                                                  : 15.0 );
-    static const double OPPONENT_DIST_THR2 = std::pow( 20.0, 2 );
+    static const double SHOOT_ANGLE_THRESHOLD = (is_self
+                                                 ? 20.0
+                                                 : 15.0);
+    static const double OPPONENT_DIST_THR2 = std::pow(20.0, 2);
 
-    if ( ServerParam::i().theirTeamGoalPos().dist2( pos )
-         > SHOOT_DIST_THR2 )
-    {
+    if (ServerParam::i().theirTeamGoalPos().dist2(pos)
+        > SHOOT_DIST_THR2) {
         return false;
     }
 
@@ -582,37 +548,34 @@ FieldAnalyzer::can_shoot_from( const bool is_self,
                   pos.x, pos.y );
 #endif
 
-    const Vector2D goal_minus( ServerParam::i().pitchHalfLength(),
-                               -ServerParam::i().goalHalfWidth() + 0.5 );
-    const Vector2D goal_plus( ServerParam::i().pitchHalfLength(),
-                              +ServerParam::i().goalHalfWidth() - 0.5 );
+    const Vector2D goal_minus(ServerParam::i().pitchHalfLength(),
+                              -ServerParam::i().goalHalfWidth() + 0.5);
+    const Vector2D goal_plus(ServerParam::i().pitchHalfLength(),
+                             +ServerParam::i().goalHalfWidth() - 0.5);
 
-    const AngleDeg goal_minus_angle = ( goal_minus - pos ).th();
-    const AngleDeg goal_plus_angle = ( goal_plus - pos ).th();
+    const AngleDeg goal_minus_angle = (goal_minus - pos).th();
+    const AngleDeg goal_plus_angle = (goal_plus - pos).th();
 
     //
     // create opponent list
     //
 
-    std::vector< Player > opponent_candidates;
-    opponent_candidates.reserve( opponents.size() );
+    std::vector <Player> opponent_candidates;
+    opponent_candidates.reserve(opponents.size());
 
     const AbstractPlayerCont::const_iterator o_end = opponents.end();
-    for ( AbstractPlayerCont::const_iterator o = opponents.begin();
-          o != o_end;
-          ++o )
-    {
-        if ( (*o)->posCount() > valid_opponent_threshold )
-        {
+    for (AbstractPlayerCont::const_iterator o = opponents.begin();
+         o != o_end;
+         ++o) {
+        if ((*o)->posCount() > valid_opponent_threshold) {
             continue;
         }
 
-        if ( (*o)->pos().dist2( pos ) > OPPONENT_DIST_THR2 )
-        {
+        if ((*o)->pos().dist2(pos) > OPPONENT_DIST_THR2) {
             continue;
         }
 
-        opponent_candidates.push_back( Player( *o, pos ) );
+        opponent_candidates.push_back(Player(*o, pos));
 #ifdef DEBUG_CAN_SHOOT_FROM
         dlog.addText( Logger::SHOOT,
                       "(can_shoot_from) (opponent:%d) pos=(%.1f %.1f) angleFromPos=%.1f hideAngle=%.1f",
@@ -630,23 +593,21 @@ FieldAnalyzer::can_shoot_from( const bool is_self,
     // std::sort( opponent_candidates.begin(), opponent_candidates.end(),
     //            Opponent::Compare() );
 
-    const double angle_width = ( goal_plus_angle - goal_minus_angle ).abs();
-    const double angle_step = std::max( 2.0, angle_width / 10.0 );
+    const double angle_width = (goal_plus_angle - goal_minus_angle).abs();
+    const double angle_step = std::max(2.0, angle_width / 10.0);
 
-    const std::vector< Player >::const_iterator end = opponent_candidates.end();
+    const std::vector<Player>::const_iterator end = opponent_candidates.end();
 
     double max_angle_diff = 0.0;
 
-    for ( double a = 0.0; a < angle_width + 0.001; a += angle_step )
-    {
+    for (double a = 0.0; a < angle_width + 0.001; a += angle_step) {
         const AngleDeg shoot_angle = goal_minus_angle + a;
 
         double min_angle_diff = 180.0;
-        for ( std::vector< Player >::const_iterator o = opponent_candidates.begin();
-              o != end;
-              ++o )
-        {
-            double angle_diff = ( o->angle_from_pos_ - shoot_angle ).abs();
+        for (std::vector<Player>::const_iterator o = opponent_candidates.begin();
+             o != end;
+             ++o) {
+            double angle_diff = (o->angle_from_pos_ - shoot_angle).abs();
 
 #ifdef DEBUG_CAN_SHOOT_FROM
             dlog.addText( Logger::SHOOT,
@@ -654,28 +615,22 @@ FieldAnalyzer::can_shoot_from( const bool is_self,
                           o->player_->unum(),
                           angle_diff, angle_diff - o->hide_angle_*0.5 );
 #endif
-            if ( is_self )
-            {
+            if (is_self) {
                 angle_diff -= o->hide_angle_;
-            }
-            else
-            {
-                angle_diff -= o->hide_angle_*0.5;
+            } else {
+                angle_diff -= o->hide_angle_ * 0.5;
             }
 
-            if ( angle_diff < min_angle_diff )
-            {
+            if (angle_diff < min_angle_diff) {
                 min_angle_diff = angle_diff;
 
-                if ( min_angle_diff < SHOOT_ANGLE_THRESHOLD )
-                {
+                if (min_angle_diff < SHOOT_ANGLE_THRESHOLD) {
                     break;
                 }
             }
         }
 
-        if ( min_angle_diff > max_angle_diff )
-        {
+        if (min_angle_diff > max_angle_diff) {
             max_angle_diff = min_angle_diff;
         }
 
@@ -688,9 +643,9 @@ FieldAnalyzer::can_shoot_from( const bool is_self,
     }
 
 #ifdef DEBUG_CAN_SHOOT_FROM
-        dlog.addText( Logger::SHOOT,
-                      "(can_shoot_from) maxAngleDiff=%.1f",
-                      max_angle_diff );
+    dlog.addText( Logger::SHOOT,
+                  "(can_shoot_from) maxAngleDiff=%.1f",
+                  max_angle_diff );
 #endif
 
     return max_angle_diff >= SHOOT_ANGLE_THRESHOLD;
@@ -701,28 +656,27 @@ FieldAnalyzer::can_shoot_from( const bool is_self,
 
  */
 bool
-FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
-                                        const AbstractPlayerCont & teammates,
-                                        const int valid_teammate_threshold,
-                                        const double shoot_dist_threshold,
-                                        const double shoot_angle_threshold,
-                                        const double teammate_dist_threshold,
-                                        double * max_angle_diff_result,
-                                        const bool calculate_detail )
-{
+FieldAnalyzer::opponent_can_shoot_from(const Vector2D &pos,
+                                       const AbstractPlayerCont &teammates,
+                                       const int valid_teammate_threshold,
+                                       const double shoot_dist_threshold,
+                                       const double shoot_angle_threshold,
+                                       const double teammate_dist_threshold,
+                                       double *max_angle_diff_result,
+                                       const bool calculate_detail) {
     const double DEFAULT_SHOOT_DIST_THR = 40.0;
     const double DEFAULT_SHOOT_ANGLE_THR = 12.0;
-    const double DEFAULT_TEAMMATE_DIST_THR2 = std::pow( 40.0, 2 );
+    const double DEFAULT_TEAMMATE_DIST_THR2 = std::pow(40.0, 2);
 
-    const double SHOOT_DIST_THR = ( shoot_dist_threshold > 0.0
-                                    ? shoot_dist_threshold
-                                    : DEFAULT_SHOOT_DIST_THR );
-    const double SHOOT_ANGLE_THR = ( shoot_angle_threshold > 0.0
-                                     ? shoot_angle_threshold
-                                     : DEFAULT_SHOOT_ANGLE_THR );
-    const double TEAMMATE_DIST_THR2 = ( teammate_dist_threshold > 0.0
-                                        ? std::pow( teammate_dist_threshold, 2 )
-                                        : DEFAULT_TEAMMATE_DIST_THR2 );
+    const double SHOOT_DIST_THR = (shoot_dist_threshold > 0.0
+                                   ? shoot_dist_threshold
+                                   : DEFAULT_SHOOT_DIST_THR);
+    const double SHOOT_ANGLE_THR = (shoot_angle_threshold > 0.0
+                                    ? shoot_angle_threshold
+                                    : DEFAULT_SHOOT_ANGLE_THR);
+    const double TEAMMATE_DIST_THR2 = (teammate_dist_threshold > 0.0
+                                       ? std::pow(teammate_dist_threshold, 2)
+                                       : DEFAULT_TEAMMATE_DIST_THR2);
 
 #ifdef DEBUG_CAN_SHOOT_FROM
     dlog.addText( Logger::SHOOT,
@@ -743,10 +697,8 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
                   TEAMMATE_DIST_THR2 );
 #endif
 
-    if ( get_dist_from_our_near_goal_post( pos ) > SHOOT_DIST_THR )
-    {
-        if ( max_angle_diff_result )
-        {
+    if (get_dist_from_our_near_goal_post(pos) > SHOOT_DIST_THR) {
+        if (max_angle_diff_result) {
             *max_angle_diff_result = 0.0;
         }
 
@@ -756,16 +708,14 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
     //
     // create teammate list
     //
-    std::vector< Player > teammate_candidates;
-    teammate_candidates.reserve( teammates.size() );
+    std::vector <Player> teammate_candidates;
+    teammate_candidates.reserve(teammates.size());
 
     const AbstractPlayerCont::const_iterator t_end = teammates.end();
-    for ( AbstractPlayerCont::const_iterator t = teammates.begin();
-          t != t_end;
-          ++t )
-    {
-        if ( (*t)->posCount() > valid_teammate_threshold )
-        {
+    for (AbstractPlayerCont::const_iterator t = teammates.begin();
+         t != t_end;
+         ++t) {
+        if ((*t)->posCount() > valid_teammate_threshold) {
 #ifdef DEBUG_CAN_SHOOT_FROM
             dlog.addText( Logger::SHOOT,
                           "(opponent_can_shoot_from) skip teammate %d, too big pos count, pos count = %d",
@@ -774,8 +724,7 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
             continue;
         }
 
-        if ( (*t)->pos().dist2( pos ) > TEAMMATE_DIST_THR2 )
-        {
+        if ((*t)->pos().dist2(pos) > TEAMMATE_DIST_THR2) {
 #ifdef DEBUG_CAN_SHOOT_FROM
             dlog.addText( Logger::SHOOT,
                           "(opponent_can_shoot_from) skip teammate %d, too far from point, dist^2 = %f, pos = (%.2f, %.2f), teammate pos = (%.2f, %.2f)",
@@ -785,7 +734,7 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
             continue;
         }
 
-        teammate_candidates.push_back( Player( *t, pos ) );
+        teammate_candidates.push_back(Player(*t, pos));
 #ifdef DEBUG_CAN_SHOOT_FROM
         dlog.addText( Logger::SHOOT,
                       "(opponent_can_shoot_from) (teammate:%d) pos=(%.1f %.1f) angleFromPos=%.1f hideAngle=%.1f",
@@ -803,30 +752,29 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
     // std::sort( opponent_candidates.begin(), opponent_candidates.end(),
     //            Opponent::Compare() );
 
-    const Vector2D goal_minus( -ServerParam::i().pitchHalfLength(),
-                               -ServerParam::i().goalHalfWidth() + 0.5 );
-    const Vector2D goal_plus( -ServerParam::i().pitchHalfLength(),
-                              +ServerParam::i().goalHalfWidth() - 0.5 );
+    const Vector2D goal_minus(-ServerParam::i().pitchHalfLength(),
+                              -ServerParam::i().goalHalfWidth() + 0.5);
+    const Vector2D goal_plus(-ServerParam::i().pitchHalfLength(),
+                             +ServerParam::i().goalHalfWidth() - 0.5);
 
-    const AngleDeg goal_minus_angle = ( goal_minus - pos ).th();
-    const AngleDeg goal_plus_angle = ( goal_plus - pos ).th();
+    const AngleDeg goal_minus_angle = (goal_minus - pos).th();
+    const AngleDeg goal_plus_angle = (goal_plus - pos).th();
 
-    const double angle_width = ( goal_plus_angle - goal_minus_angle ).abs();
+    const double angle_width = (goal_plus_angle - goal_minus_angle).abs();
 #ifdef DEBUG_CAN_SHOOT_FROM
     dlog.addText( Logger::SHOOT,
                   "(opponent_can_shoot_from) angle_width = %.2f,"
                   " goal_plus_angle = %.2f, goal_minus_angle = %2f",
                   angle_width, goal_plus_angle.degree(), goal_minus_angle.degree() );
 #endif
-    const double angle_step = std::max( 2.0, angle_width / 10.0 );
+    const double angle_step = std::max(2.0, angle_width / 10.0);
 
     double max_angle_diff = 0.0;
 
-    const std::vector< Player >::const_iterator begin = teammate_candidates.begin();
-    const std::vector< Player >::const_iterator end = teammate_candidates.end();
+    const std::vector<Player>::const_iterator begin = teammate_candidates.begin();
+    const std::vector<Player>::const_iterator end = teammate_candidates.end();
 
-    for ( double a = 0.0; a < angle_width + 0.001; a += angle_step )
-    {
+    for (double a = 0.0; a < angle_width + 0.001; a += angle_step) {
         const AngleDeg shoot_angle = goal_minus_angle - a;
 #ifdef DEBUG_CAN_SHOOT_FROM
         dlog.addText( Logger::SHOOT,
@@ -835,11 +783,10 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
 #endif
 
         double min_angle_diff = 180.0;
-        for ( std::vector< Player >::const_iterator t = begin;
-              t != end;
-              ++t )
-        {
-            double angle_diff = ( t->angle_from_pos_ - shoot_angle ).abs();
+        for (std::vector<Player>::const_iterator t = begin;
+             t != end;
+             ++t) {
+            double angle_diff = (t->angle_from_pos_ - shoot_angle).abs();
 
 #ifdef DEBUG_CAN_SHOOT_FROM
             dlog.addText( Logger::SHOOT,
@@ -849,16 +796,13 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
 #endif
 
             //angle_diff -= t->hide_angle_;
-            angle_diff -= t->hide_angle_*0.5;
+            angle_diff -= t->hide_angle_ * 0.5;
 
-            if ( angle_diff < min_angle_diff )
-            {
+            if (angle_diff < min_angle_diff) {
                 min_angle_diff = angle_diff;
 
-                if ( min_angle_diff < SHOOT_ANGLE_THR )
-                {
-                    if ( ! calculate_detail )
-                    {
+                if (min_angle_diff < SHOOT_ANGLE_THR) {
+                    if (!calculate_detail) {
 #ifdef DEBUG_CAN_SHOOT_FROM
                         dlog.addText( Logger::SHOOT,
                                       "(opponent_can_shoot_from)__ min_angle_diff < SHOOT_ANGLE_THR: skip other teammates" );
@@ -870,8 +814,7 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
             }
         }
 
-        if ( min_angle_diff > max_angle_diff )
-        {
+        if (min_angle_diff > max_angle_diff) {
             max_angle_diff = min_angle_diff;
         }
 
@@ -883,9 +826,8 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
 #endif
     }
 
-    const bool result = ( max_angle_diff >= SHOOT_ANGLE_THR );
-    if ( max_angle_diff_result )
-    {
+    const bool result = (max_angle_diff >= SHOOT_ANGLE_THR);
+    if (max_angle_diff_result) {
         *max_angle_diff_result = max_angle_diff;
     }
 
@@ -903,39 +845,33 @@ FieldAnalyzer::opponent_can_shoot_from( const Vector2D & pos,
 
  */
 double
-FieldAnalyzer::get_dist_player_nearest_to_point( const Vector2D & point,
-                                                 const PlayerCont & players,
-                                                 const int count_thr )
-{
+FieldAnalyzer::get_dist_player_nearest_to_point(const Vector2D &point,
+                                                const PlayerCont &players,
+                                                const int count_thr) {
     double min_dist2 = 65535.0;
 
     const PlayerCont::const_iterator end = players.end();
-    for ( PlayerCont::const_iterator it = players.begin();
-          it != end;
-          ++it )
-    {
-        if ( (*it).isGhost() )
-        {
+    for (PlayerCont::const_iterator it = players.begin();
+         it != end;
+         ++it) {
+        if ((*it).isGhost()) {
             continue;
         }
 
-        if ( count_thr != -1 )
-        {
-            if ( (*it).posCount() > count_thr )
-            {
+        if (count_thr != -1) {
+            if ((*it).posCount() > count_thr) {
                 continue;
             }
         }
 
-        double d2 = (*it).pos().dist2( point );
+        double d2 = (*it).pos().dist2(point);
 
-        if ( d2 < min_dist2 )
-        {
+        if (d2 < min_dist2) {
             min_dist2 = d2;
         }
     }
 
-    return std::sqrt( min_dist2 );
+    return std::sqrt(min_dist2);
 }
 
 /*-------------------------------------------------------------------*/
@@ -943,12 +879,11 @@ FieldAnalyzer::get_dist_player_nearest_to_point( const Vector2D & point,
 
  */
 Vector2D
-FieldAnalyzer::get_our_team_near_goal_post_pos( const Vector2D & point )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_our_team_near_goal_post_pos(const Vector2D &point) {
+    const ServerParam &SP = ServerParam::i();
 
-    return Vector2D( -SP.pitchHalfLength(),
-                     +sign( point.y ) * SP.goalHalfWidth() );
+    return Vector2D(-SP.pitchHalfLength(),
+                    +sign(point.y) * SP.goalHalfWidth());
 }
 
 /*-------------------------------------------------------------------*/
@@ -956,12 +891,11 @@ FieldAnalyzer::get_our_team_near_goal_post_pos( const Vector2D & point )
 
  */
 Vector2D
-FieldAnalyzer::get_our_team_far_goal_post_pos( const Vector2D & point )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_our_team_far_goal_post_pos(const Vector2D &point) {
+    const ServerParam &SP = ServerParam::i();
 
-    return Vector2D( -SP.pitchHalfLength(),
-                     -sign( point.y ) * SP.goalHalfWidth() );
+    return Vector2D(-SP.pitchHalfLength(),
+                    -sign(point.y) * SP.goalHalfWidth());
 }
 
 /*-------------------------------------------------------------------*/
@@ -969,12 +903,11 @@ FieldAnalyzer::get_our_team_far_goal_post_pos( const Vector2D & point )
 
  */
 Vector2D
-FieldAnalyzer::get_opponent_team_near_goal_post_pos( const Vector2D & point )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_opponent_team_near_goal_post_pos(const Vector2D &point) {
+    const ServerParam &SP = ServerParam::i();
 
-    return Vector2D( +SP.pitchHalfLength(),
-                     +sign( point.y ) * SP.goalHalfWidth() );
+    return Vector2D(+SP.pitchHalfLength(),
+                    +sign(point.y) * SP.goalHalfWidth());
 }
 
 /*-------------------------------------------------------------------*/
@@ -982,12 +915,11 @@ FieldAnalyzer::get_opponent_team_near_goal_post_pos( const Vector2D & point )
 
  */
 Vector2D
-FieldAnalyzer::get_opponent_team_far_goal_post_pos( const Vector2D & point )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_opponent_team_far_goal_post_pos(const Vector2D &point) {
+    const ServerParam &SP = ServerParam::i();
 
-    return Vector2D( +SP.pitchHalfLength(),
-                     -sign( point.y ) * SP.goalHalfWidth() );
+    return Vector2D(+SP.pitchHalfLength(),
+                    -sign(point.y) * SP.goalHalfWidth());
 }
 
 /*-------------------------------------------------------------------*/
@@ -995,16 +927,15 @@ FieldAnalyzer::get_opponent_team_far_goal_post_pos( const Vector2D & point )
 
  */
 double
-FieldAnalyzer::get_dist_from_our_near_goal_post( const Vector2D & point )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_dist_from_our_near_goal_post(const Vector2D &point) {
+    const ServerParam &SP = ServerParam::i();
 
-    return std::min( point.dist( Vector2D
-                                 ( - SP.pitchHalfLength(),
-                                   - SP.goalHalfWidth() ) ),
-                     point.dist( Vector2D
-                                 ( - SP.pitchHalfLength(),
-                                   + SP.goalHalfWidth() ) ) );
+    return std::min(point.dist(Vector2D
+                                       (-SP.pitchHalfLength(),
+                                        -SP.goalHalfWidth())),
+                    point.dist(Vector2D
+                                       (-SP.pitchHalfLength(),
+                                        +SP.goalHalfWidth())));
 }
 
 /*-------------------------------------------------------------------*/
@@ -1012,16 +943,15 @@ FieldAnalyzer::get_dist_from_our_near_goal_post( const Vector2D & point )
 
  */
 double
-FieldAnalyzer::get_dist_from_opponent_near_goal_post( const Vector2D & point )
-{
-    const ServerParam & SP = ServerParam::i();
+FieldAnalyzer::get_dist_from_opponent_near_goal_post(const Vector2D &point) {
+    const ServerParam &SP = ServerParam::i();
 
-    return std::min( point.dist( Vector2D
-                                 ( + SP.pitchHalfLength(),
-                                   - SP.goalHalfWidth() ) ),
-                     point.dist( Vector2D
-                                 ( + SP.pitchHalfLength(),
-                                   + SP.goalHalfWidth() ) ) );
+    return std::min(point.dist(Vector2D
+                                       (+SP.pitchHalfLength(),
+                                        -SP.goalHalfWidth())),
+                    point.dist(Vector2D
+                                       (+SP.pitchHalfLength(),
+                                        +SP.goalHalfWidth())));
 }
 
 /*-------------------------------------------------------------------*/
@@ -1029,41 +959,35 @@ FieldAnalyzer::get_dist_from_opponent_near_goal_post( const Vector2D & point )
 
  */
 int
-FieldAnalyzer::get_pass_count( const PredictState & state,
-                               const PassChecker & pass_checker,
-                               const double first_ball_speed,
-                               const int max_count )
-{
-    const AbstractPlayerObject * from = state.ballHolder();
+FieldAnalyzer::get_pass_count(const PredictState &state,
+                              const PassChecker &pass_checker,
+                              const double first_ball_speed,
+                              const int max_count) {
+    const AbstractPlayerObject *from = state.ballHolder();
 
-    if ( ! from )
-    {
-        dlog.addText( Logger::ANALYZER,
-                      "get_pass_count: invalid ball holder" );
+    if (!from) {
+        dlog.addText(Logger::ANALYZER,
+                     "get_pass_count: invalid ball holder");
         return 0;
     }
 
 
     int pass_count = 0;
-    for ( PredictPlayerPtrCont::const_iterator
-              it = state.ourPlayers().begin(),
-              end = state.ourPlayers().end();
-          it != end;
-          ++it )
-    {
-        if ( ! (*it)->isValid()
-             || (*it)->unum() == from->unum() )
-        {
+    for (PredictPlayerPtrCont::const_iterator
+                 it = state.ourPlayers().begin(),
+                 end = state.ourPlayers().end();
+         it != end;
+         ++it) {
+        if (!(*it)->isValid()
+            || (*it)->unum() == from->unum()) {
             continue;
         }
 
-        if ( pass_checker( state, *from, **it, (*it)->pos(), first_ball_speed ) )
-        {
-            pass_count ++;
+        if (pass_checker(state, *from, **it, (*it)->pos(), first_ball_speed)) {
+            pass_count++;
 
-            if ( max_count >= 0
-                 && pass_count >= max_count )
-            {
+            if (max_count >= 0
+                && pass_count >= max_count) {
                 return max_count;
             }
         }
@@ -1077,20 +1001,19 @@ FieldAnalyzer::get_pass_count( const PredictState & state,
 
  */
 bool
-FieldAnalyzer::is_ball_moving_to_our_goal( const Vector2D & ball_pos,
-                                           const Vector2D & ball_vel,
-                                           const double & post_buffer )
-{
+FieldAnalyzer::is_ball_moving_to_our_goal(const Vector2D &ball_pos,
+                                          const Vector2D &ball_vel,
+                                          const double &post_buffer) {
     const double goal_half_width = ServerParam::i().goalHalfWidth();
     const double goal_line_x = ServerParam::i().ourTeamGoalLineX();
-    const Vector2D goal_plus_post( goal_line_x,
-                                   +goal_half_width + post_buffer );
-    const Vector2D goal_minus_post( goal_line_x,
-                                    -goal_half_width - post_buffer );
+    const Vector2D goal_plus_post(goal_line_x,
+                                  +goal_half_width + post_buffer);
+    const Vector2D goal_minus_post(goal_line_x,
+                                   -goal_half_width - post_buffer);
     const AngleDeg ball_angle = ball_vel.th();
 
-    return ( ( ( goal_plus_post - ball_pos ).th() - ball_angle ).degree() < 0
-             && ( ( goal_minus_post - ball_pos ).th() - ball_angle ).degree() > 0 );
+    return (((goal_plus_post - ball_pos).th() - ball_angle).degree() < 0
+            && ((goal_minus_post - ball_pos).th() - ball_angle).degree() > 0);
 }
 
 /*-------------------------------------------------------------------*/
@@ -1098,9 +1021,8 @@ FieldAnalyzer::is_ball_moving_to_our_goal( const Vector2D & ball_pos,
 
  */
 bool
-FieldAnalyzer::to_be_final_action( const PredictState & state )
-{
-    return to_be_final_action( state.ball().pos(), state.theirDefensePlayerLineX() );
+FieldAnalyzer::to_be_final_action(const PredictState &state) {
+    return to_be_final_action(state.ball().pos(), state.theirDefensePlayerLineX());
 }
 
 /*-------------------------------------------------------------------*/
@@ -1108,9 +1030,8 @@ FieldAnalyzer::to_be_final_action( const PredictState & state )
 
  */
 bool
-FieldAnalyzer::to_be_final_action( const WorldModel & wm )
-{
-    return to_be_final_action( wm.ball().pos(), wm.theirDefensePlayerLineX() );
+FieldAnalyzer::to_be_final_action(const WorldModel &wm) {
+    return to_be_final_action(wm.ball().pos(), wm.theirDefensePlayerLineX());
 }
 
 /*-------------------------------------------------------------------*/
@@ -1118,22 +1039,17 @@ FieldAnalyzer::to_be_final_action( const WorldModel & wm )
 
  */
 bool
-FieldAnalyzer::to_be_final_action( const Vector2D & ball_pos,
-                                   const double their_defense_player_line_x )
-{
+FieldAnalyzer::to_be_final_action(const Vector2D &ball_pos,
+                                  const double their_defense_player_line_x) {
     // if near opponent goal, search next action such as shoot
-    if ( ball_pos.x > 30.0 )
-    {
+    if (ball_pos.x > 30.0) {
         return false;
     }
 
     // if over offside line, final action
-    if ( ball_pos.x > their_defense_player_line_x )
-    {
+    if (ball_pos.x > their_defense_player_line_x) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -1143,14 +1059,13 @@ FieldAnalyzer::to_be_final_action( const Vector2D & ball_pos,
 
  */
 const AbstractPlayerObject *
-FieldAnalyzer::get_blocker( const WorldModel & wm,
-                            const Vector2D & opponent_pos )
-{
-    return get_blocker( wm,
-                        opponent_pos,
-                        Vector2D( -ServerParam::i().pitchHalfLength()*0.6
-                                  + ServerParam::i().ourPenaltyAreaLineX()*0.4,
-                                  0.0 ) );
+FieldAnalyzer::get_blocker(const WorldModel &wm,
+                           const Vector2D &opponent_pos) {
+    return get_blocker(wm,
+                       opponent_pos,
+                       Vector2D(-ServerParam::i().pitchHalfLength() * 0.6
+                                + ServerParam::i().ourPenaltyAreaLineX() * 0.4,
+                                0.0));
 }
 
 /*-------------------------------------------------------------------*/
@@ -1158,38 +1073,34 @@ FieldAnalyzer::get_blocker( const WorldModel & wm,
 
  */
 const AbstractPlayerObject *
-FieldAnalyzer::get_blocker( const WorldModel & wm,
-                            const Vector2D & opponent_pos,
-                            const Vector2D & base_pos )
-{
-    static const double min_dist_thr2 = std::pow( 1.0, 2 );
-    static const double max_dist_thr2 = std::pow( 4.0, 2 );
+FieldAnalyzer::get_blocker(const WorldModel &wm,
+                           const Vector2D &opponent_pos,
+                           const Vector2D &base_pos) {
+    static const double min_dist_thr2 = std::pow(1.0, 2);
+    static const double max_dist_thr2 = std::pow(4.0, 2);
     static const double angle_thr = 15.0;
 
-    const AngleDeg attack_angle = ( base_pos - opponent_pos ).th();
+    const AngleDeg attack_angle = (base_pos - opponent_pos).th();
 
-    for ( AbstractPlayerCont::const_iterator
-              t = wm.ourPlayers().begin(),
-              end = wm.ourPlayers().end();
-          t != end;
-          ++t )
-    {
-        if ( (*t)->goalie() ) continue;
-        if ( (*t)->posCount() >= 5 ) continue;
-        if ( (*t)->unumCount() >= 10 ) continue;
-        if ( (*t)->ghostCount() >= 2 ) continue;
+    for (AbstractPlayerCont::const_iterator
+                 t = wm.ourPlayers().begin(),
+                 end = wm.ourPlayers().end();
+         t != end;
+         ++t) {
+        if ((*t)->goalie()) continue;
+        if ((*t)->posCount() >= 5) continue;
+        if ((*t)->unumCount() >= 10) continue;
+        if ((*t)->ghostCount() >= 2) continue;
 
-        double d2 = opponent_pos.dist2( (*t)->pos() );
-        if ( d2 < min_dist_thr2
-             || max_dist_thr2 < d2 )
-        {
+        double d2 = opponent_pos.dist2((*t)->pos());
+        if (d2 < min_dist_thr2
+            || max_dist_thr2 < d2) {
             continue;
         }
 
-        AngleDeg teammate_angle = ( (*t)->pos() - opponent_pos ).th();
+        AngleDeg teammate_angle = ((*t)->pos() - opponent_pos).th();
 
-        if ( ( teammate_angle - attack_angle ).abs() < angle_thr )
-        {
+        if ((teammate_angle - attack_angle).abs() < angle_thr) {
             return *t;
         }
     }
@@ -1202,20 +1113,17 @@ FieldAnalyzer::get_blocker( const WorldModel & wm,
 
  */
 void
-FieldAnalyzer::update( const WorldModel & wm )
-{
-    static GameTime s_update_time( 0, 0 );
+FieldAnalyzer::update(const WorldModel &wm) {
+    static GameTime s_update_time(0, 0);
 
-    if ( s_update_time == wm.time() )
-    {
+    if (s_update_time == wm.time()) {
         return;
     }
     s_update_time = wm.time();
 
-    if ( wm.gameMode().type() == GameMode::BeforeKickOff
-         || wm.gameMode().type() == GameMode::AfterGoal_
-         || wm.gameMode().isPenaltyKickMode() )
-    {
+    if (wm.gameMode().type() == GameMode::BeforeKickOff
+        || wm.gameMode().type() == GameMode::AfterGoal_
+        || wm.gameMode().isPenaltyKickMode()) {
         return;
     }
 
@@ -1223,7 +1131,7 @@ FieldAnalyzer::update( const WorldModel & wm )
     Timer timer;
 #endif
 
-     updateVoronoiDiagram( wm );
+    updateVoronoiDiagram(wm);
 
 #ifdef DEBUG_PRINT
     dlog.addText( Logger::TEAM,
@@ -1239,11 +1147,10 @@ FieldAnalyzer::update( const WorldModel & wm )
 
  */
 void
-FieldAnalyzer::updateVoronoiDiagram( const WorldModel & wm )
-{
-    const Rect2D rect = Rect2D::from_center( 0.0, 0.0,
-                                             ServerParam::i().pitchLength() - 10.0,
-                                             ServerParam::i().pitchWidth() - 10.0 );
+FieldAnalyzer::updateVoronoiDiagram(const WorldModel &wm) {
+    const Rect2D rect = Rect2D::from_center(0.0, 0.0,
+                                            ServerParam::i().pitchLength() - 10.0,
+                                            ServerParam::i().pitchWidth() - 10.0);
 
     M_all_players_voronoi_diagram.clear();
     M_teammates_voronoi_diagram.clear();
@@ -1252,36 +1159,32 @@ FieldAnalyzer::updateVoronoiDiagram( const WorldModel & wm )
     const SideID our = wm.ourSide();
 
     const AbstractPlayerCont::const_iterator end = wm.allPlayers().end();
-    for ( AbstractPlayerCont::const_iterator p = wm.allPlayers().begin();
-          p != end;
-          ++p )
-    {
-        M_all_players_voronoi_diagram.addPoint( (*p)->pos() );
+    for (AbstractPlayerCont::const_iterator p = wm.allPlayers().begin();
+         p != end;
+         ++p) {
+        M_all_players_voronoi_diagram.addPoint((*p)->pos());
 
-        if ( (*p)->side() == our )
-        {
-            M_teammates_voronoi_diagram.addPoint( (*p)->pos() );
-        }
-        else
-        {
-            M_pass_voronoi_diagram.addPoint( (*p)->pos() );
+        if ((*p)->side() == our) {
+            M_teammates_voronoi_diagram.addPoint((*p)->pos());
+        } else {
+            M_pass_voronoi_diagram.addPoint((*p)->pos());
         }
     }
 
     // our goal
-    M_pass_voronoi_diagram.addPoint( Vector2D( - ServerParam::i().pitchHalfLength() + 5.5, 0.0 ) );
+    M_pass_voronoi_diagram.addPoint(Vector2D(-ServerParam::i().pitchHalfLength() + 5.5, 0.0));
     //     M_pass_voronoi_diagram.addPoint( Vector2D( - ServerParam::i().pitchHalfLength() + 5.5,
     //                                                - ServerParam::i().goalHalfWidth() ) );
     //     M_pass_voronoi_diagram.addPoint( Vector2D( - ServerParam::i().pitchHalfLength() + 5.5,
     //                                                + ServerParam::i().goalHalfWidth() ) );
 
     // opponent side corners
-    M_pass_voronoi_diagram.addPoint( Vector2D( + ServerParam::i().pitchHalfLength() + 10.0,
-                                               - ServerParam::i().pitchHalfWidth() - 10.0 ) );
-    M_pass_voronoi_diagram.addPoint( Vector2D( + ServerParam::i().pitchHalfLength() + 10.0,
-                                               + ServerParam::i().pitchHalfWidth() + 10.0 ) );
+    M_pass_voronoi_diagram.addPoint(Vector2D(+ServerParam::i().pitchHalfLength() + 10.0,
+                                             -ServerParam::i().pitchHalfWidth() - 10.0));
+    M_pass_voronoi_diagram.addPoint(Vector2D(+ServerParam::i().pitchHalfLength() + 10.0,
+                                             +ServerParam::i().pitchHalfWidth() + 10.0));
 
-    M_pass_voronoi_diagram.setBoundingRect( rect );
+    M_pass_voronoi_diagram.setBoundingRect(rect);
 
     M_all_players_voronoi_diagram.compute();
     M_teammates_voronoi_diagram.compute();
@@ -1293,29 +1196,25 @@ FieldAnalyzer::updateVoronoiDiagram( const WorldModel & wm )
 
  */
 void
-FieldAnalyzer::writeDebugLog()
-{
+FieldAnalyzer::writeDebugLog() {
 
-    if ( dlog.isEnabled( Logger::PASS ) )
-    {
+    if (dlog.isEnabled(Logger::PASS)) {
         const VoronoiDiagram::Segment2DCont::const_iterator s_end = M_pass_voronoi_diagram.resultSegments().end();
-        for ( VoronoiDiagram::Segment2DCont::const_iterator s = M_pass_voronoi_diagram.resultSegments().begin();
-              s != s_end;
-              ++s )
-        {
-            dlog.addLine( Logger::PASS,
-                          s->origin(), s->terminal(),
-                          "#0000ff" );
+        for (VoronoiDiagram::Segment2DCont::const_iterator s = M_pass_voronoi_diagram.resultSegments().begin();
+             s != s_end;
+             ++s) {
+            dlog.addLine(Logger::PASS,
+                         s->origin(), s->terminal(),
+                         "#0000ff");
         }
 
         const VoronoiDiagram::Ray2DCont::const_iterator r_end = M_pass_voronoi_diagram.resultRays().end();
-        for ( VoronoiDiagram::Ray2DCont::const_iterator r = M_pass_voronoi_diagram.resultRays().begin();
-              r != r_end;
-              ++r )
-        {
-            dlog.addLine( Logger::PASS,
-                          r->origin(), r->origin() + Vector2D::polar2vector( 20.0, r->dir() ),
-                          "#0000ff" );
+        for (VoronoiDiagram::Ray2DCont::const_iterator r = M_pass_voronoi_diagram.resultRays().begin();
+             r != r_end;
+             ++r) {
+            dlog.addLine(Logger::PASS,
+                         r->origin(), r->origin() + Vector2D::polar2vector(20.0, r->dir()),
+                         "#0000ff");
         }
     }
 }

@@ -678,6 +678,9 @@ SamplePlayer::doHeardPassReceive() {
         return false;
     }
 
+
+    std::cout << wm.time() << " heard passssssssssssssssssssssssss" << std::endl;
+
     int self_min = wm.interceptTable()->selfReachCycle();
     Vector2D intercept_pos = wm.ball().inertiaPoint(self_min);
     Vector2D heard_pos = wm.audioMemory().pass().front().receive_pos_;

@@ -34,6 +34,11 @@ bool Bhv_PassPosition::execute(rcsc::PlayerAgent *agent) {
     const Strategy &stra = Strategy::i();
     const CafeModel &cm = CafeModel::i();
 
+    if(!donor){
+        dlog.addText(Logger::TEAM,
+                     __FILE__": Bhv_PassPosition donor is NULL !!!");
+        return false;
+    }
 
     Vector2D target_point = getPassPos(agent);
     if (target_point == Vector2D::INVALIDATED) {
@@ -42,7 +47,14 @@ bool Bhv_PassPosition::execute(rcsc::PlayerAgent *agent) {
         return false;
     }
 
-    const double dash_power = Strategy::get_normal_dash_power(wm, stra);
+    double dash_power = Strategy::get_normal_dash_power(wm, stra);
+
+    const PlayerObject * ball_lord = cm.getBallLord();
+
+    if(ball_lord && donor->unum() == ball_lord->unum()){
+        dash_power = std::min(dash_power * 1.8,
+                              ServerParam::i().maxDashPower());
+    }
 
     double dist_thr = wm.ball().distFromSelf() * 0.04;
     if (dist_thr < 1.0) dist_thr = 1.0;

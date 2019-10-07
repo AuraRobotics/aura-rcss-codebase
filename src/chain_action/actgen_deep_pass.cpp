@@ -97,11 +97,13 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
         FastIC * fic = cm.fastIC();
 
         Vector2D donor_to_me_vel = pass_pos - ball_pos;
+        Vector2D donor_offset = donor_to_me_vel;
+        donor_offset.setLength(1.1);
         while(pass_speed > 0.5){
             donor_to_me_vel.setLength(pass_speed);
 
             fic->refresh();
-            fic->setBall(ball_pos + donor_to_me_vel, donor_to_me_vel, 0);
+            fic->setBall(ball_pos + donor_offset, donor_to_me_vel, 0);
             fic->calculate();
 
             const int pass_cycle = rcscUtils::ballCycle(dist_pass, pass_speed);
@@ -116,7 +118,7 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
             }
 
             if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
-                fastest_player_cycle < pass_cycle + 2 && fastest_player_cycle > 3 &&
+                fastest_player_cycle < pass_cycle + 2 && fastest_player_cycle > pass_cycle - 2 &&
                 fastest_player_cycle < fastest_opp_cycle - 3) {
                 break;
             }

@@ -130,6 +130,12 @@ void PlayerRelationship::calcRelations() {
 
 
     }
+
+
+
+
+
+
 }
 
 /*
@@ -266,7 +272,7 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
 
 
     double pass_dist = player_first_pos.dist(player_second_pos);
-    const double max_receive_ball_speed = 1.24;
+    const double max_receive_ball_speed = 1.45;
 
     double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
 

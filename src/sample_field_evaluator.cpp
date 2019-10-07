@@ -52,7 +52,7 @@ static const int VALID_PLAYER_THRESHOLD = 8;
 /*!
 
  */
-static double evaluate_state(const PredictState &state);
+static double evaluate_state(const PredictState &state, const std::vector <ActionStatePair> & path );
 
 
 /*-------------------------------------------------------------------*/
@@ -77,8 +77,8 @@ SampleFieldEvaluator::~SampleFieldEvaluator() {
  */
 double
 SampleFieldEvaluator::operator()(const PredictState &state,
-                                 const std::vector <ActionStatePair> & /*path*/ ) const {
-    const double final_state_evaluation = evaluate_state(state);
+                                 const std::vector <ActionStatePair> & path ) const {
+    const double final_state_evaluation = evaluate_state(state, path);
 
     //
     // ???
@@ -109,7 +109,7 @@ SampleFieldEvaluator::operator()(const PredictState &state,
  */
 static
 double
-evaluate_state(const PredictState &state) {
+evaluate_state(const PredictState &state,const std::vector <ActionStatePair> & path ) {
     const ServerParam &SP = ServerParam::i();
 
     const AbstractPlayerObject *holder = state.ballHolder();
@@ -191,22 +191,37 @@ evaluate_state(const PredictState &state) {
 #endif
 
 
-    double *dist_opp = new double(DBL_MAX);
-    const AbstractPlayerObject *nearest_opp = state.getOpponentNearestTo(holder->pos(), 1, dist_opp);
 
-    if (dist_opp && (*dist_opp) < 2.5) {
-        return -DBL_MAX / 2.0;
+
+    const bool path_is_empty = path.empty();
+    if(path_is_empty){
+        double dist_opp = 9999;
+        const PlayerObject * nearest_opp = state.getOpponentNearestTo(holder->pos(), 10, &dist_opp);
+        rcsc::dlog.addText(rcsc::Logger::ACTION_CHAIN,
+                           __FILE__" dist nearset opp( dist : %.2f )  ", (dist_opp));
+
+        if(nearest_opp){
+            int last_observe_count = nearest_opp->posCount();
+            dist_opp -= last_observe_count * 2;
+            rcsc::dlog.addText(rcsc::Logger::ACTION_CHAIN,
+                               __FILE__" dist nearset after observer( dist : %.2f )  %d", (dist_opp), last_observe_count);
+        }
+
+        if (dist_opp < 2.5) {
+            return -DBL_MAX / 2.0;
+        }
+
+        if (dist_opp < 5) {
+            return -DBL_MAX / 3.0;
+        }
+
+        if (dist_opp < 10) {
+            point -= 10 - (dist_opp) ;
+        }
+
+
+
     }
-
-    if (dist_opp && (*dist_opp) < 5) {
-        return -DBL_MAX / 3.0;
-    }
-
-    if (dist_opp && (*dist_opp) < 10) {
-        point -= 10 - (*dist_opp) ;
-    }
-
-
 
     //
     // add bonus for goal, free situation near offside line

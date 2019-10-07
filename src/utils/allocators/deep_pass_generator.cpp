@@ -121,9 +121,11 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
         const int pass_cycle = rcscUtils::ballCycle(pass_dist, pass_speed);
         Vector2D donor_to_me_vel = to_goal - sender_pos;
         donor_to_me_vel.setLength(pass_speed);
+        Vector2D donor_offset = donor_to_me_vel;
+        donor_offset.setLength(1.1);
 
         fic->refresh();
-        fic->setBall(sender_pos + donor_to_me_vel, donor_to_me_vel, 0); //TODO donor_to_me_vel
+        fic->setBall(sender_pos + donor_offset, donor_to_me_vel, 0); //TODO donor_to_me_vel
         fic->calculate();
 
 
