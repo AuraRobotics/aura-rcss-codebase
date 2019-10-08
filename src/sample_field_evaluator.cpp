@@ -52,8 +52,9 @@ static const int VALID_PLAYER_THRESHOLD = 8;
 /*!
 
  */
-static double evaluate_state(const PredictState &state, const std::vector <ActionStatePair> & path );
+static double evaluate_state(const PredictState &state, const std::vector <ActionStatePair> &path);
 
+static double areaRate(const PredictState &state, const std::vector <ActionStatePair> &path);
 
 /*-------------------------------------------------------------------*/
 /*!
@@ -77,7 +78,7 @@ SampleFieldEvaluator::~SampleFieldEvaluator() {
  */
 double
 SampleFieldEvaluator::operator()(const PredictState &state,
-                                 const std::vector <ActionStatePair> & path ) const {
+                                 const std::vector <ActionStatePair> &path) const {
     const double final_state_evaluation = evaluate_state(state, path);
 
     //
@@ -94,9 +95,9 @@ SampleFieldEvaluator::operator()(const PredictState &state,
     if (holder) {
         holder_unum = holder->unum();
     }
-//    dlog.addText(Logger::PLAN,
-//                 __FILE__":  score  %d -----------------> %.2f",holder_unum,  result);
-//
+    dlog.addText(Logger::PLAN,
+                 __FILE__":  score  %d -----------------> %.2f",holder_unum,  areaRate(state, path));
+
     ////////////////////////
 
     return result;
@@ -109,7 +110,7 @@ SampleFieldEvaluator::operator()(const PredictState &state,
  */
 static
 double
-evaluate_state(const PredictState &state,const std::vector <ActionStatePair> & path ) {
+evaluate_state(const PredictState &state, const std::vector <ActionStatePair> &path) {
     const ServerParam &SP = ServerParam::i();
 
     const AbstractPlayerObject *holder = state.ballHolder();
@@ -173,6 +174,13 @@ evaluate_state(const PredictState &state,const std::vector <ActionStatePair> & p
     }
 
 
+
+
+
+
+
+
+
     //
     // set basic evaluation
     //
@@ -191,20 +199,25 @@ evaluate_state(const PredictState &state,const std::vector <ActionStatePair> & p
 #endif
 
 
+    double area_rate = areaRate(state, path);
 
+
+
+    point = area_rate;
 
     const bool path_is_empty = path.empty();
-    if(path_is_empty){
+    if (path_is_empty) {
         double dist_opp = 9999;
-        const PlayerObject * nearest_opp = state.getOpponentNearestTo(holder->pos(), 10, &dist_opp);
+        const PlayerObject *nearest_opp = state.getOpponentNearestTo(holder->pos(), 10, &dist_opp);
         rcsc::dlog.addText(rcsc::Logger::ACTION_CHAIN,
                            __FILE__" dist nearset opp( dist : %.2f )  ", (dist_opp));
 
-        if(nearest_opp){
+        if (nearest_opp) {
             int last_observe_count = nearest_opp->posCount();
             dist_opp -= last_observe_count * 2;
             rcsc::dlog.addText(rcsc::Logger::ACTION_CHAIN,
-                               __FILE__" dist nearset after observer( dist : %.2f )  %d", (dist_opp), last_observe_count);
+                               __FILE__" dist nearset after observer( dist : %.2f )  %d", (dist_opp),
+                               last_observe_count);
         }
 
         if (dist_opp < 2.5) {
@@ -216,9 +229,8 @@ evaluate_state(const PredictState &state,const std::vector <ActionStatePair> & p
         }
 
         if (dist_opp < 10) {
-            point -= 10 - (dist_opp) ;
+            point -= 15 - (dist_opp);
         }
-
 
 
     }
@@ -247,4 +259,65 @@ evaluate_state(const PredictState &state,const std::vector <ActionStatePair> & p
     }
 
     return point;
+}
+
+
+#include "strategy.h"
+
+static double areaRate(const PredictState &state, const std::vector <ActionStatePair> &path) {
+
+    Vector2D ball_pos = state.ball().pos();
+    Strategy::BallArea ball_area = Strategy::get_ball_area(ball_pos);
+    double dist_goal = ServerParam::i().theirTeamGoalPos().dist(state.ball().pos());
+
+    double base = 0;
+    double dist_rate = 0;
+
+    switch (ball_area) {
+        case Strategy::BA_OffMidField: {
+            base = 180;
+            double dist_area_min = 18;
+            double dist_delta = 36 - (-1);
+            double rate_delta = 300 - base;
+
+            dist_rate = (1 - ((dist_goal - dist_area_min) / dist_delta)) * rate_delta;
+
+        }
+            break;
+        case Strategy::BA_DribbleAttack: {
+            base = 180;
+            double dist_area_min = 27;
+            double dist_delta = 36 - (-1);
+            double rate_delta = 220 - base;
+
+            dist_rate = (1 - ((dist_goal - dist_area_min) / dist_delta)) * rate_delta;
+        }
+            break;
+        case Strategy::BA_Cross: {
+            base = 220;
+            double dist_area_min = 20;
+            double dist_delta = 53 - (36);
+            double rate_delta = 270 - base;
+
+            dist_rate = (1 - ((dist_goal - dist_area_min) / dist_delta)) * rate_delta;
+        }
+            break;
+        case Strategy::BA_ShootChance: {
+            base = 300;
+            double dist_area_min = 0;
+            double dist_delta = 53 - (36);
+            double rate_delta = 500 - base;
+
+            dist_rate = (1 - ((dist_goal - dist_area_min) / dist_delta)) * rate_delta;
+        }
+            break;
+        default: {
+            base = 150;
+            dist_rate = state.ball().pos().x;
+        }
+            break;
+    }
+
+
+    return base + dist_rate;
 }

@@ -314,7 +314,13 @@ sample_player-sample_field_evaluator.o: sample_field_evaluator.cpp \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/c++/5/cfloat \
- /usr/lib/gcc/x86_64-linux-gnu/5/include/float.h
+ /usr/lib/gcc/x86_64-linux-gnu/5/include/float.h strategy.h \
+ roles/soccer_role.h /usr/local/include/rcsc/factory.h \
+ /usr/include/c++/5/stack /usr/include/c++/5/bits/stl_stack.h \
+ /usr/include/c++/5/cstring /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/string3.h \
+ /usr/local/include/rcsc/formation/formation.h \
+ /usr/local/include/rcsc/formation/sample_data.h
 
 /usr/include/stdc-predef.h:
 
@@ -1087,3 +1093,23 @@ sample_field_evaluator.h:
 /usr/include/c++/5/cfloat:
 
 /usr/lib/gcc/x86_64-linux-gnu/5/include/float.h:
+
+strategy.h:
+
+roles/soccer_role.h:
+
+/usr/local/include/rcsc/factory.h:
+
+/usr/include/c++/5/stack:
+
+/usr/include/c++/5/bits/stl_stack.h:
+
+/usr/include/c++/5/cstring:
+
+/usr/include/string.h:
+
+/usr/include/x86_64-linux-gnu/bits/string3.h:
+
+/usr/local/include/rcsc/formation/formation.h:
+
+/usr/local/include/rcsc/formation/sample_data.h:

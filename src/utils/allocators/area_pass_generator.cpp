@@ -177,7 +177,7 @@ bool AreaPassGenerator::checkPosIsValid(const rcsc::Vector2D check_point, const 
     }
 
     double pass_dist = sender_pos.dist(check_point);
-    const double max_receive_ball_speed = 1.24;
+    const double max_receive_ball_speed = 1.19;
 
     double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
 

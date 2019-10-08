@@ -204,7 +204,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
             double near_to_body_dir =
                     nearToBodyDir(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0;
             double near_to_goal = nearToGoal(check_point, 2 * search_radius) * 1;
-            double free_space = freeSpace(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0.3;
+            double free_space = freeSpace(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0.1;
 
             temp_score += near_to_body_dir;
             temp_score += near_to_goal;
@@ -353,7 +353,7 @@ double Bhv_PassPosition::freeSpace(rcsc::Vector2D check_point, rcsc::Vector2D se
 
     }
 
-    if(min_dist > max_radius2){
+    if(min_dist > 8){
         return 1;
     }
 

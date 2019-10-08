@@ -26,7 +26,7 @@ public:
             relationships(rel), wm(wm) {
         this->fic = fic;
         fic->setByWorldModel();
-        fic->setMaxCycleAfterFirstFastestPlayer(5);
+        fic->setMaxCycleAfterFirstFastestPlayer(8);
     }
 
 

@@ -86,17 +86,19 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                                                            angle_ball);
 
         const PlayerType *ptype = resiver->playerTypePtr();
-        const double max_receive_ball_speed = 0.9;
+        const double max_receive_ball_speed = 1.5;
 //
         double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
 //
         FastIC *fic = cm.fastIC();
+        fic->setMaxCycleAfterFirstFastestPlayer(8);
 
         Vector2D donor_to_me_vel = pass_pos - ball_pos;
         Vector2D donor_offset = donor_to_me_vel;
-        donor_offset.setLength(2);
+
         while (pass_speed > 0.5) {
             donor_to_me_vel.setLength(pass_speed);
+            donor_offset.setLength(pass_speed * 2.2);
 
             fic->refresh();
             fic->setBall(ball_pos + donor_offset, donor_to_me_vel, 0);
@@ -115,8 +117,8 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
 
 
             if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
-                fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle > 3 &&
-                fastest_opp_cycle > fastest_player_cycle + 5) {
+                fastest_player_cycle < pass_cycle + 4 && fastest_player_cycle >= 3 &&
+                fastest_opp_cycle > fastest_player_cycle + 3) {
                 dlog.addText(Logger::Logger::ACTION_CHAIN,
                              __FILE__"pass area to %d in pos %.2f %.2f,   fast_palyer : %d , fast_cycle, %d, should cycle : %d , speed : %.2f, opp_cycle : %d ",
                              resiver->unum(), pass_pos.x, pass_pos.y, fastest_player->unum(), fastest_player_cycle, pass_cycle, pass_speed, fastest_opp_cycle);
@@ -132,7 +134,7 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
         }
 
         if (pass_speed > 1.1) {
-            pass_speed -= 0.32;
+            pass_speed -= 0.31;
         }
 
 

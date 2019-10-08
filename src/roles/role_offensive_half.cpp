@@ -105,6 +105,9 @@ RoleOffensiveHalf::doMove(PlayerAgent *agent) {
     if (Bhv_Intercept().execute(agent)) {
         return;
     }
+    dlog.addText(Logger::TEAM,
+                 __FILE__": stra.getSituation()  =   %d",
+                 stra.getSituation());
 
     switch (stra.getSituation()){
         case Defense_Situation:
