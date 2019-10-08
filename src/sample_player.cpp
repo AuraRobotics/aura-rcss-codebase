@@ -223,7 +223,6 @@ void
 SamplePlayer::actionImpl() {
 
 
-
     const WorldModel &wm = this->world();
     clock_t start_time = clock();
     //
@@ -515,6 +514,23 @@ SamplePlayer::doPreprocess() {
 
     dlog.addText(Logger::TEAM,
                  __FILE__": (doPreProcess)");
+
+
+    bool kickable = wm.self().isKickable();
+    if (kickable && wm.existKickableTeammate()) {
+        const int mate_unum = wm.teammatesFromBall().front()->unum();
+
+        if (mate_unum != -1 && wm.self().unum() < mate_unum) {
+            dlog.addText(Logger::TEAM,
+                         __FILE__": kickable teammate with unum  %d",
+                         mate_unum);
+
+            this->setViewAction(new View_Tactical());
+            this->setNeckAction(new Neck_TurnToBallOrScan());
+            return true;
+        }
+
+    }
 
     //
     // freezed by tackle effect

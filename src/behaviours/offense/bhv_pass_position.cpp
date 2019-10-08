@@ -201,14 +201,21 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
 
             double temp_score = 0;
 
+
+            double shoot_pasible = shootPasible(check_point, self_pos, ball_next_pos, 2 * search_radius, fastIC);
+
             double near_to_body_dir =
                     nearToBodyDir(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0;
             double near_to_goal = nearToGoal(check_point, 2 * search_radius) * 1;
-            double free_space = freeSpace(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0.1;
+            double free_space = freeSpace(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0.12;
 
             temp_score += near_to_body_dir;
             temp_score += near_to_goal;
             temp_score += free_space;
+            temp_score += shoot_pasible;
+            if(shoot_pasible > 0){
+                std::cout << " -> -> : " << wm.self().unum() << "   " << wm.time() << std::endl;
+            }
 
             ///////////
             table_near_to_goal.back().push_back(near_to_goal);
@@ -267,7 +274,6 @@ void Bhv_PassPosition::fastICConfig(FastIC *fastIC, rcsc::PlayerAgent *agent) {
     for (int i = 0; i < wm.theirPlayers().size(); i++) {
         if (fastIC->isPlayerValid(wm.theirPlayers()[i])) {
             fastIC->addPlayer(wm.theirPlayers()[i]);
-
         }
     }
 
@@ -275,6 +281,42 @@ void Bhv_PassPosition::fastICConfig(FastIC *fastIC, rcsc::PlayerAgent *agent) {
     fastIC->setMaxCycleAfterOppReach(10);
     fastIC->setMaxCycles(20);
 }
+
+double Bhv_PassPosition::shootPasible(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D ball_pos,
+                                      double max_radius2, FastIC * fastIC) {
+
+    if(check_point.x < 35 || std::abs(check_point.y) > 20){
+        return 0;
+    }
+    double ball_speed = 2.8;//TODO
+    Vector2D goal_pos = ServerParam::i().theirTeamGoalPos();
+
+    int shoot_count = 0;
+    for(int goal_y = goal_pos.y - 7 ; goal_y < goal_pos.y + 7; goal_y ++ ){
+
+        Vector2D temp_shot_pos(goal_pos.x , goal_y);
+
+        Vector2D to_goal_vel = temp_shot_pos -  check_point;
+        to_goal_vel.setLength(ball_speed);
+
+        fastIC->refresh();
+        fastIC->setBall(check_point, to_goal_vel, 0);
+        fastIC->calculate();
+
+        const AbstractPlayerObject *fastestPlayer = fastIC->getFastestPlayer();
+        if(fastestPlayer == NULL){
+            shoot_count ++;
+            dlog.addLine(Logger::TEAM,
+                         check_point, temp_shot_pos,
+                         "#f00f00");
+
+            return 100;
+        }
+
+    }
+    return 0;
+}
+
 
 bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D opp_pos, rcsc::Vector2D ball_lord_pos,
                                        double offside_x, const WorldModel & wm) {
@@ -290,9 +332,14 @@ bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2
         return false;
     }
 
-    const PlayerObject * nearest_mate = wm.teammatesFromSelf().front();
-    if(nearest_mate && nearest_mate->pos().dist(check_point) < 4.5){
-        return false;
+    const PlayerPtrCont::const_iterator t_end = wm.teammatesFromSelf().end();
+    for ( PlayerPtrCont::const_iterator t = wm.teammatesFromSelf().begin();
+          t != t_end;
+          ++t )
+    {
+        if((*t) && (*t)->pos().dist(check_point) < 3.5){
+            return false;
+        }
     }
 
     const PlayerPtrCont::const_iterator end = wm.opponentsFromSelf().end();
