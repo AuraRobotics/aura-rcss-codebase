@@ -19,6 +19,7 @@
 #include <rcsc/action/neck_turn_to_ball_or_scan.h>
 #include <rcsc/action/neck_turn_to_low_conf_teammate.h>
 #include <rcsc/geom/vector_2d.h>
+#include <rcsc/geom/line_2d.h>
 #include <rcsc/geom/angle_deg.h>
 
 
@@ -213,6 +214,9 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
             temp_score += near_to_goal;
             temp_score += free_space;
             temp_score += shoot_pasible;
+            temp_score += (check_point.x - check_line_x.first) * 2;
+
+
             if(shoot_pasible > 0){
                 std::cout << " -> -> : " << wm.self().unum() << "   " << wm.time() << std::endl;
             }
@@ -318,7 +322,7 @@ double Bhv_PassPosition::shootPasible(rcsc::Vector2D check_point, rcsc::Vector2D
 }
 
 
-bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D opp_pos, rcsc::Vector2D ball_lord_pos,
+bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D self_pos, rcsc::Vector2D ball_lord_pos,
                                        double offside_x, const WorldModel & wm) {
     const ServerParam &SP = ServerParam::i();
     const CafeModel &cm = CafeModel::i();
@@ -337,9 +341,29 @@ bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2
           t != t_end;
           ++t )
     {
-        if((*t) && (*t)->pos().dist(check_point) < 3.5){
+        if(!(*t)){
+            continue;
+        }
+        if((*t)->pos().dist(check_point) < 3.5){
             return false;
         }
+
+
+        Vector2D mate_pos = (*t)->pos();
+        if(self_pos.dist(check_point) > self_pos.dist(mate_pos)){
+            Vector2D to_mate_vel = mate_pos - self_pos;
+            to_mate_vel.setLength(20);
+
+            Line2D line_self_mate(mate_pos, mate_pos + to_mate_vel);
+            dlog.addLine(Logger::TEAM,
+                         mate_pos, mate_pos + to_mate_vel,
+                         "#f00f00");
+
+            if(line_self_mate.dist(check_point) < 3.6){
+                return false;
+            }
+        }
+
     }
 
     const PlayerPtrCont::const_iterator end = wm.opponentsFromSelf().end();
@@ -351,6 +375,10 @@ bool Bhv_PassPosition::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2
             return false;
         }
     }
+
+
+
+
 
     return true;
 }
@@ -411,7 +439,7 @@ double Bhv_PassPosition::nearToGoal(rcsc::Vector2D check_point, double max_radiu
     const ServerParam &SP = ServerParam::i();
     const Vector2D our_goal = SP.theirTeamGoalPos();
     double dist_from_goal = our_goal.dist(check_point);
-    return (55 - dist_from_goal) / 55;
+    return (55 - dist_from_goal) / 55 ;
 }
 
 #include "../../utils/utils.cpp"

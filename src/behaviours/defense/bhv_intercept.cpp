@@ -50,7 +50,7 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
                  opp_min);
     bool flag_intercept = false;
     if (self_min <= opp_min) {
-        if(self_min + 1 < mate_min){
+        if(self_min + 1 <= mate_min){
             flag_intercept = true;
         }
 

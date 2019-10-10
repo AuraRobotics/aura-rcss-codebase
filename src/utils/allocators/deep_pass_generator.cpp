@@ -121,7 +121,7 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
         Vector2D donor_to_me_vel = to_goal - sender_pos;
         donor_to_me_vel.setLength(pass_speed);
         Vector2D donor_offset = donor_to_me_vel;
-        donor_offset.setLength(5);
+        donor_offset.setLength(2);
 
         fic->refresh();
         fic->setBall(sender_pos + donor_offset, donor_to_me_vel, 0); //TODO donor_to_me_vel
@@ -177,7 +177,7 @@ const rcsc::Vector2D DeepPassGenerator::generateDeepPass(const rcsc::AbstractPla
         Vector2D donor_to_me_vel = to_end - sender_pos;
         donor_to_me_vel.setLength(pass_speed);
         Vector2D donor_offset = donor_to_me_vel;
-        donor_offset.setLength(5);
+        donor_offset.setLength(2);
 
         fic->refresh();
         fic->setBall(sender_pos + donor_offset, donor_to_me_vel, 0); //TODO donor_to_me_vel

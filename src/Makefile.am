@@ -47,7 +47,7 @@ BHV_Offense_SOURCE = \
     behaviours/offense/bhv_offensive_positioning.h \
     behaviours/offense/bhv_offensive_positioning.cpp \
     behaviours/offense/bhv_pass_position.h \
-    behaviours/offense/bhv_pass_position.cpp 
+    behaviours/offense/bhv_pass_position.cpp
 
 
 BHV_SOURCE = \

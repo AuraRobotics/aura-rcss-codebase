@@ -253,6 +253,12 @@ public:
       }
 
     rcsc::AbstractPlayerCont getPlayerCont( const rcsc::PlayerPredicate * predicate ) const;
+
+    rcsc::Vector2D orgBallPos() const{
+        return M_world->ball().pos();
+    }
+
+
 };
 
 #endif

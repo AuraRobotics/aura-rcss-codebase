@@ -228,14 +228,14 @@ SampleCommunication::execute( PlayerAgent * agent )
 
 #if 1
     sayBallAndPlayers( agent );
-    sayStamina( agent );
+//    sayStamina( agent );
 #else
     sayBall( agent );
     sayGoalie( agent );
     saySelf( agent );
     sayPlayers( agent );
 #endif
-    attentiontoSomeone( agent );
+//    attentiontoSomeone( agent );
 
     return true;
 }

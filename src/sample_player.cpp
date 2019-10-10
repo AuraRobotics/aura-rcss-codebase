@@ -634,7 +634,8 @@ SamplePlayer::doShoot() {
     if (wm.gameMode().type() != GameMode::IndFreeKick_
         && wm.time().stopped() == 0
         && wm.self().isKickable()
-        && Bhv_StrictCheckShoot().execute(this)) {
+        && Bhv_StrictCheckShoot().execute(this)
+        ) {
         dlog.addText(Logger::TEAM,
                      __FILE__": shooted");
 
@@ -783,7 +784,7 @@ SamplePlayer::createActionGenerator() const {
     //
 //
     g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_ShortPass(), 1));
+                            (new ActGen_ShortPass(), 2));
 
 
 
@@ -817,8 +818,8 @@ SamplePlayer::createActionGenerator() const {
     //
     // cross
     //
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_Cross(), 1));
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_Cross(), 1));
 
     //
     // direct pass
@@ -830,8 +831,8 @@ SamplePlayer::createActionGenerator() const {
     //
     // short dribble
 
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_ShortDribble(), 1));
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_ShortDribble(), 1));
 
     //
     // self pass (long dribble)
