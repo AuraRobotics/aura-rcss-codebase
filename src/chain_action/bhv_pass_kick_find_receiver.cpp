@@ -335,6 +335,7 @@ Bhv_PassKickFindReceiver::execute(PlayerAgent *agent) {
         agent->debugClient().addCircle(wm.self().pos(), 5.0);
         agent->debugClient().addCircle(wm.self().pos(), 10.0);
 
+
         return true;
     }
 
@@ -507,6 +508,7 @@ Bhv_PassKickFindReceiver::doCheckReceiver(PlayerAgent *agent,
 
         if (next_ball_dist > noised_kickable_area) {
             if (doKeepBall(agent, pass)) {
+                doSayPass(agent, pass);
                 return true;
             }
 
@@ -515,7 +517,7 @@ Bhv_PassKickFindReceiver::doCheckReceiver(PlayerAgent *agent,
                              __FILE__": (doCheckReceiver) stop the ball");
                 agent->debugClient().addMessage("PassKickFind:StopBall");
                 agent->debugClient().setTarget(receiver->unum());
-
+                doSayPass(agent, pass);
                 return true;
             }
 

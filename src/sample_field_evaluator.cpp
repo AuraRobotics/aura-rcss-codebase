@@ -185,7 +185,7 @@ evaluate_state(const PredictState &state, const std::vector <ActionStatePair> &p
     if(state.ball().pos().x > 36) {
         double shoot_count_rate = can_shoot_to_goal(state, path);
         if (shoot_count_rate > 0) {
-            std::cout << " cannn shoootttttttttttttttttttt 0))))))" << std::endl;
+//            std::cout << " cannn shoootttttttttttttttttttt 0))))))" << std::endl;
             return shoot_count_rate * 1000;
         }
     }
@@ -399,9 +399,34 @@ static double freeSpace(const PredictState &state, const std::vector <ActionStat
 double can_shoot_to_goal(const PredictState &state, const std::vector <ActionStatePair> &path){
 
     FastIC *fic = CafeModel::fastIC();
-    fic->setByWorldModel();
-    fic->setMaxCycleAfterFirstFastestPlayer(20);
-    fic->setMaxCycleAfterOppReach(3);
+
+    const ServerParam &SP = ServerParam::i();
+
+
+    fic->reset();
+    fic->setShootMode();
+    fic->setProbMode();
+
+//    for (int i = 0; i < wm.ourPlayers().size(); i++)
+//    {
+//        if (isPlayerValid(wm.ourPlayers()[i]))
+//        {
+//            addPlayer(wm.ourPlayers()[i]);
+//
+//        }
+//    }
+    for (int i = 0; i < state.theirPlayers().size(); i++) {
+        if (fic->isPlayerValid(state.theirPlayers()[i])) {
+            fic->addPlayer(state.theirPlayers()[i]);
+        }
+    }
+
+    fic->setMaxCycleAfterFirstFastestPlayer(10);
+    fic->setMaxCycleAfterOppReach(10);
+    fic->setMaxCycles(20);
+
+
+
 
     Vector2D ball_pos = state.ball().pos();
 
@@ -431,3 +456,6 @@ double can_shoot_to_goal(const PredictState &state, const std::vector <ActionSta
     }
     return shoot_count;
 }
+
+
+

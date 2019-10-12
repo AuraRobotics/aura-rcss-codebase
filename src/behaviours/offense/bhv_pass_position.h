@@ -41,6 +41,9 @@ private:
     double shootPasible(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
                         rcsc::Vector2D ball_pos, double max_radius2, FastIC * fastIC);
 
+    double passDealer(rcsc::Vector2D check_point, rcsc::Vector2D self_pos,
+                        rcsc::Vector2D ball_pos, double max_radius2, FastIC * fastIC, const rcsc::PlayerObject *, const rcsc::WorldModel &wm );
+
     double nearToGoal(rcsc::Vector2D check_point,  double max_radius2);
 
     void fastICConfig(FastIC *fastIC, rcsc::PlayerAgent *agent);

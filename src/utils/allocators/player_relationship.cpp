@@ -40,7 +40,7 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 }
 
 void PlayerRelationship::calcKickable() {
-    if(!wm.self().isKickable() && wm.self().unum() != 8){
+    if(!wm.self().isKickable()){
         return;
     }
 
@@ -296,7 +296,7 @@ bool PlayerRelationship::ignoreIterceptPass(int unum_first, const rcsc::Abstract
 
 
     double pass_dist = player_first_pos.dist(player_second_pos);
-    const double max_receive_ball_speed = 1.45;
+    const double max_receive_ball_speed = 1.25;
 
     double pass_speed = rcscUtils::first_speed_pass(pass_dist, max_receive_ball_speed);
 

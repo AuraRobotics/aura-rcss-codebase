@@ -84,7 +84,7 @@ void ActGen_ShortPass::generate(std::vector <ActionStatePair> *result, const Pre
 
 
         const PlayerType * ptype = resiver->playerTypePtr();
-        const double max_receive_ball_speed = 1.45;
+        const double max_receive_ball_speed = 1.25;
 
         double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
 

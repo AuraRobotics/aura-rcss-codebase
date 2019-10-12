@@ -53,6 +53,7 @@
 
 #include "communication/intention_receive.h"
 #include "cafe_model.h"
+#include "./behaviours/offense/bhv_shoot.h"
 
 #include <rcsc/action/basic_actions.h>
 #include <rcsc/action/bhv_emergency.h>
@@ -634,7 +635,8 @@ SamplePlayer::doShoot() {
     if (wm.gameMode().type() != GameMode::IndFreeKick_
         && wm.time().stopped() == 0
         && wm.self().isKickable()
-        && Bhv_StrictCheckShoot().execute(this)
+//        && Bhv_StrictCheckShoot().execute(this)
+        && Bhv_Shoot().execute(this)
         ) {
         dlog.addText(Logger::TEAM,
                      __FILE__": shooted");
@@ -784,7 +786,7 @@ SamplePlayer::createActionGenerator() const {
     //
 //
     g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_ShortPass(), 2));
+                            (new ActGen_ShortPass(), 3));
 
 
 
@@ -831,8 +833,8 @@ SamplePlayer::createActionGenerator() const {
     //
     // short dribble
 
-    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_ShortDribble(), 1));
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_ShortDribble(), 1));
 
     //
     // self pass (long dribble)
