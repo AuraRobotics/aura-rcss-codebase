@@ -46,7 +46,8 @@ bool Bhv_MarkMan::execute(rcsc::PlayerAgent *agent) {
 
     const double dash_power = Strategy::get_normal_dash_power(wm, stra);
 
-    double dist_thr = 1.5;//wm.ball().distFromSelf() * 0.04;
+    double dist_target = target_point.dist(wm.self().pos());
+    double dist_thr =  dist_target > 10 ?  dist_target * 0.1 * 3 : dist_target * 0.1 * 1.2;
     if (dist_thr < 1.0) dist_thr = 1.0;
 
     dlog.addText(Logger::TEAM,
@@ -60,16 +61,12 @@ bool Bhv_MarkMan::execute(rcsc::PlayerAgent *agent) {
         Body_TurnToBall().execute(agent);
     }
 
+    if (!Neck_TurnToBallAndPlayer( target_opp ).execute( agent )) {
 
-    int count_thr = 0;
-    if (target_opp->vel().r() < 0.15) {
-        count_thr = 1;
-    }
-    if (!Neck_TurnToBallAndPlayer(static_cast<const AbstractPlayerObject *>(target_opp), 1).execute(agent)) {
         std::cout << "scannnnnnnnnnnnnn in mark men problem -----" << std::endl;
         agent->setNeckAction(new Neck_TurnToBallOrScan());
     }
-//    agent->setNeckAction(new Neck_TurnToBallOrScan());
+
 
     return true;
 }

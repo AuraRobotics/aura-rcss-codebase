@@ -1185,8 +1185,15 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
                      __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
                      dash_power);
     } else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
-        dash_power = std::min(my_inc * 20.1,
+        dash_power = std::min(my_inc * 2.1,
                               ServerParam::i().maxDashPower());
+        dlog.addText(Logger::TEAM,
+                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
+                     dash_power);
+    }
+    if (Strategy::defense_mode == Dangerous && (role_group == Defense || role_group == Halfback) ) {
+                dash_power = std::min(my_inc * 2,
+                                      ServerParam::i().maxDashPower());
         dlog.addText(Logger::TEAM,
                      __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
                      dash_power);
@@ -1281,9 +1288,9 @@ Vector2D Strategy::getNearsetPos(unsigned unum, RoleGroup role_group) const {
 #define MIN_COVER_DIST 8.5
 
 double Strategy::getPlayerZoneRadius(unsigned unum) const {
-    double dist_div = 1.25;
+    double dist_div = 1.1;
     if (Strategy::defense_mode == Dangerous) {
-        dist_div = 1.3;
+        dist_div = 1.1;
     }
     double cover_radius = getNearsetPosDistGroup(unum) / dist_div;
     if (Strategy::defense_mode == Dangerous) {

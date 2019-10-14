@@ -240,7 +240,7 @@ rcsc::Vector2D CafeModel::getOptimizedPosition(const rcsc::Vector2D &form_pos, c
             if (role_group == Offensive) {
                 double their_offside_line_x = wm->offsideLineX();
                 double form_pos_x = std::min(form_pos.x, their_offside_line_x);
-                return Vector2D((form_pos_x + their_offside_line_x) / 2, form_pos.y);
+                return Vector2D((their_offside_line_x + their_offside_line_x) / 2, form_pos.y);
             }
             return form_pos;
         }

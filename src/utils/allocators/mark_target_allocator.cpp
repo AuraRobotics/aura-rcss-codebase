@@ -96,12 +96,12 @@ const PlayerPtrCont MarkTargetAllocator::getDengerOpponents() {
     const PlayerPtrCont::const_iterator end_dp = opp_in_range.end();
     for (PlayerPtrCont::const_iterator it = opp_in_range.begin(); it != end_dp; it++) {
         if ((*it)->unum() != -1 && (*it)->posValid()) {
-            if (Strategy::defense_mode == Dangerous) {
-                Vector2D pos = (*it)->pos();
-                if (pos.y < -20 || pos.y > 20) {
-                    continue;
-                }
-            }
+//            if (Strategy::defense_mode == Dangerous) {
+//                Vector2D pos = (*it)->pos();
+//                if (pos.y < -20 || pos.y > 20) {
+//                    continue;
+//                }
+//            }
             denger_opps.push_back((*it));
         }
 

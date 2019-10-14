@@ -212,13 +212,13 @@ evaluate_state(const PredictState &state, const std::vector <ActionStatePair> &p
 #endif
 
 
-//    double area_rate = areaRate(state, path);
-//    double player_role_rate = playerRoleRate(state, path) * 25;
-//    double free_space = freeSpace(state, path) * 7;
+    double area_rate = areaRate(state, path);
+    double player_role_rate = playerRoleRate(state, path) * 25;
+    double free_space = freeSpace(state, path) * 10;
 //
-//    point = area_rate;
-//    point += player_role_rate;
-//    point += free_space;
+    point = area_rate;
+    point += player_role_rate;
+    point += free_space;
 
     const bool path_is_empty = path.empty();
     if (path_is_empty) {

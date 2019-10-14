@@ -31,6 +31,10 @@ bool Bhv_Shoot::execute(rcsc::PlayerAgent *agent) {
     const static CafeModel &cm = CafeModel::i();
     const static WorldModel &wm = agent->world();
 
+    if(wm.self().pos().x < 35){
+        return false;
+    }
+
     Vector2D best_shoot = doShoot(agent);
     if (best_shoot == Vector2D::INVALIDATED) {
         return false;

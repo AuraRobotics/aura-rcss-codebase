@@ -41,7 +41,8 @@ bool Bhv_MarkDeep::execute(rcsc::PlayerAgent *agent) {
 
     const double dash_power = Strategy::get_normal_dash_power(wm, stra);
 
-    double dist_thr = wm.ball().distFromSelf() * 0.04;
+    double dist_target = target_point.dist(wm.self().pos());
+    double dist_thr =  dist_target > 10 ?  dist_target * 0.1 * 3 : dist_target * 0.1 * 1.2;
     if (dist_thr < 1.0) dist_thr = 1.0;
 
     dlog.addText(Logger::TEAM,

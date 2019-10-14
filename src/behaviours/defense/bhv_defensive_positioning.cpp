@@ -58,26 +58,29 @@ bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
         }
     }
 
+
     if(Strategy::defense_mode == Normal){
         if(stra.getRoleGroup(wm.self().unum()) == Defense){
             if (Bhv_MarkDeep(target_opp).execute(agent)) {
                 return true;
             }
-        }else if(stra.getRoleGroup(wm.self().unum()) == Defense){
+        }else if(stra.getRoleGroup(wm.self().unum()) == Halfback || stra.getRoleGroup(wm.self().unum()) == Offensive ){
             if (Bhv_MarkZone(target_opp).execute(agent)) {
                 return true;
             }
         }
     }else if(Strategy::defense_mode == Dangerous){
+
+        //////////////////////////
+//        if (Bhv_MarkDeep(target_opp).execute(agent)) {
+//            return true;
+//        }
+
+        ////////////////////////////
         if (Bhv_MarkMan(target_opp).execute(agent)) {
             return true;
         }
     }
-
-
-
-
-
 
 
     return false;

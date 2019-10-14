@@ -68,7 +68,7 @@ Bhv_BasicMove::execute( PlayerAgent * agent )
     const Vector2D target_point = Strategy::i().getPosition( wm.self().unum() );
     const double dash_power = Strategy::get_normal_dash_power( wm, stra );
 
-    double dist_thr = wm.ball().distFromSelf() * 0.1;
+    double dist_thr = target_point.dist(wm.self().pos()) * 0.1 * 3;
     if ( dist_thr < 1.0 ) dist_thr = 1.0;
 
     dlog.addText( Logger::TEAM,

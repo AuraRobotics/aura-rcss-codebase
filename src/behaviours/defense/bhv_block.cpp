@@ -42,11 +42,11 @@ bool Bhv_Block::execute(rcsc::PlayerAgent *agent) {
     const Vector2D &our_goal = SP.ourTeamGoalPos();
     const Vector2D ball_pos = wm.ball().pos();
 
-    const Vector2D target_pos = target_opp->pos();
+    const Vector2D target_pos = ball_pos;
 
-    double dash_power = stra.get_normal_dash_power(wm, stra);
+    double dash_power = SP.maxDashPower(); //stra.get_normal_dash_power(wm, stra);
 
-    if (stra.getRoleGroup(self_unum) == Defense && self_pos.dist(ball_pos) > 5) {
+    if (stra.getRoleGroup(self_unum) == Defense && self_pos.dist(ball_pos) > 6 && ( self_pos.x + 5 < target_pos.x )   ) {
 
         double goal_y = target_pos.y > 0 ? 7 : -7;
         Vector2D goal_pos(our_goal.x, goal_y);

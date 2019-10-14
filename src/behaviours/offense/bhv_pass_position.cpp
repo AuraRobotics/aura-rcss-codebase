@@ -76,6 +76,7 @@ bool Bhv_PassPosition::execute(rcsc::PlayerAgent *agent) {
     } else {
         agent->setNeckAction(new Neck_TurnToBallOrScan());
     }
+//todo    agent->setNeckAction( new Neck_OffensiveInterceptNeck() );
 
     return true;
 }
