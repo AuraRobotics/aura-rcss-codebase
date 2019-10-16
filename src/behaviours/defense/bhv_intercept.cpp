@@ -91,6 +91,12 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
 //
 //    }
 
+//    const PlayerObject * ball_lord = cm.getBallLord();
+//    if(ball_lord != NULL){
+//        if(ball_lord->side() == wm.ourSide()){
+//            flag_intercept = false;
+//        }
+//    }
 
     if(flag_intercept){
         dlog.addText(Logger::TEAM,

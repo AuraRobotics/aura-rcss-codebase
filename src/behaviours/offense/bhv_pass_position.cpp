@@ -57,7 +57,7 @@ bool Bhv_PassPosition::execute(rcsc::PlayerAgent *agent) {
                               ServerParam::i().maxDashPower());
     }
 
-    double dist_thr = 2;
+    double dist_thr = target_point.dist(wm.self().pos()) * 0.15;
     if (dist_thr < 1.0) dist_thr = 1.0;
 
     dlog.addText(Logger::TEAM,
@@ -211,7 +211,7 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
 
 
             double shoot_pasible = shootPasible(check_point, self_pos, ball_next_pos, 2 * search_radius, fastIC) * 100;
-            double pass_dealer = passDealer(check_point, self_pos, ball_next_pos, 2 * search_radius, fastIC, ball_lord, wm) * 10;
+            double pass_dealer = passDealer(check_point, self_pos, ball_next_pos, 2 * search_radius, fastIC, ball_lord, wm) * 1;
             double near_to_body_dir = nearToBodyDir(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0;
             double near_to_goal = nearToGoal(check_point, 2 * search_radius) * 1;
             double free_space = freeSpace(check_point, self_pos, ball_next_pos, 2 * search_radius, agent) * 0.12;
