@@ -52,7 +52,19 @@ bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
     /////////////////////////////////////////////////////////////
 
     const PlayerObject *ball_lord = cm.getBallLord();
+    const Vector2D self_pos = wm.self().pos();
     if(ball_lord != NULL && ball_lord->unum() == target_opp->unum()){
+        if (Bhv_Block(target_opp).execute(agent)) {
+            return true;
+        }
+    }
+
+
+    const int self_min = wm.interceptTable()->selfReachCycle();
+    const int mate_min = wm.interceptTable()->teammateReachCycle();
+    const int opp_min = wm.interceptTable()->opponentReachCycle();
+
+    if(self_min - 3 <= opp_min && self_min <= mate_min){
         if (Bhv_Block(target_opp).execute(agent)) {
             return true;
         }
@@ -65,7 +77,10 @@ bool Bhv_DefensivePositioning::execute(rcsc::PlayerAgent *agent) {
                 return true;
             }
         }else if(stra.getRoleGroup(wm.self().unum()) == Halfback || stra.getRoleGroup(wm.self().unum()) == Offensive ){
-            if (Bhv_MarkZone(target_opp).execute(agent)) {
+//            if (Bhv_MarkZone(target_opp).execute(agent)) {
+//                return true;
+//            }
+            if (Bhv_MarkMan(target_opp).execute(agent)) {
                 return true;
             }
         }

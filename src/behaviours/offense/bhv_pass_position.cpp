@@ -178,32 +178,32 @@ Vector2D Bhv_PassPosition::getPassPos(rcsc::PlayerAgent *agent) {
 
             fastIC->setMaxCycles(cycle_pass_me + 1);
 
-            fastIC->refresh();
-            fastIC->setBall(donor_pos + donor_to_me_vel, donor_to_me_vel, 0);
-            fastIC->calculate();
-
-            const AbstractPlayerObject *fastestPlayer = fastIC->getFastestPlayer();
-
-
-            int cycle_opp_intercept = fastIC->getFastestPlayerReachCycle();
-
-            /////
-            if (fastestPlayer != NULL)
-                dlog.addText(Logger::PASS,
-                             __FILE__":   pass fastest Player  :   %d, pos: %.2f %.2f  cycle opp : %d  cycle me : %d",
-                             fastestPlayer->unum(),
-                             check_point.x, check_point.y, cycle_opp_intercept, cycle_pass_me);
-            ///////////////////////////////////////////////////
-
-            if (fastestPlayer != NULL && cycle_pass_me > cycle_opp_intercept) {
-                ///////////
-                table_free_space.back().push_back(-0.01);
-                table_near_to_goal.back().push_back(-0.01);
-                table_body_dir.back().push_back(-0.01);
-                table_final_score.back().push_back(-0.01);
-                ///////////////////////////////////////////////////
-                continue;
-            }
+//            fastIC->refresh();
+//            fastIC->setBall(donor_pos + donor_to_me_vel, donor_to_me_vel, 0);
+//            fastIC->calculate();
+//
+//            const AbstractPlayerObject *fastestPlayer = fastIC->getFastestPlayer();
+//
+//
+//            int cycle_opp_intercept = fastIC->getFastestPlayerReachCycle();
+//
+//            /////
+//            if (fastestPlayer != NULL)
+//                dlog.addText(Logger::PASS,
+//                             __FILE__":   pass fastest Player  :   %d, pos: %.2f %.2f  cycle opp : %d  cycle me : %d",
+//                             fastestPlayer->unum(),
+//                             check_point.x, check_point.y, cycle_opp_intercept, cycle_pass_me);
+//            ///////////////////////////////////////////////////
+//
+//            if (fastestPlayer != NULL && cycle_pass_me > cycle_opp_intercept) {
+//                ///////////
+//                table_free_space.back().push_back(-0.01);
+//                table_near_to_goal.back().push_back(-0.01);
+//                table_body_dir.back().push_back(-0.01);
+//                table_final_score.back().push_back(-0.01);
+//                ///////////////////////////////////////////////////
+//                continue;
+//            }
 
             fastIC->setMaxCycles(20);
 

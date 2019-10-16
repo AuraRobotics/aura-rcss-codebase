@@ -63,6 +63,8 @@ bool Bhv_MarkDeep::execute(rcsc::PlayerAgent *agent) {
         agent->setNeckAction(new Neck_TurnToBallOrScan());
     }
 
+    agent->doChangeView(ViewWidth::NORMAL);
+
     return true;
 }
 
@@ -226,7 +228,11 @@ bool Bhv_MarkDeep::checkPosIsValid(rcsc::Vector2D check_point, rcsc::Vector2D se
         return false;
     }
 
-    double radius_opp_cover = 1.5;
+    if (check_point.x > our_offside_x + radius_offside_cover + 1.5) {
+        return false;
+    }
+
+    double radius_opp_cover = 1;
 
     if (opp_pos.x + radius_opp_cover < check_point.x) {
         return false;
@@ -388,12 +394,19 @@ rcsc::Polygon2D Bhv_MarkDeep::getDengerArea(Vector2D ball_pos,
     end_point_danger += end_point_opp;
 
 
+    Vector2D horizon_start(start_point_opp.x - 15, start_point_opp.y);
+    Vector2D horizon_end(end_point_opp.x - 15, end_point_opp.y);
+
+
     std::vector <rcsc::Vector2D> rect;
 
     rect.push_back(start_point_opp);
     rect.push_back(end_point_opp);
-    rect.push_back(start_point_danger);
-    rect.push_back(end_point_danger);
+//    rect.push_back(start_point_danger);
+//    rect.push_back(end_point_danger);
+    rect.push_back(horizon_start);
+    rect.push_back(horizon_end);
+
 
     rcsc::Polygon2D dengerArea(rect);
     geoUtils::polygonOrientation(dengerArea);//TODO true ?

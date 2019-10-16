@@ -42,18 +42,20 @@ bool Bhv_Block::execute(rcsc::PlayerAgent *agent) {
     const Vector2D &our_goal = SP.ourTeamGoalPos();
     const Vector2D ball_pos = wm.ball().pos();
 
-    const Vector2D target_pos = ball_pos;
+    const Vector2D target_pos = target_opp->pos();
 
     double dash_power = SP.maxDashPower(); //stra.get_normal_dash_power(wm, stra);
 
-    if (stra.getRoleGroup(self_unum) == Defense && self_pos.dist(ball_pos) > 6 && ( self_pos.x + 5 < target_pos.x )   ) {
+    if (stra.getRoleGroup(self_unum) == Defense && stra.get_ball_area(wm) != Strategy::BA_Danger && (self_pos.dist(ball_pos) > 4 || ( self_pos.x + 0.5 > target_pos.x ) )   ) {
 
         double goal_y = target_pos.y > 0 ? 7 : -7;
         Vector2D goal_pos(our_goal.x, goal_y);
         Segment2D target_to_goal(target_pos, our_goal);
         Vector2D foot = geoUtils::findFootNearThan(target_to_goal, self_pos, target_pos);
+        dlog.addText(Logger::TEAM,
+                     __FILE__": find foot : %f %f ", foot.x , foot.y);
         if (foot == Vector2D::INVALIDATED) {
-            foot = target_pos;
+            foot = goal_pos;
         }
         double dist_form_foot = self_pos.dist(foot);
         if (Body_GoToPoint(foot, 0.5, dash_power).execute(agent)) {

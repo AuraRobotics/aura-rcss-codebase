@@ -354,9 +354,9 @@ static double playerRoleRate(const PredictState &state, const std::vector <Actio
 
 static double freeSpace(const PredictState &state, const std::vector <ActionStatePair> &path) {
 
-    if( !(path.empty() || path.back().action().category() == CooperativeAction::Pass) ){
-        return 0;
-    }
+//    if( !(path.empty() || path.back().action().category() == CooperativeAction::Pass) ){
+//        return 0;
+//    }
 
 
 
@@ -391,6 +391,9 @@ static double freeSpace(const PredictState &state, const std::vector <ActionStat
 
     if(min_opp_reach < 5){
         return 0;
+    }
+    if(min_opp_reach > 15){
+        return 10;
     }
     return min_opp_reach;
 }

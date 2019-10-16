@@ -72,25 +72,24 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
 
     }
 
-    if(!flag_intercept && self_min - 3 <= opp_min && self_min <= mate_min){
-        flag_intercept = true;
-        std::cout << " BLOCK INTERCEPT _))()()()()()()()()( " << std::endl;
-    }
+//    if(!flag_intercept && self_min - 3 <= opp_min && self_min <= mate_min){
+//        Bhv_Blo
+//    }
 
-    if(flag_intercept && self_min < mate_min && mate_min + 2 < opp_min){
-
-        const PlayerObject * fastest_mate = wm.interceptTable()->fastestTeammate();
-        if(fastest_mate != NULL){
-            const int unum_mate = fastest_mate->unum();
-            if(unum_mate != -1){
-                if(self_unum > unum_mate){
-                    flag_intercept = false;
-                    std::cout << " INTERCEPT FLAG FALSE UNUM mmmmmmmmmmmmmmmmmmmmmmmm_))()()()()()()()()( " << std::endl;
-                }
-            }
-        }
-
-    }
+//    if(flag_intercept && self_min < mate_min && mate_min + 2 < opp_min){
+//
+//        const PlayerObject * fastest_mate = wm.interceptTable()->fastestTeammate();
+//        if(fastest_mate != NULL){
+//            const int unum_mate = fastest_mate->unum();
+//            if(unum_mate != -1){
+//                if(self_unum > unum_mate){
+//                    flag_intercept = false;
+//                    std::cout << " INTERCEPT FLAG FALSE UNUM mmmmmmmmmmmmmmmmmmmmmmmm_))()()()()()()()()( " << std::endl;
+//                }
+//            }
+//        }
+//
+//    }
 
 
     if(flag_intercept){

@@ -163,6 +163,14 @@ int MarkTargetAllocator::calcStateCost(const PlayerObject *our_p, const PlayerOb
         mate_to_opp_dist -= 0;
     }
 
+    if(wm.self().unum() == our_p->unum()){
+        mate_to_opp_dist *= 0.9;
+    }
+
+    if(our_pos.x  > opp_pos.x ){
+        mate_to_opp_dist += our_pos.x - opp_pos.x;
+    }
+
     return mate_to_opp_dist;
 }
 

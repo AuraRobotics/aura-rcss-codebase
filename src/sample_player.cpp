@@ -786,7 +786,7 @@ SamplePlayer::createActionGenerator() const {
     //
 //
     g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_ShortPass(), 3));
+                            (new ActGen_ShortPass(), 1));
 
 
 
@@ -813,7 +813,7 @@ SamplePlayer::createActionGenerator() const {
 
     //
     // strict check pass
-    //
+//    //
 //    g->addGenerator(new ActGen_MaxActionChainLengthFilter
 //                            (new ActGen_StrictCheckPass(), 1));
 
@@ -861,6 +861,68 @@ bool SamplePlayer::test() {
 
     const WorldModel &wm = this->world();
     const CafeModel &cm = CafeModel::i();
+
+
+    static int ball_area_mate_count = 0;
+    static int ball_area_opp_count = 0;
+
+    static int ownership_mate = 0;
+    static int ownership_opp = 0;
+
+    if ( wm.gameMode().type() == rcsc::GameMode::PlayOn )
+    {
+        if(wm.ball().pos().x >= 0){
+            ball_area_mate_count++;
+        }else{
+            ball_area_opp_count++;
+        }
+
+        const PlayerObject *  ball_lord = cm.getBallLord();
+
+        if(ball_lord != NULL){
+            if(ball_lord->side() == wm.ourSide()){
+                ownership_mate++;
+            }
+            if(ball_lord->side() == wm.theirSide()){
+                ownership_opp++;
+            }
+        }
+
+
+    }
+
+
+
+
+    if ( wm.time().cycle() % 100 == 0 ){
+        std::cerr << " ball_area:" << ball_area_mate_count/((double) ball_area_mate_count + ball_area_opp_count) * 100 << std::endl;
+        std::cerr << " ownership:" << ownership_mate/((double) ownership_mate + ownership_opp) * 100 << std::endl;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     if (world().gameMode().type() == GameMode::PlayOn && world().self().unum() != 1) {
