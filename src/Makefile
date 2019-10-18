@@ -143,7 +143,9 @@ am__objects_2 = chain_action/sample_player-actgen_cross.$(OBJEXT) \
 	chain_action/sample_player-strict_check_pass_generator.$(OBJEXT) \
 	chain_action/sample_player-tackle_generator.$(OBJEXT) \
 	chain_action/sample_player-actgen_short_pass.$(OBJEXT) \
-	chain_action/sample_player-actgen_area_pass.$(OBJEXT)
+	chain_action/sample_player-actgen_area_pass.$(OBJEXT) \
+	chain_action/sample_player-actgen_deep_pass.$(OBJEXT) \
+	chain_action/sample_player-actgen_deg_pass.$(OBJEXT)
 am__objects_3 =  \
 	behaviours/defense/sample_player-bhv_basic_tackle.$(OBJEXT) \
 	behaviours/defense/sample_player-bhv_defensive_positioning.$(OBJEXT) \
@@ -153,7 +155,8 @@ am__objects_3 =  \
 	behaviours/defense/sample_player-bhv_mark_deep.$(OBJEXT) \
 	behaviours/defense/sample_player-bhv_intercept.$(OBJEXT)
 am__objects_4 = behaviours/offense/sample_player-bhv_offensive_positioning.$(OBJEXT) \
-	behaviours/offense/sample_player-bhv_pass_position.$(OBJEXT)
+	behaviours/offense/sample_player-bhv_pass_position.$(OBJEXT) \
+	behaviours/offense/sample_player-bhv_shoot.$(OBJEXT)
 am__objects_5 = $(am__objects_3) $(am__objects_4) \
 	behaviours/sample_player-bhv_basic_move.$(OBJEXT) \
 	behaviours/sample_player-bhv_basic_offensive_kick.$(OBJEXT) \
@@ -442,7 +445,9 @@ BHV_Offense_SOURCE = \
     behaviours/offense/bhv_offensive_positioning.h \
     behaviours/offense/bhv_offensive_positioning.cpp \
     behaviours/offense/bhv_pass_position.h \
-    behaviours/offense/bhv_pass_position.cpp 
+    behaviours/offense/bhv_pass_position.cpp \
+    behaviours/offense/bhv_shoot.h \
+    behaviours/offense/bhv_shoot.cpp
 
 BHV_SOURCE = \
     $(BHV_Defense_SOURCE) \
@@ -613,7 +618,11 @@ CHAINACTIONSOURCES = \
 	chain_action/actgen_short_pass.h \
 	chain_action/actgen_short_pass.cpp \
 	chain_action/actgen_area_pass.h \
-	chain_action/actgen_area_pass.cpp
+	chain_action/actgen_area_pass.cpp \
+	chain_action/actgen_deep_pass.h \
+	chain_action/actgen_deep_pass.cpp \
+	chain_action/actgen_deg_pass.h \
+	chain_action/actgen_deg_pass.cpp
 
 COACHSOURCES = \
 	sample_coach.cpp \
@@ -869,6 +878,12 @@ chain_action/sample_player-actgen_short_pass.$(OBJEXT):  \
 chain_action/sample_player-actgen_area_pass.$(OBJEXT):  \
 	chain_action/$(am__dirstamp) \
 	chain_action/$(DEPDIR)/$(am__dirstamp)
+chain_action/sample_player-actgen_deep_pass.$(OBJEXT):  \
+	chain_action/$(am__dirstamp) \
+	chain_action/$(DEPDIR)/$(am__dirstamp)
+chain_action/sample_player-actgen_deg_pass.$(OBJEXT):  \
+	chain_action/$(am__dirstamp) \
+	chain_action/$(DEPDIR)/$(am__dirstamp)
 behaviours/defense/$(am__dirstamp):
 	@$(MKDIR_P) behaviours/defense
 	@: > behaviours/defense/$(am__dirstamp)
@@ -906,6 +921,9 @@ behaviours/offense/sample_player-bhv_offensive_positioning.$(OBJEXT):  \
 	behaviours/offense/$(am__dirstamp) \
 	behaviours/offense/$(DEPDIR)/$(am__dirstamp)
 behaviours/offense/sample_player-bhv_pass_position.$(OBJEXT):  \
+	behaviours/offense/$(am__dirstamp) \
+	behaviours/offense/$(DEPDIR)/$(am__dirstamp)
+behaviours/offense/sample_player-bhv_shoot.$(OBJEXT):  \
 	behaviours/offense/$(am__dirstamp) \
 	behaviours/offense/$(DEPDIR)/$(am__dirstamp)
 behaviours/$(am__dirstamp):
@@ -1141,8 +1159,11 @@ include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_man.Po
 include behaviours/defense/$(DEPDIR)/sample_player-bhv_mark_zone.Po
 include behaviours/offense/$(DEPDIR)/sample_player-bhv_offensive_positioning.Po
 include behaviours/offense/$(DEPDIR)/sample_player-bhv_pass_position.Po
+include behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_area_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_cross.Po
+include chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Po
+include chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_direct_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_self_pass.Po
 include chain_action/$(DEPDIR)/sample_player-actgen_shoot.Po
@@ -1708,6 +1729,34 @@ chain_action/sample_player-actgen_area_pass.obj: chain_action/actgen_area_pass.c
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_area_pass.obj `if test -f 'chain_action/actgen_area_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_area_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_area_pass.cpp'; fi`
 
+chain_action/sample_player-actgen_deep_pass.o: chain_action/actgen_deep_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_deep_pass.o -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Tpo -c -o chain_action/sample_player-actgen_deep_pass.o `test -f 'chain_action/actgen_deep_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_deep_pass.cpp
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_deep_pass.cpp' object='chain_action/sample_player-actgen_deep_pass.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_deep_pass.o `test -f 'chain_action/actgen_deep_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_deep_pass.cpp
+
+chain_action/sample_player-actgen_deep_pass.obj: chain_action/actgen_deep_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_deep_pass.obj -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Tpo -c -o chain_action/sample_player-actgen_deep_pass.obj `if test -f 'chain_action/actgen_deep_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_deep_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_deep_pass.cpp'; fi`
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_deep_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_deep_pass.cpp' object='chain_action/sample_player-actgen_deep_pass.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_deep_pass.obj `if test -f 'chain_action/actgen_deep_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_deep_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_deep_pass.cpp'; fi`
+
+chain_action/sample_player-actgen_deg_pass.o: chain_action/actgen_deg_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_deg_pass.o -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Tpo -c -o chain_action/sample_player-actgen_deg_pass.o `test -f 'chain_action/actgen_deg_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_deg_pass.cpp
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_deg_pass.cpp' object='chain_action/sample_player-actgen_deg_pass.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_deg_pass.o `test -f 'chain_action/actgen_deg_pass.cpp' || echo '$(srcdir)/'`chain_action/actgen_deg_pass.cpp
+
+chain_action/sample_player-actgen_deg_pass.obj: chain_action/actgen_deg_pass.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT chain_action/sample_player-actgen_deg_pass.obj -MD -MP -MF chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Tpo -c -o chain_action/sample_player-actgen_deg_pass.obj `if test -f 'chain_action/actgen_deg_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_deg_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_deg_pass.cpp'; fi`
+	$(AM_V_at)$(am__mv) chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Tpo chain_action/$(DEPDIR)/sample_player-actgen_deg_pass.Po
+#	$(AM_V_CXX)source='chain_action/actgen_deg_pass.cpp' object='chain_action/sample_player-actgen_deg_pass.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o chain_action/sample_player-actgen_deg_pass.obj `if test -f 'chain_action/actgen_deg_pass.cpp'; then $(CYGPATH_W) 'chain_action/actgen_deg_pass.cpp'; else $(CYGPATH_W) '$(srcdir)/chain_action/actgen_deg_pass.cpp'; fi`
+
 behaviours/defense/sample_player-bhv_basic_tackle.o: behaviours/defense/bhv_basic_tackle.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/defense/sample_player-bhv_basic_tackle.o -MD -MP -MF behaviours/defense/$(DEPDIR)/sample_player-bhv_basic_tackle.Tpo -c -o behaviours/defense/sample_player-bhv_basic_tackle.o `test -f 'behaviours/defense/bhv_basic_tackle.cpp' || echo '$(srcdir)/'`behaviours/defense/bhv_basic_tackle.cpp
 	$(AM_V_at)$(am__mv) behaviours/defense/$(DEPDIR)/sample_player-bhv_basic_tackle.Tpo behaviours/defense/$(DEPDIR)/sample_player-bhv_basic_tackle.Po
@@ -1833,6 +1882,20 @@ behaviours/offense/sample_player-bhv_pass_position.obj: behaviours/offense/bhv_p
 #	$(AM_V_CXX)source='behaviours/offense/bhv_pass_position.cpp' object='behaviours/offense/sample_player-bhv_pass_position.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/offense/sample_player-bhv_pass_position.obj `if test -f 'behaviours/offense/bhv_pass_position.cpp'; then $(CYGPATH_W) 'behaviours/offense/bhv_pass_position.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/offense/bhv_pass_position.cpp'; fi`
+
+behaviours/offense/sample_player-bhv_shoot.o: behaviours/offense/bhv_shoot.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/offense/sample_player-bhv_shoot.o -MD -MP -MF behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Tpo -c -o behaviours/offense/sample_player-bhv_shoot.o `test -f 'behaviours/offense/bhv_shoot.cpp' || echo '$(srcdir)/'`behaviours/offense/bhv_shoot.cpp
+	$(AM_V_at)$(am__mv) behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Tpo behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Po
+#	$(AM_V_CXX)source='behaviours/offense/bhv_shoot.cpp' object='behaviours/offense/sample_player-bhv_shoot.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/offense/sample_player-bhv_shoot.o `test -f 'behaviours/offense/bhv_shoot.cpp' || echo '$(srcdir)/'`behaviours/offense/bhv_shoot.cpp
+
+behaviours/offense/sample_player-bhv_shoot.obj: behaviours/offense/bhv_shoot.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/offense/sample_player-bhv_shoot.obj -MD -MP -MF behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Tpo -c -o behaviours/offense/sample_player-bhv_shoot.obj `if test -f 'behaviours/offense/bhv_shoot.cpp'; then $(CYGPATH_W) 'behaviours/offense/bhv_shoot.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/offense/bhv_shoot.cpp'; fi`
+	$(AM_V_at)$(am__mv) behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Tpo behaviours/offense/$(DEPDIR)/sample_player-bhv_shoot.Po
+#	$(AM_V_CXX)source='behaviours/offense/bhv_shoot.cpp' object='behaviours/offense/sample_player-bhv_shoot.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -c -o behaviours/offense/sample_player-bhv_shoot.obj `if test -f 'behaviours/offense/bhv_shoot.cpp'; then $(CYGPATH_W) 'behaviours/offense/bhv_shoot.cpp'; else $(CYGPATH_W) '$(srcdir)/behaviours/offense/bhv_shoot.cpp'; fi`
 
 behaviours/sample_player-bhv_basic_move.o: behaviours/bhv_basic_move.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(sample_player_CXXFLAGS) $(CXXFLAGS) -MT behaviours/sample_player-bhv_basic_move.o -MD -MP -MF behaviours/$(DEPDIR)/sample_player-bhv_basic_move.Tpo -c -o behaviours/sample_player-bhv_basic_move.o `test -f 'behaviours/bhv_basic_move.cpp' || echo '$(srcdir)/'`behaviours/bhv_basic_move.cpp

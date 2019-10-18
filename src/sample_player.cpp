@@ -53,6 +53,7 @@
 
 #include "communication/intention_receive.h"
 #include "cafe_model.h"
+#include "./behaviours/offense/bhv_shoot.h"
 
 #include <rcsc/action/basic_actions.h>
 #include <rcsc/action/bhv_emergency.h>
@@ -222,12 +223,33 @@ SamplePlayer::initImpl(CmdLineParser &cmd_parser) {
 void
 SamplePlayer::actionImpl() {
 
+
+    const WorldModel &wm = this->world();\
+
+
+
+    clock_t start_time = clock();
+    clock_t temp_time = clock();
+
+    if (test()) {
+        return;
+    }
     //
     // update strategy and analyzer
     //
+
+
+
+
     Strategy::instance().update(world());
     FieldAnalyzer::instance().update(world());
     CafeModel::instance().update(this);
+
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d ",
+                 clock() - temp_time);
+    temp_time = clock();
+
 
     //
     // prepare action chain
@@ -238,11 +260,17 @@ SamplePlayer::actionImpl() {
     ActionChainHolder::instance().setFieldEvaluator(M_field_evaluator);
     ActionChainHolder::instance().setActionGenerator(M_action_generator);
 
+
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d ",
+                 clock() - temp_time);
+    temp_time = clock();
+
     //
     // special situations (tackle, objects accuracy, intention...)
     //
     if (doPreprocess()) {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::SYSTEM,
                      __FILE__": preprocess done");
         return;
     }
@@ -250,12 +278,24 @@ SamplePlayer::actionImpl() {
     //
     // update action chain
     //
+//    if (wm.self().isKickable()) {
     ActionChainHolder::instance().update(world());
 
 
-    if (test()) {
-        return;
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d ",
+                 clock() - temp_time);
+    temp_time = clock();
+//    }
+
+    if (clock() - start_time > 20000) {
+        std::cout << " time "<< wm.time() << "&&&&#####################################" << std::endl;
+        std::cout << " time &&&&#####################################" << std::endl;
+        std::cout << " time &&&&#####################################" << std::endl;
+        std::cout << " time --------------- : " << clock() - start_time << std::endl;
     }
+
+
 
     //
     // create current role
@@ -274,7 +314,6 @@ SamplePlayer::actionImpl() {
         }
     }
 
-
     //
     // override execute if role accept
     //
@@ -283,11 +322,10 @@ SamplePlayer::actionImpl() {
         return;
     }
 
-
     //
     // play_on mode
     //
-    if (world().gameMode().type() == GameMode::PlayOn) {
+    if (world().gameMode().type() == GameMode::PlayOn || false) {
         role_ptr->execute(this);
         return;
     }
@@ -504,6 +542,23 @@ SamplePlayer::doPreprocess() {
     dlog.addText(Logger::TEAM,
                  __FILE__": (doPreProcess)");
 
+
+    bool kickable = wm.self().isKickable();
+    if (kickable && wm.existKickableTeammate()) {
+        const int mate_unum = wm.teammatesFromBall().front()->unum();
+
+        if (mate_unum != -1 && wm.self().unum() < mate_unum) {
+            dlog.addText(Logger::TEAM,
+                         __FILE__": kickable teammate with unum  %d",
+                         mate_unum);
+
+            this->setViewAction(new View_Tactical());
+            this->setNeckAction(new Neck_TurnToBallOrScan());
+            return true;
+        }
+
+    }
+
     //
     // freezed by tackle effect
     //
@@ -606,7 +661,9 @@ SamplePlayer::doShoot() {
     if (wm.gameMode().type() != GameMode::IndFreeKick_
         && wm.time().stopped() == 0
         && wm.self().isKickable()
-        && Bhv_StrictCheckShoot().execute(this)) {
+        //        && Bhv_StrictCheckShoot().execute(this)
+        && Bhv_Shoot().execute(this)
+            ) {
         dlog.addText(Logger::TEAM,
                      __FILE__": shooted");
 
@@ -659,6 +716,10 @@ bool
 SamplePlayer::doHeardPassReceive() {
     const WorldModel &wm = this->world();
 
+    dlog.addText(Logger::COMMUNICATION,
+                 __FILE__":  (doHeardPassReceive)  passTime: %d , size pass memory: %d",
+                 wm.audioMemory().passTime().cycle(), wm.audioMemory().pass().size());
+
     if (wm.audioMemory().passTime() != wm.time()
         || wm.audioMemory().pass().empty()
         || wm.audioMemory().pass().front().receiver_ != wm.self().unum()) {
@@ -666,11 +727,12 @@ SamplePlayer::doHeardPassReceive() {
         return false;
     }
 
+
     int self_min = wm.interceptTable()->selfReachCycle();
     Vector2D intercept_pos = wm.ball().inertiaPoint(self_min);
     Vector2D heard_pos = wm.audioMemory().pass().front().receive_pos_;
 
-    dlog.addText(Logger::TEAM,
+    dlog.addText(Logger::COMMUNICATION,
                  __FILE__":  (doHeardPassReceive) heard_pos(%.2f %.2f) intercept_pos(%.2f %.2f)",
                  heard_pos.x, heard_pos.y,
                  intercept_pos.x, intercept_pos.y);
@@ -681,14 +743,14 @@ SamplePlayer::doHeardPassReceive() {
         && self_min < 20
         //&& intercept_pos.dist( heard_pos ) < 3.0 ) //5.0 )
             ) {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::COMMUNICATION,
                      __FILE__": (doHeardPassReceive) intercept cycle=%d. intercept",
                      self_min);
         this->debugClient().addMessage("Comm:Receive:Intercept");
         Body_Intercept().execute(this);
         this->setNeckAction(new Neck_TurnToBall());
     } else {
-        dlog.addText(Logger::TEAM,
+        dlog.addText(Logger::COMMUNICATION,
                      __FILE__": (doHeardPassReceive) intercept cycle=%d. go to receive point",
                      self_min);
         this->debugClient().setTarget(heard_pos);
@@ -740,6 +802,8 @@ SamplePlayer::createFieldEvaluator() const {
 #include "actgen_shoot.h"
 #include "chain_action/actgen_short_pass.h"
 #include "chain_action/actgen_area_pass.h"
+#include "chain_action/actgen_deep_pass.h"
+#include "chain_action/actgen_deg_pass.h"
 #include "actgen_action_chain_length_filter.h"
 
 ActionGenerator::ConstPtr
@@ -752,8 +816,8 @@ SamplePlayer::createActionGenerator() const {
     //  short pass
     //
 
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_ShortPass(), 1));
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_ShortPass(), 1));
 
 
 
@@ -762,26 +826,40 @@ SamplePlayer::createActionGenerator() const {
     //
 
     g->addGenerator(new ActGen_MaxActionChainLengthFilter
-                            (new ActGen_AreaPass(), 3));
+                            (new ActGen_AreaPass(), 1));
+
+    //
+    //  deep pass
+    //
+
+//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+//                            (new ActGen_DeepPass(), 1));
+
+    //
+    //  deg pass
+    //
+
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_DegPass(), 1));
 
     //
     // shoot
     //
-//    g->addGenerator(new ActGen_RangeActionChainLengthFilter
-//                            (new ActGen_Shoot(),
-//                             2, ActGen_RangeActionChainLengthFilter::MAX));
+    g->addGenerator(new ActGen_RangeActionChainLengthFilter
+                            (new ActGen_Shoot(),
+                             2, ActGen_RangeActionChainLengthFilter::MAX));
 
     //
     // strict check pass
-    //
+//    //
 //    g->addGenerator(new ActGen_MaxActionChainLengthFilter
 //                            (new ActGen_StrictCheckPass(), 1));
 
     //
     // cross
     //
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_Cross(), 1));
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_Cross(), 1));
 
     //
     // direct pass
@@ -793,8 +871,8 @@ SamplePlayer::createActionGenerator() const {
     //
     // short dribble
 
-//    g->addGenerator(new ActGen_MaxActionChainLengthFilter
-//                            (new ActGen_ShortDribble(), 1));
+    g->addGenerator(new ActGen_MaxActionChainLengthFilter
+                            (new ActGen_ShortDribble(), 1));
 
     //
     // self pass (long dribble)
@@ -805,9 +883,9 @@ SamplePlayer::createActionGenerator() const {
     //
     // simple dribble
     //
-    // g->addGenerator( new ActGen_RangeActionChainLengthFilter
-    //                  ( new ActGen_SimpleDribble(),
-    //                    2, ActGen_RangeActionChainLengthFilter::MAX ) );
+//     g->addGenerator( new ActGen_RangeActionChainLengthFilter
+//                      ( new ActGen_SimpleDribble(),
+//                        2, ActGen_RangeActionChainLengthFilter::MAX ) );
 
     return ActionGenerator::ConstPtr(g);
 }
@@ -822,21 +900,92 @@ bool SamplePlayer::test() {
     const WorldModel &wm = this->world();
     const CafeModel &cm = CafeModel::i();
 
+//
+//    static int ball_area_mate_count = 0;
+//    static int ball_area_opp_count = 0;
+//
+//    static int ownership_mate = 0;
+//    static int ownership_opp = 0;
+//
+//    if ( wm.gameMode().type() == rcsc::GameMode::PlayOn )
+//    {
+//        if(wm.ball().pos().x >= 0){
+//            ball_area_mate_count++;
+//        }else{
+//            ball_area_opp_count++;
+//        }
+//
+//        const PlayerObject *  ball_lord = cm.getBallLord();
+//
+//        if(ball_lord != NULL){
+//            if(ball_lord->side() == wm.ourSide()){
+//                ownership_mate++;
+//            }
+//            if(ball_lord->side() == wm.theirSide()){
+//                ownership_opp++;
+//            }
+//        }
+//
+//
+//    }
 
-    if (world().gameMode().type() == GameMode::PlayOn && world().self().unum() != 1) {
+//
+//
+//
+//    if ( wm.time().cycle() % 100 == 0 ){
+//        std::cerr << " ball_area:" << ball_area_mate_count/((double) ball_area_mate_count + ball_area_opp_count) * 100 << std::endl;
+//        std::cerr << " ownership:" << ownership_mate/((double) ownership_mate + ownership_opp) * 100 << std::endl;
+//
+//    }
+//
+//
+//
 
-        dlog.addCircle(Logger::TEAM,
-                       cm.getBallLordPos(), 0.8, "#c603fc", true);
-
-    }
 
 
-    double our_offside_line = cm.getOurOffsideLine();
+//
+    int self_min = wm.interceptTable()->selfReachCycle();
+    int mate_min = wm.interceptTable()->teammateReachCycle();
+    int opp_min = wm.interceptTable()->opponentReachCycle();
 
-    dlog.addLine(Logger::TEAM,
-                 Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
-    );
-    return false;
+
+
+//
+
+    dlog.addText(Logger::TEAM,
+                 __FILE__":========================== self_cycle: %d, opp_cycle =%d , mate_cycle : %d ",
+                 self_min, opp_min, mate_min);
+
+
+//
+//    dlog.addCircle(Logger::TEAM,
+//                   wm.ball().pos(), 0.8, "#000000", true);
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+//    if (world().gameMode().type() == GameMode::PlayOn && world().self().unum() != 1) {
+//
+//        dlog.addCircle(Logger::TEAM,
+//                       cm.getBallLordPos(), 0.8, "#c603fc", true);
+//
+//    }
+
+//
+//    double our_offside_line = cm.getOurOffsideLine();
+//
+//    dlog.addLine(Logger::TEAM,
+//                 Vector2D(our_offside_line, -30), Vector2D(our_offside_line, 30)
+//    );
+//    return false;
 //    for(int unum = 1; unum<=11 ; unum++){
 //
 //        dlog.addText( Logger::TEAM,
@@ -867,14 +1016,14 @@ bool SamplePlayer::test() {
 //        std::cout << (*it)->unum() << std::endl;
 //    }
 
-    dlog.addRect(Logger::TEAM,
-                 wm.self().pos().x - 2.1, wm.self().pos().y - 2.1, 4.1, 4.1,
-                 "#0000ff");
-
-
-    const PlayerAgent *agent = this;
-
-    FastIC *fastIC = CafeModel::fastIC();
+//    dlog.addRect(Logger::TEAM,
+//                 wm.self().pos().x - 2.1, wm.self().pos().y - 2.1, 4.1, 4.1,
+//                 "#0000ff");
+//
+//
+//    const PlayerAgent *agent = this;
+//
+//    FastIC *fastIC = CafeModel::fastIC();
 //    for (int i = 0; i < wm.theirPlayers().size(); i++)
 //    {
 //        if (FastIC::isPlayerValid(wm.theirPlayers()[i]))
@@ -889,18 +1038,18 @@ bool SamplePlayer::test() {
 
 //    fastIC.setBall(wm.ball().pos(), );
 
-    fastIC->setMaxCycleAfterFirstFastestPlayer(10);
-    fastIC->refresh();
-    fastIC->calculate();
-
-    int opp_cycle = fastIC->getFastestOpponentReachCycle();
-    int mate_cycle = fastIC->getFastestTeammateReachCycle(true);
-    int min_player = fastIC->getFastestPlayerReachCycle();
-
-
-    dlog.addText(Logger::TEAM,
-                 __FILE__":========================== opp_cycle =%d , mate_cycle : %d , player_cycle: %d",
-                 opp_cycle, mate_cycle, min_player);
+//    fastIC->setMaxCycleAfterFirstFastestPlayer(10);
+//    fastIC->refresh();
+//    fastIC->calculate();
+//
+//    int opp_cycle = fastIC->getFastestOpponentReachCycle();
+//    int mate_cycle = fastIC->getFastestTeammateReachCycle(true);
+//    int min_player = fastIC->getFastestPlayerReachCycle();
+//
+//
+//    dlog.addText(Logger::TEAM,
+//                 __FILE__":========================== opp_cycle =%d , mate_cycle : %d , player_cycle: %d",
+//                 opp_cycle, mate_cycle, min_player);
 
 
 

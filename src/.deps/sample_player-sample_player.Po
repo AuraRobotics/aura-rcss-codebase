@@ -522,6 +522,8 @@ sample_player-sample_player.o: sample_player.cpp \
  utils/allocators/../estimators/HERMES_FastIC.h \
  utils/allocators/./area_pass_generator.h \
  utils/allocators/./../estimators/HERMES_FastIC.h \
+ utils/allocators/./deep_pass_generator.h behaviours/offense/bhv_shoot.h \
+ behaviours/offense/../../utils/estimators/HERMES_FastIC.h \
  /usr/local/include/rcsc/action/basic_actions.h \
  /usr/local/include/rcsc/action/arm_off.h \
  /usr/local/include/rcsc/action/arm_point_to_point.h \
@@ -924,6 +926,8 @@ sample_player-sample_player.o: sample_player.cpp \
  ../src/chain_action/actgen_simple_dribble.h \
  ../src/chain_action/actgen_shoot.h chain_action/actgen_short_pass.h \
  chain_action/action_generator.h chain_action/actgen_area_pass.h \
+ chain_action/actgen_deep_pass.h chain_action/actgen_deg_pass.h \
+ chain_action/../utils/allocators/area_pass_generator.h \
  ../src/chain_action/actgen_action_chain_length_filter.h \
  utils/geo_utils.h /usr/local/include/rcsc/geom/polygon_2d.h \
  utils/estimators/player_estimator.h
@@ -2158,6 +2162,12 @@ utils/allocators/./area_pass_generator.h:
 
 utils/allocators/./../estimators/HERMES_FastIC.h:
 
+utils/allocators/./deep_pass_generator.h:
+
+behaviours/offense/bhv_shoot.h:
+
+behaviours/offense/../../utils/estimators/HERMES_FastIC.h:
+
 /usr/local/include/rcsc/action/basic_actions.h:
 
 /usr/local/include/rcsc/action/arm_off.h:
@@ -3019,6 +3029,12 @@ chain_action/actgen_short_pass.h:
 chain_action/action_generator.h:
 
 chain_action/actgen_area_pass.h:
+
+chain_action/actgen_deep_pass.h:
+
+chain_action/actgen_deg_pass.h:
+
+chain_action/../utils/allocators/area_pass_generator.h:
 
 ../src/chain_action/actgen_action_chain_length_filter.h:
 

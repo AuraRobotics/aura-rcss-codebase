@@ -47,29 +47,29 @@ void ActGen_ShortPass::generate(std::vector <ActionStatePair> *result, const Pre
     double ball_speed = ball_object.pos().r();
     AngleDeg angle_ball = ball_object.vel().th();
 
-    AbstractPlayerCont short_pass_resiver = cm.playerRel().getShortPass(ball_holder_unum);
+    AbstractPlayerCont short_pass_receiver = cm.playerRel().getShortPass(ball_holder_unum);
 
 
-    const AbstractPlayerCont::const_iterator resiver_end = short_pass_resiver.end();
-    for (AbstractPlayerCont::const_iterator resiver_it = short_pass_resiver.begin();
-         resiver_it != resiver_end;
-         ++resiver_it) {
+    const AbstractPlayerCont::const_iterator receiver_end = short_pass_receiver.end();
+    for (AbstractPlayerCont::const_iterator receiver_it = short_pass_receiver.begin();
+         receiver_it != receiver_end;
+         ++receiver_it) {
 
-        const AbstractPlayerObject * resiver = (*resiver_it);
+        const AbstractPlayerObject * receiver = (*receiver_it);
 
-        if(resiver == NULL || resiver->unum() == -1){
+        if(receiver == NULL || receiver->unum() == -1){
             continue;
         }
 
 
         dlog.addText(Logger::Logger::ACTION_CHAIN,
-                     __FILE__"pass to %d", resiver->unum());
-        dlog.addLine(Logger::ACTION_CHAIN,
-                     ball_holder->pos(), resiver->pos(),
-                     "#a855232");
+                     __FILE__"pass to %d", receiver->unum());
+//        dlog.addLine(Logger::ACTION_CHAIN,
+//                     ball_holder->pos(), receiver->pos(),
+//                     "#a855232");
 
-        const int receiver_unum = resiver->unum();
-        Vector2D receiver_pos = resiver->pos();
+        const int receiver_unum = receiver->unum();
+        Vector2D receiver_pos = receiver->pos();
 
         double dist_pass = receiver_pos.dist(ball_pos);
 
@@ -83,8 +83,8 @@ void ActGen_ShortPass::generate(std::vector <ActionStatePair> *result, const Pre
                                                            angle_ball);
 
 
-        const PlayerType * ptype = resiver->playerTypePtr();
-        const double max_receive_ball_speed = 1.23;
+        const PlayerType * ptype = receiver->playerTypePtr();
+        const double max_receive_ball_speed = 1.25;
 
         double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
 

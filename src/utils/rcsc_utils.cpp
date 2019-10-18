@@ -19,6 +19,17 @@ double rcscUtils::ballPathDistWithMaxSpeed(int cycle) {
     return max_speed * (1 - std::pow(dencay, cycle)) / (1 - dencay);
 }
 
+double rcscUtils::ballPathDist(int cycle, double speed) {
+    const static ServerParam &SP = ServerParam::i();
+    double dencay = SP.ballDecay();
+
+    if (dencay == 1) {
+        std::cerr << "dancay is 1 ..." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    return speed * (1 - std::pow(dencay, cycle)) / (1 - dencay);
+}
+
 
 double rcscUtils::maxDistBall(double initial_speed) {
     const static ServerParam &SP = ServerParam::i();

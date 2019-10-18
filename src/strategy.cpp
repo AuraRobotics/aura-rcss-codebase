@@ -77,7 +77,8 @@ using namespace rcsc;
 
 const std::string Strategy::BEFORE_KICK_OFF_CONF = "before-kick-off.conf";
 const std::string Strategy::NORMAL_FORMATION_CONF = "normal-formation.conf";
-const std::string Strategy::DEFENSE_FORMATION_CONF = "defense-formation.conf";
+//const std::string Strategy::DEFENSE_FORMATION_CONF = "defense-formation.conf";
+const std::string Strategy::DEFENSE_FORMATION_CONF = "DefPos_4D_GK.conf";
 //const std::string Strategy::OFFENSE_FORMATION_CONF = "offense-formation.conf";
 const std::string Strategy::OFFENSE_FORMATION_CONF = "OffensePositioning_no3_al.conf";
 const std::string Strategy::GOAL_KICK_OPP_FORMATION_CONF = "goal-kick-opp.conf";
@@ -446,6 +447,7 @@ Strategy::createFormation(const std::string &type_name) const {
 DefenseMode Strategy::defense_mode = Normal;
 double Strategy::danger_sep_x = -32;
 double Strategy::danger_set_dist_goal = 28;
+
 void
 Strategy::update(const WorldModel &wm) {
     static GameTime s_update_time(-1, 0);
@@ -458,11 +460,11 @@ Strategy::update(const WorldModel &wm) {
 
     const ServerParam &SP = ServerParam::i();
     const Vector2D our_goal = SP.ourTeamGoalPos();
-    const double dist_self_goal =  wm.self().pos().dist(our_goal);
+    const double dist_self_goal = wm.self().pos().dist(our_goal);
 
 
     defense_mode = Normal;
-    if(wm.ball().pos().x < danger_sep_x || dist_self_goal < danger_set_dist_goal){
+    if (wm.ball().pos().x < danger_sep_x || dist_self_goal < danger_set_dist_goal) {
         defense_mode = Dangerous;
     }
 
@@ -622,6 +624,19 @@ Strategy::updateSituation(const WorldModel &wm) {
 
     dlog.addText(Logger::TEAM,
                  __FILE__": Situation Normal");
+
+
+    static SituationType last_situation_prority = Normal_Situation;
+
+    if (M_current_situation == Offense_Situation || M_current_situation == Defense_Situation) {
+        last_situation_prority = M_current_situation;
+    }
+
+    M_current_situation = last_situation_prority;
+
+    if(M_current_situation == Normal_Situation){
+        M_current_situation = Defense_Situation;
+    }
 }
 
 /*-------------------------------------------------------------------*/
@@ -773,7 +788,7 @@ Strategy::getPositionType(const int unum) const {
 /*!
 
  */
-std::vector<Vector2D> Strategy::getPositions() const {
+std::vector <Vector2D> Strategy::getPositions() const {
     return M_positions;
 }
 
@@ -1168,20 +1183,25 @@ Strategy::get_normal_dash_power(const WorldModel &wm, const Strategy &stra) {
         dlog.addText(Logger::TEAM,
                      __FILE__": (get_normal_dash_power) !bound dash_power=%.1f",
                      dash_power);
-    }
-    else if(self_pos.x < -35 && (get_ball_area(wm) == BA_Danger )){
-        dash_power = std::min(my_inc * 1.8,
+    } else if (self_pos.x < -35 && (get_ball_area(wm) == BA_Danger)) {
+        dash_power = std::min(my_inc * 2.5,
                               ServerParam::i().maxDashPower());
         dlog.addText(Logger::TEAM,
-                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
-                     dash_power);
-    }
-    else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
-        dash_power = std::min(my_inc * 20.1,
+                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f max=%.1f ",
+                     dash_power,  ServerParam::i().maxDashPower());
+    } else if (role_group == Defense && self_pos.x > ball_pos_lord.x) {
+        dash_power = std::min(my_inc * 2.5,
                               ServerParam::i().maxDashPower());
         dlog.addText(Logger::TEAM,
-                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f",
-                     dash_power);
+                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f max=%.1f ",
+                     dash_power,  ServerParam::i().maxDashPower());
+    }
+    if (Strategy::defense_mode == Dangerous && (role_group == Defense || role_group == Halfback) ) {
+                dash_power = std::min(my_inc * 2.5,
+                                      ServerParam::i().maxDashPower());
+        dlog.addText(Logger::TEAM,
+                     __FILE__": (get_normal_dash_power)  maxxx Dasshh defense lagging!! dash_power=%.1f max=%.1f ",
+                     dash_power,  ServerParam::i().maxDashPower());
     }
 //    } else if (role_group == Halfback && -25 > ball_pos_lord.x) {
 //        dash_power = std::min(my_inc * 2,
@@ -1255,14 +1275,14 @@ Vector2D Strategy::getNearsetPos(unsigned unum, RoleGroup role_group) const {
     Vector2D near_pos = Vector2D::INVALIDATED;
 
     for (int i = 0; i < 11; i++) {
-        if(i+1 == unum){
+        if (i + 1 == unum) {
             continue;
         }
-        if(role_group != None && role_group != getRoleGroup(i+1)){
+        if (role_group != None && role_group != getRoleGroup(i + 1)) {
             continue;
         }
         double dist = M_positions[i].dist(target);
-        if(min_dist > dist){
+        if (min_dist > dist) {
             min_dist = dist;
             near_pos = M_positions[i];
         }
@@ -1270,16 +1290,20 @@ Vector2D Strategy::getNearsetPos(unsigned unum, RoleGroup role_group) const {
     return near_pos;
 }
 
-#define MIN_COVER_DIST 8.5
+#define MIN_COVER_DIST 20.0
 
 double Strategy::getPlayerZoneRadius(unsigned unum) const {
-    double dist_div = 1.25;
+    double dist_div = 1.1;
     if (Strategy::defense_mode == Dangerous) {
-        dist_div = 1.3;
+        dist_div = 1.1;
+    }
+    if(getRoleGroup(unum) != Defense){
+        dist_div = 0.2;
     }
     double cover_radius = getNearsetPosDistGroup(unum) / dist_div;
     if (Strategy::defense_mode == Dangerous) {
         cover_radius = std::max(cover_radius, MIN_COVER_DIST);
     }
+
     return cover_radius;
 }

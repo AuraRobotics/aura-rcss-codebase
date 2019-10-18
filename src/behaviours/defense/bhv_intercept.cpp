@@ -32,16 +32,13 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
 
     const Vector2D self_pos = wm.self().pos();
     const Vector2D ball_pos = wm.ball().pos();
-
+    const int self_unum = wm.self().unum();
 
     //-----------------------------------------------
     // tackle
-    if ( Bhv_BasicTackle( 0.8, 80.0 ).execute( agent ) )
-    {
+    if (Bhv_BasicTackle(0.8, 80.0).execute(agent)) {
         return true;
     }
-
-
 
 
     const int self_min = wm.interceptTable()->selfReachCycle();
@@ -51,18 +48,73 @@ bool Bhv_Intercept::execute(rcsc::PlayerAgent *agent) {
     dlog.addText(Logger::TEAM,
                  __FILE__": ================= self_min : %d , mate_min: %d ,  opp_min: %d", self_min, mate_min,
                  opp_min);
+    bool flag_intercept = false;
+    if (self_min <= opp_min || (self_min <= opp_min + 3 && opp_min != 0)) {
+        if(self_min + 1 <= mate_min){
+            flag_intercept = true;
+        }
 
-    if (self_min <= opp_min && self_min <= mate_min) {
 
-            dlog.addText(Logger::TEAM,
-                         __FILE__": intercept");
+        if (std::abs(self_min -  mate_min) < 1) {
 
-            std::cout << " intercept BALL" << std::endl;
+            const PlayerObject * fastest_mate = wm.interceptTable()->fastestTeammate();
+            if(fastest_mate != NULL){
+                const int unum_mate = fastest_mate->unum();
+                if(unum_mate != -1){
+                    if(self_unum < unum_mate){
+                        flag_intercept = true;
+                    }
+                }
+            }
 
-            Body_Intercept().execute(agent);
-            agent->setNeckAction(new Neck_OffensiveInterceptNeck());
-            return true;
+        }
 
+
+    }
+
+//    if(!flag_intercept && self_min - 3 <= opp_min && self_min <= mate_min){
+//        Bhv_Blo
+//    }
+
+    if(flag_intercept && self_min < mate_min && mate_min + 2 < opp_min && std::abs(self_min - mate_min) <= 3 ){
+
+        const PlayerObject * fastest_mate = wm.interceptTable()->fastestTeammate();
+        if(fastest_mate != NULL){
+            const int unum_mate = fastest_mate->unum();
+            if(unum_mate != -1){
+                if(self_unum > unum_mate){
+                    flag_intercept = false;
+                    std::cout << " INTERCEPT FLAG FALSE UNUM mmmmmmmmmmmmmmmmmmmmmmmm_))()()()()()()()()( " << std::endl;
+                }
+            }
+        }
+
+    }
+
+
+
+//    const PlayerObject * ball_lord = cm.getBallLord();
+//    if(ball_lord != NULL){
+//        if(ball_lord->side() == wm.ourSide()){
+//            flag_intercept = false;
+//        }
+//    }
+
+    if(flag_intercept){
+        dlog.addText(Logger::TEAM,
+                     __FILE__": intercept");
+
+        std::cout << " intercept BALL" << std::endl;
+
+//        HM_Intercept intercept(agent);
+//        intercept.calculate();
+//        intercept.execute();
+
+
+
+        Body_Intercept().execute(agent);
+        agent->setNeckAction(new Neck_OffensiveInterceptNeck());
+        return true;
     }
 
 

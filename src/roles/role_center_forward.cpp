@@ -107,7 +107,11 @@ RoleCenterForward::doMove(PlayerAgent *agent) {
         return;
     }
 
-    switch (stra.getSituation()){
+
+    dlog.addText(Logger::TEAM,
+                 __FILE__": stra.getSituation()  =   %d",
+                 stra.getSituation());
+    switch (stra.getSituation()) {
         case Defense_Situation:
             if (Bhv_DefensivePositioning().execute(agent)) {
                 return;

@@ -18,7 +18,6 @@ class DeepPassGenerator {
     const rcsc::WorldModel &wm;
     static FastIC *fic;
     rcsc::AbstractPlayerCont *relationships;
-
     DeepPassCont direct_pass[11];
 
 
@@ -27,6 +26,7 @@ public:
             relationships(rel), wm(wm) {
         this->fic = fic;
         fic->setByWorldModel();
+        fic->setMaxCycleAfterFirstFastestPlayer(8);
     }
 
 
@@ -42,7 +42,7 @@ public:
 
 private:
     const rcsc::Vector2D generateDeepPass(const rcsc::AbstractPlayerObject *sender,
-                                          const rcsc::AbstractPlayerObject *resiver);
+                                          const rcsc::AbstractPlayerObject *receiver);
 
 
 };

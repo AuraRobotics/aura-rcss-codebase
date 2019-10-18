@@ -499,7 +499,8 @@ sample_player-strategy.o: strategy.cpp /usr/include/stdc-predef.h \
  utils/allocators/../estimators/HERMES_FastIC.h \
  utils/allocators/./area_pass_generator.h \
  utils/allocators/./../estimators/HERMES_FastIC.h \
- roles/role_keepaway_keeper.h roles/role_keepaway_taker.h \
+ utils/allocators/./deep_pass_generator.h roles/role_keepaway_keeper.h \
+ roles/role_keepaway_taker.h \
  /usr/local/include/rcsc/formation/formation_static.h \
  /usr/local/include/rcsc/formation/formation_dt.h \
  /usr/local/include/rcsc/player/intercept_table.h \
@@ -2034,6 +2035,8 @@ utils/allocators/../estimators/HERMES_FastIC.h:
 utils/allocators/./area_pass_generator.h:
 
 utils/allocators/./../estimators/HERMES_FastIC.h:
+
+utils/allocators/./deep_pass_generator.h:
 
 roles/role_keepaway_keeper.h:
 

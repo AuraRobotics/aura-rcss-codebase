@@ -46,7 +46,8 @@ bool Bhv_MarkMan::execute(rcsc::PlayerAgent *agent) {
 
     const double dash_power = Strategy::get_normal_dash_power(wm, stra);
 
-    double dist_thr = 1.5;//wm.ball().distFromSelf() * 0.04;
+    double dist_target = target_point.dist(wm.self().pos());
+    double dist_thr =  dist_target > 10 ?  dist_target * 0.1 * 3 : dist_target * 0.1 * 1.2;
     if (dist_thr < 1.0) dist_thr = 1.0;
 
     dlog.addText(Logger::TEAM,
@@ -60,16 +61,13 @@ bool Bhv_MarkMan::execute(rcsc::PlayerAgent *agent) {
         Body_TurnToBall().execute(agent);
     }
 
-
-    int count_thr = 0;
-    if (target_opp->vel().r() < 0.15) {
-        count_thr = 1;
-    }
-    if (!Neck_TurnToBallAndPlayer(static_cast<const AbstractPlayerObject *>(target_opp), 1).execute(agent)) {
-        std::cout << "scannnnnnnnnnnnnn in mark men problem -----" << std::endl;
+    if (!Neck_TurnToBallAndPlayer( target_opp ).execute( agent )) {
+//
+//        std::cout << "scannnnnnnnnnnnnn in mark men problem -----" << std::endl;
         agent->setNeckAction(new Neck_TurnToBallOrScan());
     }
-//    agent->setNeckAction(new Neck_TurnToBallOrScan());
+    agent->doChangeView(ViewWidth::NARROW);
+
 
     return true;
 }
@@ -116,7 +114,7 @@ Vector2D Bhv_MarkMan::getDefensivePos(rcsc::PlayerAgent *agent) {
     rcsc::Polygon2D dengerArea = getDengerArea(ball_pos, opp_pos);
 
 
-    double search_radius = 8;//TODO dynamic
+    double search_radius = 15;//TODO dynamic
     std::pair<double, double> check_line_y(self_form_pos.y - search_radius, self_form_pos.y + search_radius);
     std::pair<double, double> check_line_x(self_form_pos.x - search_radius, self_form_pos.x + search_radius);
 
@@ -169,7 +167,7 @@ Vector2D Bhv_MarkMan::getDefensivePos(rcsc::PlayerAgent *agent) {
 //                    nearToPenaltyArea(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0;
             double near_to_goal = nearToGoal(check_point, check_line_x.first, 2 * search_radius) * 0.3;
 //
-            double near_to_target = nearToTarget(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.18;
+            double near_to_target = nearToTarget(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.5;
 
 //            double near_to_pass_line = nearToPassLine(check_point, self_pos, opp_pos, ball_next_pos, 2 * search_radius) * 0.4;
             double near_to_body_dir =

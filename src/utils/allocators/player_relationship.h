@@ -16,6 +16,7 @@
 #include <rcsc/player/player_object.h>
 #include "../estimators/HERMES_FastIC.h"
 #include "./area_pass_generator.h"
+#include "./deep_pass_generator.h"
 
 class PlayerRelationship {
 
@@ -34,6 +35,7 @@ class PlayerRelationship {
 
     rcsc::AbstractPlayerCont short_pass[11];
     AreaPassCont area_pass[11];
+    DeepPassCont deep_pass[11];
 
 
 
@@ -50,16 +52,21 @@ public:
 
     rcsc::AbstractPlayerCont getNeighbors(const int unum) const;
 
-    rcsc::AbstractPlayerCont getPassPath(const int sender, const int resiver) const;
+    rcsc::AbstractPlayerCont getPassPath(const int sender, const int receiver) const;
 
     rcsc::AbstractPlayerCont getShortPass(const int unum) const;
 
     AreaPassCont getAreaPass(const int unum) const;
 
+    DeepPassCont getDeepPass(const int unum) const;
+
 private:
+
     void addVertexs();
 
     void calcRelations();
+
+    void calcKickable();
 
     const rcsc::AbstractPlayerObject *getPlayerInPos(const rcsc::Vector2D pos);
 

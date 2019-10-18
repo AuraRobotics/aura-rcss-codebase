@@ -26,7 +26,17 @@ bool Bhv_OffensivePositioning::execute(rcsc::PlayerAgent *agent) {
                  __FILE__": Bhv_OffensivePositioning execute -- ");
 
 
-    AbstractPlayerCont pass_path = cm.playerRel().getPassPath(cm.getBallLord()->unum(), wm.self().unum());
+
+    const PlayerObject * ball_lord = cm.getBallLord();
+    if(ball_lord == NULL){
+        return false;
+    }
+
+
+
+    const int ball_lord_unum = ball_lord->unum();
+    AbstractPlayerCont pass_path = cm.playerRel().getPassPath(ball_lord_unum, wm.self().unum());
+
     ////DEBUG
     Vector2D temp_r = Vector2D::INVALIDATED;
     for (AbstractPlayerCont::const_iterator
@@ -51,6 +61,7 @@ bool Bhv_OffensivePositioning::execute(rcsc::PlayerAgent *agent) {
     if(pass_path.size() <= 1){
         return false;
     }
+
 
     const AbstractPlayerObject *donor_player = pass_path[1];
     if (Bhv_PassPosition(donor_player).execute(agent)) {
