@@ -103,7 +103,7 @@ SampleFieldEvaluator::operator()(const PredictState &state,
     }
     dlog.addText(Logger::PLAN,
                  __FILE__":  score  %d -----------------> %.2f  - area_rate:  %.2f, player_rate: %.2f, freeSpace: %.2f",
-                 holder_unum, result, areaRate(state, path), playerRoleRate(state, path), freeSpace(state, path));
+                 holder_unum, result);
 
     ////////////////////////
 
@@ -181,16 +181,13 @@ evaluate_state(const PredictState &state, const std::vector <ActionStatePair> &p
     }
 
 
-
-    if(state.ball().pos().x > 36) {
+    if (state.ball().pos().x > 36) {
         double shoot_count_rate = can_shoot_to_goal(state, path);
         if (shoot_count_rate > 0) {
 //            std::cout << " cannn shoootttttttttttttttttttt 0))))))" << std::endl;
             return shoot_count_rate * 1000;
         }
     }
-
-
 
 
 
@@ -213,15 +210,30 @@ evaluate_state(const PredictState &state, const std::vector <ActionStatePair> &p
 
 
     double area_rate = areaRate(state, path);
-    double player_role_rate = playerRoleRate(state, path) * 25;
-    double free_space = freeSpace(state, path) * 10;
+    double player_role_rate = playerRoleRate(state, path) * 15;
+//    double free_space = freeSpace(state, path) * 2.5;
+
+
+
+
+
 //
     point = area_rate;
     point += player_role_rate;
-    point += free_space;
+//    point += free_space;
+
+
+    bool flag_dribble = false;
+    for(int i=0; i<path.size(); i++){
+        if(path[i].action().category() == CooperativeAction::Dribble){
+            flag_dribble = true;
+        }
+    }
+
+
 
     const bool path_is_empty = path.empty();
-    if (path_is_empty) {
+    if (path_is_empty || flag_dribble) {
         double dist_opp = 9999;
         const PlayerObject *nearest_opp = state.getOpponentNearestTo(holder->pos(), 10, &dist_opp);
         rcsc::dlog.addText(rcsc::Logger::ACTION_CHAIN,
@@ -303,16 +315,16 @@ static double areaRate(const PredictState &state, const std::vector <ActionState
             base = 180;
             double dist_area_min = 27;
             double dist_delta = 36 - (-1);
-            double rate_delta = 220 - base;
+            double rate_delta = 300 - base;
 
             dist_rate = (1 - ((dist_goal - dist_area_min) / dist_delta)) * rate_delta;
         }
             break;
         case Strategy::BA_Cross: {
-            base = 220;
+            base = 300;
             double dist_area_min = 20;
             double dist_delta = 53 - (36);
-            double rate_delta = 270 - base;
+            double rate_delta = 330 - base;
 
             dist_rate = (1 - ((dist_goal - dist_area_min) / dist_delta)) * rate_delta;
         }
@@ -334,6 +346,10 @@ static double areaRate(const PredictState &state, const std::vector <ActionState
     }
 
 
+    if(ball_pos.x > 36 && dist_goal > 27){
+        base -= dist_rate * 2;
+    }
+
     return base + dist_rate;
 }
 
@@ -341,6 +357,9 @@ static double areaRate(const PredictState &state, const std::vector <ActionState
 static double playerRoleRate(const PredictState &state, const std::vector <ActionStatePair> &path) {
     const Strategy &stra = Strategy::i();
 
+    if(state.ball().pos().x > 25){
+        return 0;
+    }
     const int ball_holder_unum = state.ballHolderUnum();
     if (stra.getRoleGroup(ball_holder_unum) == Halfback) {
         return 1;
@@ -360,6 +379,8 @@ static double freeSpace(const PredictState &state, const std::vector <ActionStat
 
 
 
+
+
     FastIC *fic = CafeModel::fastIC();
     fic->setByWorldModel();
     fic->setMaxCycleAfterFirstFastestPlayer(20);
@@ -367,7 +388,7 @@ static double freeSpace(const PredictState &state, const std::vector <ActionStat
 
     Vector2D ball_pos = state.ball().pos();
     Vector2D org_ball_pos = state.orgBallPos();
-    if(org_ball_pos.x > ball_pos.x){
+    if (org_ball_pos.x + 10 > ball_pos.x) {
         return 0;
     }
 
@@ -389,17 +410,25 @@ static double freeSpace(const PredictState &state, const std::vector <ActionStat
 
     min_opp_reach = std::min(min_opp_reach, fic->getFastestOpponentReachCycle());
 
-    if(min_opp_reach < 5){
+    const AbstractPlayerObject *fastest_opp = fic->getFastestOpponent();
+    if (fastest_opp != NULL) {
+        if (fastest_opp->goalie() || fastest_opp->unum() == 1) { //NOT TRUE
+
+            return 20;
+        }
+    }
+
+    if (min_opp_reach < 5) {
         return 0;
     }
-    if(min_opp_reach > 15){
+    if (min_opp_reach > 15) {
         return 10;
     }
     return min_opp_reach;
 }
 
 
-double can_shoot_to_goal(const PredictState &state, const std::vector <ActionStatePair> &path){
+double can_shoot_to_goal(const PredictState &state, const std::vector <ActionStatePair> &path) {
 
     FastIC *fic = CafeModel::fastIC();
 
@@ -429,19 +458,17 @@ double can_shoot_to_goal(const PredictState &state, const std::vector <ActionSta
     fic->setMaxCycles(20);
 
 
-
-
     Vector2D ball_pos = state.ball().pos();
 
     double ball_speed = 2.8;//TODO
     Vector2D goal_pos = ServerParam::i().theirTeamGoalPos();
 
     int shoot_count = 0;
-    for(int goal_y = goal_pos.y - 7 ; goal_y < goal_pos.y + 7; goal_y ++ ){
+    for (int goal_y = goal_pos.y - 7; goal_y < goal_pos.y + 7; goal_y+= 2) {
 
-        Vector2D temp_shot_pos(goal_pos.x , goal_y);
+        Vector2D temp_shot_pos(goal_pos.x, goal_y);
 
-        Vector2D to_goal_vel = temp_shot_pos -  ball_pos;
+        Vector2D to_goal_vel = temp_shot_pos - ball_pos;
         to_goal_vel.setLength(ball_speed);
 
         fic->refresh();
@@ -449,8 +476,8 @@ double can_shoot_to_goal(const PredictState &state, const std::vector <ActionSta
         fic->calculate();
 
         const AbstractPlayerObject *faster_opp = fic->getFastestOpponent();
-        if(faster_opp == NULL){
-            shoot_count ++;
+        if (faster_opp == NULL) {
+            shoot_count++;
             dlog.addLine(Logger::TEAM,
                          ball_pos, temp_shot_pos,
                          "#ff0f00");

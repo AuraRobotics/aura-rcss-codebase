@@ -52,7 +52,7 @@ public:
 
     rcsc::AbstractPlayerCont getNeighbors(const int unum) const;
 
-    rcsc::AbstractPlayerCont getPassPath(const int sender, const int resiver) const;
+    rcsc::AbstractPlayerCont getPassPath(const int sender, const int receiver) const;
 
     rcsc::AbstractPlayerCont getShortPass(const int unum) const;
 

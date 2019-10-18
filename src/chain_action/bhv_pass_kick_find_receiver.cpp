@@ -913,6 +913,10 @@ Bhv_PassKickFindReceiver::doSayPass(PlayerAgent *agent,
     const int receiver_unum = pass.targetPlayerUnum();
     const Vector2D &receive_pos = pass.targetPoint();
 
+    dlog.addText(Logger::ACTION | Logger::TEAM | Logger::COMMUNICATION,
+                 __FILE__": (doSayPass) ------------------------------------------");
+
+
     if (agent->config().useCommunication()
         && receiver_unum != Unum_Unknown
         && !agent->effector().queuedNextBallKickable()
@@ -922,7 +926,7 @@ Bhv_PassKickFindReceiver::doSayPass(PlayerAgent *agent,
             return;
         }
 
-        dlog.addText(Logger::ACTION | Logger::TEAM,
+        dlog.addText(Logger::ACTION | Logger::TEAM | Logger::COMMUNICATION,
                      __FILE__": (doSayPass) set pass communication.");
 
         Vector2D target_buf(0.0, 0.0);

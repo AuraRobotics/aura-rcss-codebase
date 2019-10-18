@@ -108,6 +108,7 @@ Neck_TurnToReceiver::executeImpl( PlayerAgent * agent )
     const CooperativeAction & pass = M_chain_graph.getFirstAction();
     const AbstractPlayerObject * receiver = wm.ourPlayer( pass.targetPlayerUnum() );
 
+
     // if ( receiver->posCount() == 0 )
     // {
     //     dlog.addText( Logger::TEAM,

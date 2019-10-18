@@ -1,5 +1,20 @@
 ## Process this file with automake to produce Makefile.in
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 UTILSSOURCES = \
     utils/utils.cpp \
     utils/rcsc_utils.h \
@@ -41,6 +56,7 @@ BHV_Defense_SOURCE = \
     behaviours/defense/bhv_mark_deep.cpp \
     behaviours/defense/bhv_intercept.h \
     behaviours/defense/bhv_intercept.cpp
+
 
 
 BHV_Offense_SOURCE = \
@@ -224,7 +240,9 @@ CHAINACTIONSOURCES = \
 	chain_action/actgen_area_pass.h \
 	chain_action/actgen_area_pass.cpp \
 	chain_action/actgen_deep_pass.h \
-	chain_action/actgen_deep_pass.cpp
+	chain_action/actgen_deep_pass.cpp \
+	chain_action/actgen_deg_pass.h \
+	chain_action/actgen_deg_pass.cpp
 
 COACHSOURCES = \
 	sample_coach.cpp \

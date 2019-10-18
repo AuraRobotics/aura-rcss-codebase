@@ -20,8 +20,12 @@ void AreaPassGenerator::generate() {
     dlog.addText(Logger::CROSS,
                  __FILE__": AreaPassGenerator  generate()");
 
+    if(!wm.self().isKickable()){
+        return;
+    }
 
-    for (int i = 1; i < 11; i++) {
+//    for (int i = 1; i < 11; i++) {
+        int i = wm.self().unum() - 1;
         const AbstractPlayerObject *sender = wm.ourPlayer(i + 1);
         if (sender == NULL) {
             dlog.addText(Logger::CROSS,
@@ -29,31 +33,31 @@ void AreaPassGenerator::generate() {
         }
 
         AbstractPlayerCont neighbors = relationships[i];
-        const AbstractPlayerCont::const_iterator resiver_end = neighbors.end();
-        for (AbstractPlayerCont::const_iterator resiver_it = neighbors.begin();
-             resiver_it != resiver_end;
-             ++resiver_it) {
+        const AbstractPlayerCont::const_iterator receiver_end = neighbors.end();
+        for (AbstractPlayerCont::const_iterator receiver_it = neighbors.begin();
+             receiver_it != receiver_end;
+             ++receiver_it) {
 
-            if (!(*resiver_it) || ((*resiver_it)->unum() == -1) || (*resiver_it)->goalie()) {
+            if (!(*receiver_it) || ((*receiver_it)->unum() == -1) || (*receiver_it)->goalie()) {
                 continue;
             }
 
-            if((*resiver_it)->pos().dist(sender->pos()) < 5){
+            if((*receiver_it)->pos().dist(sender->pos()) < 5){
                 continue;
             }
 
-            Vector2D best_area_pass = generateAreaPass(sender, (*resiver_it));
+            Vector2D best_area_pass = generateAreaPass(sender, (*receiver_it));
             if (best_area_pass == Vector2D::INVALIDATED) {
                 continue;
             }
 
-            area_pass[i].push_back(std::make_pair((*resiver_it), best_area_pass));
+            area_pass[i].push_back(std::make_pair((*receiver_it), best_area_pass));
 
 
             if (i == wm.self().unum() - 1) {
                 //////////////////////////////////
                 dlog.addText(Logger::CROSS,
-                             __FILE__": Area pass ::  %d -> %d  : %.2f %.2f", i + 1, (*resiver_it)->unum(),
+                             __FILE__": Area pass ::  %d -> %d  : %.2f %.2f", i + 1, (*receiver_it)->unum(),
                              best_area_pass.x, best_area_pass.y);
 
                 dlog.addLine(Logger::CROSS,
@@ -69,36 +73,36 @@ void AreaPassGenerator::generate() {
 
         }
 
-    }
+//    }
 
 }
 
 //
 //static std::vector <std::vector<double> > table_near_goal;
-//static std::vector <std::vector<double> > table_near_resiver;
+//static std::vector <std::vector<double> > table_near_receiver;
 //static std::vector <std::vector<double> > table_final_score;
 
 const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObject *sender,
-                                                   const rcsc::AbstractPlayerObject *resiver) {
+                                                   const rcsc::AbstractPlayerObject *receiver) {
 
-    if (sender == NULL || resiver == NULL) {
+    if (sender == NULL || receiver == NULL) {
         return Vector2D::INVALIDATED;
     }
 
     const int sender_unum = sender->unum();
-    const int resiver_unum = resiver->unum();
+    const int receiver_unum = receiver->unum();
 
     const Vector2D sender_pos = sender->pos();
-    const Vector2D resiver_pos = resiver->pos();
+    const Vector2D receiver_pos = receiver->pos();
 
     int x_offside = wm.offsideLineX(); //TODO change name
 
-    if(resiver_pos.x > x_offside){
+    if(receiver_pos.x > x_offside){
         return Vector2D::INVALIDATED;
     }
     double search_radius = 4;//TODO dynamic
-    std::pair<double, double> check_line_y(resiver_pos.y - search_radius, resiver_pos.y + search_radius);
-    std::pair<double, double> check_line_x(resiver_pos.x - search_radius, resiver_pos.x + search_radius);
+    std::pair<double, double> check_line_y(receiver_pos.y - search_radius, receiver_pos.y + search_radius);
+    std::pair<double, double> check_line_x(receiver_pos.x - search_radius, receiver_pos.x + search_radius);
 
     double max_score = INT_MIN;
     Vector2D best_pos = Vector2D::INVALIDATED;
@@ -107,37 +111,37 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
 //    ////DEBUG
 //
 //    table_near_goal.clear();
-//    table_near_resiver.clear();
+//    table_near_receiver.clear();
 //    table_final_score.clear();
     ///////////////////////////////////////
 
     for (int i = check_line_x.first; i <= check_line_x.second; i += 2) {
         //////DEBUGG
 //        table_near_goal.push_back(std::vector<double>());
-//        table_near_resiver.push_back(std::vector<double>());
+//        table_near_receiver.push_back(std::vector<double>());
 //        table_final_score.push_back(std::vector<double>());
         /////DEBUG
         for (int j = check_line_y.first; j <= check_line_y.second; j += 2) {
             Vector2D check_point(i, j);
 
 
-            if (!checkPosIsValid(check_point, sender_pos, resiver_pos, x_offside, resiver_unum)) {
+            if (!checkPosIsValid(check_point, sender_pos, receiver_pos, x_offside, receiver_unum)) {
                 continue;
             }
 
             double temp_score = 0;
 
-            double near_resiver = nearResiver(check_point, sender_pos, resiver_pos, search_radius * 2) * 0.7;
+            double near_receiver = nearreceiver(check_point, sender_pos, receiver_pos, search_radius * 2) * 0.7;
             double near_goal =
-                    nearGoal(check_point, sender_pos, resiver_pos, search_radius * 2, check_line_x.first) * 0.3;
+                    nearGoal(check_point, sender_pos, receiver_pos, search_radius * 2, check_line_x.first) * 0.3;
 
 
-            temp_score += near_resiver;
+            temp_score += near_receiver;
             temp_score += near_goal;
 
             ///////////
 //            table_near_goal.back().push_back(near_goal);
-//            table_near_resiver.back().push_back(near_resiver);
+//            table_near_receiver.back().push_back(near_receiver);
             ///////////////////////////////////////////////////
 
 
@@ -157,7 +161,7 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
 
 //
 //    log_table(table_near_goal, "table_near_goal ");
-//    log_table(table_near_resiver, "table_near_resiver  ");
+//    log_table(table_near_receiver, "table_near_receiver  ");
 //    log_table(table_final_score, "final score ");
 
 //
@@ -170,7 +174,7 @@ const Vector2D AreaPassGenerator::generateAreaPass(const rcsc::AbstractPlayerObj
 
 
 bool AreaPassGenerator::checkPosIsValid(const rcsc::Vector2D check_point, const rcsc::Vector2D sender_pos,
-                                        const rcsc::Vector2D resiver_pos, double x_offside, const int resiver_unum) {
+                                        const rcsc::Vector2D receiver_pos, double x_offside, const int receiver_unum) {
 
     if (std::abs(check_point.y) > 31) {
         return false;
@@ -198,7 +202,7 @@ bool AreaPassGenerator::checkPosIsValid(const rcsc::Vector2D check_point, const 
     if (fastest_player == NULL) {
         return false;
     }
-    if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == resiver_unum &&
+    if (fastest_player->side() == wm.ourSide() && fastest_player->unum() == receiver_unum &&
         fastest_player_cycle < pass_cycle + 3 && fastest_player_cycle < fastest_opp_cycle - 3) {
         return true;
     }
@@ -207,7 +211,7 @@ bool AreaPassGenerator::checkPosIsValid(const rcsc::Vector2D check_point, const 
 }
 
 
-double AreaPassGenerator::nearGoal(rcsc::Vector2D check_point, rcsc::Vector2D sender_pos, rcsc::Vector2D resiver_pos,
+double AreaPassGenerator::nearGoal(rcsc::Vector2D check_point, rcsc::Vector2D sender_pos, rcsc::Vector2D receiver_pos,
                                    double max_radius2, double start_x) {
 
     return (check_point.x - start_x) / max_radius2;
@@ -215,11 +219,11 @@ double AreaPassGenerator::nearGoal(rcsc::Vector2D check_point, rcsc::Vector2D se
 }
 
 
-double AreaPassGenerator::nearResiver(rcsc::Vector2D check_point, rcsc::Vector2D sender_pos, rcsc::Vector2D resiver_pos,
+double AreaPassGenerator::nearreceiver(rcsc::Vector2D check_point, rcsc::Vector2D sender_pos, rcsc::Vector2D receiver_pos,
                                       double max_radius2) {
 
-    double dist_from_resiver = resiver_pos.dist(check_point);
-    return (max_radius2 - dist_from_resiver) / max_radius2;
+    double dist_from_receiver = receiver_pos.dist(check_point);
+    return (max_radius2 - dist_from_receiver) / max_radius2;
 }
 
 

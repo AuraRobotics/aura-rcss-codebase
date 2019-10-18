@@ -36,7 +36,7 @@
 #include "sample_communication.h"
 
 #include "../strategy.h"
-
+#include "../cafe_model.h"
 #include <rcsc/formation/formation.h>
 #include <rcsc/player/player_agent.h>
 #include <rcsc/player/intercept_table.h>
@@ -306,6 +306,18 @@ SampleCommunication::updateCurrentSender( const PlayerAgent * agent )
 
     int current = val % candidate_unum.size();
     int next = ( val + 1 ) % candidate_unum.size();
+
+
+    const PlayerObject * ball_lord = CafeModel::i().getBallLord();
+    if(ball_lord != NULL){
+        const int ball_lord_unum = ball_lord->unum();
+        if(ball_lord_unum != -1){
+            M_current_sender_unum = ball_lord_unum;
+            M_next_sender_unum = candidate_unum[next];
+            return;
+        }
+    }
+
 
     M_current_sender_unum = candidate_unum[current];
     M_next_sender_unum = candidate_unum[next];

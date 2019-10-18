@@ -42,7 +42,7 @@ public:
 
 private:
     const rcsc::Vector2D generateDeepPass(const rcsc::AbstractPlayerObject *sender,
-                                          const rcsc::AbstractPlayerObject *resiver);
+                                          const rcsc::AbstractPlayerObject *receiver);
 
 
 };

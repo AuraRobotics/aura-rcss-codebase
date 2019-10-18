@@ -44,8 +44,8 @@ public:
 
     Pass( const int passer,
           const int receiver,
-          const Vector2D & receive_point,
-          const double & ball_speed,
+          const Vector2D  receive_point,
+          const double  ball_speed,
           const int duration_step,
           const int kick_count,
           const bool final_action,

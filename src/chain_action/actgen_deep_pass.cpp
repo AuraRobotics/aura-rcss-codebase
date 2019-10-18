@@ -57,22 +57,22 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
          ++area_pass_it) {
 
 
-        const AbstractPlayerObject *resiver = (*area_pass_it).first;
+        const AbstractPlayerObject *receiver = (*area_pass_it).first;
         const Vector2D pass_pos = (*area_pass_it).second;
 
-        if (resiver == NULL || resiver->unum() == -1) {
+        if (receiver == NULL || receiver->unum() == -1) {
             continue;
         }
 
 
         dlog.addText(Logger::Logger::ACTION_CHAIN,
-                     __FILE__"pass area to %d in pos %.2f %.2f", resiver->unum(), pass_pos.x, pass_pos.y);
+                     __FILE__"pass area to %d in pos %.2f %.2f", receiver->unum(), pass_pos.x, pass_pos.y);
 //        dlog.addLine(Logger::ACTION_CHAIN,
-//                     ball_holder->pos(), resiver->pos(),
+//                     ball_holder->pos(), receiver->pos(),
 //                     "#a855232");
 //
-        const int receiver_unum = resiver->unum();
-        Vector2D receiver_pos = resiver->pos();
+        const int receiver_unum = receiver->unum();
+        Vector2D receiver_pos = receiver->pos();
 //
         double dist_pass = pass_pos.dist(ball_pos);
 
@@ -85,7 +85,7 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                                                            dist_pass,
                                                            angle_ball);
 
-        const PlayerType *ptype = resiver->playerTypePtr();
+        const PlayerType *ptype = receiver->playerTypePtr();
         const double max_receive_ball_speed = 1.5;
 //
         double pass_speed = rcscUtils::first_speed_pass(dist_pass, max_receive_ball_speed);
@@ -121,7 +121,7 @@ void ActGen_DeepPass::generate(std::vector <ActionStatePair> *result, const Pred
                 fastest_opp_cycle > fastest_player_cycle + 3) {
                 dlog.addText(Logger::Logger::ACTION_CHAIN,
                              __FILE__"pass area to %d in pos %.2f %.2f,   fast_palyer : %d , fast_cycle, %d, should cycle : %d , speed : %.2f, opp_cycle : %d ",
-                             resiver->unum(), pass_pos.x, pass_pos.y, fastest_player->unum(), fastest_player_cycle, pass_cycle, pass_speed, fastest_opp_cycle);
+                             receiver->unum(), pass_pos.x, pass_pos.y, fastest_player->unum(), fastest_player_cycle, pass_cycle, pass_speed, fastest_opp_cycle);
 
                 break;
             }

@@ -16,7 +16,8 @@ std::vector<int> PlayerRelationship::path_to_[11];
 FastIC *PlayerRelationship::fic;
 
 void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
-
+    clock_t start_time = clock();
+    clock_t temp_time = clock();
 
     this->fic = fic;
     fic->setByWorldModel();
@@ -31,12 +32,40 @@ void PlayerRelationship::calc(PlayerAgent *agent, FastIC *fic) {
 
     addVertexs();
 
+
     M_triangulation.compute();
     M_triangulation.updateVoronoiVertex();
 
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d triangulation",
+                 clock() - temp_time);
+    temp_time = clock();
+
+
     calcRelations();
+
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d relations",
+                 clock() - temp_time);
+    temp_time = clock();
+
+
     createGraph();
+
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d graph",
+                 clock() - temp_time);
+    temp_time = clock();
+
+
     calcKickable();
+
+    dlog.addText(Logger::SYSTEM,
+                 __FILE__": ===============================time = %d kickable",
+                 clock() - temp_time);
+    temp_time = clock();
+
+
 }
 
 void PlayerRelationship::calcKickable() {
@@ -57,12 +86,12 @@ void PlayerRelationship::calcKickable() {
 //    std::cout << " time area pass : " << clock() - start_time << std::endl;
 //    start_time = clock();
 
-    DeepPassGenerator deep_pass_generator(relationships, wm, fic);
-    deep_pass_generator.generate();
-
-    for (int i = 0; i < 11; i++) {
-        deep_pass[i] = deep_pass_generator.getDirectPass(i + 1);
-    }
+//    DeepPassGenerator deep_pass_generator(relationships, wm, fic);
+//    deep_pass_generator.generate();
+//
+//    for (int i = 0; i < 11; i++) {
+//        deep_pass[i] = deep_pass_generator.getDirectPass(i + 1);
+//    }
 //    std::cout << " time deep pass : " << clock() - start_time << std::endl;
 //    start_time = clock();
 }
@@ -200,16 +229,22 @@ DeepPassCont PlayerRelationship::getDeepPass(const int unum) const {
     return deep_pass[unum - 1];
 }
 
-rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const int resiver) const {
+rcsc::AbstractPlayerCont PlayerRelationship::getPassPath(const int sender, const int receiver) const {
     static int last_sender = -1;
+    AbstractPlayerCont path_pass_objects;
+    if(sender < 1 || sender > 11){
+        return path_pass_objects;
+    }
     if (last_sender != sender) {
         processPath(sender);
         last_sender = sender;
     }
-    std::vector<int> path_pass = path_to_[resiver - 1];
-    AbstractPlayerCont path_pass_objects;
+    std::vector<int> path_pass = path_to_[receiver - 1];
     for (int i = 0; i < path_pass.size(); i++) {
         const AbstractPlayerObject *object_player = wm.ourPlayer(path_pass[i] + 1);
+        if(object_player == NULL){
+            return path_pass_objects;
+        }
         path_pass_objects.push_back(object_player);
     }
 
@@ -256,12 +291,12 @@ const void PlayerRelationship::createGraph() {
     //////////////////////////////
 
     const AbstractPlayerCont::const_iterator pass_end = short_pass[wm.self().unum() - 1].end();
-    for (AbstractPlayerCont::const_iterator pass_resiver_it = short_pass[wm.self().unum() - 1].begin();
-         pass_resiver_it != pass_end;
-         ++pass_resiver_it) {
+    for (AbstractPlayerCont::const_iterator pass_receiver_it = short_pass[wm.self().unum() - 1].begin();
+         pass_receiver_it != pass_end;
+         ++pass_receiver_it) {
 
         dlog.addLine(Logger::PASS,
-                     wm.self().pos(), (*pass_resiver_it)->pos(),
+                     wm.self().pos(), (*pass_receiver_it)->pos(),
                      "#42a7f5");
     }
 
